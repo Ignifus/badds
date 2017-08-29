@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+
+    <script type="text/javascript" src="/static/libs/jquery/jquery-3.1.1.min.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="/static/libs/bootstrap/css/bootstrap.min.css">
+    <script type="text/javascript" src="/static/libs/bootstrap/js/bootstrap.min.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="/static/common/css/fonts.css">
+    <link type="text/css" rel="stylesheet" href="/static/common/css/global.css">
+
+    <title>Badds</title>
+    <meta name="description" content="Badds">
+    <meta name="author" content="Badds">
+</head>
+
+<body>
+
+<header>
+    <nav class="navbar navbar-inverse navbar-static-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">
+
+                </a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Features</a></li>
+                    <li><a href="#">About us</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main>
+
+    <section>
+        {% block content %}
+        {% endblock %}
+    </section>
+
+</main>
+
+<footer>
+
+</footer>
+
+</body>
+
+</html>
