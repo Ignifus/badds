@@ -1,5 +1,11 @@
 from django.shortcuts import render
 
 
-def landing(request):
-    return render(request, 'landing/base.html')
+def index(request):
+    return render(request, 'landing/index.html')
+
+def contact(request):
+    return render(request, 'landing/contact.html')
+
+def register(request):
+    return render(request, 'landing/register.html')

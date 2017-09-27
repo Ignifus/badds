@@ -1,0 +1,67 @@
+{% extends 'landing/base.html' %}
+
+{% block content %}
+    <section id="banner">
+        <h2>Badds</h2>
+        <p>Publicidad más simple.</p>
+        <ul class="actions">
+            <li><a href="/register" class="button special">Registrarse</a></li>
+            <li><a href="#features" class="button">Saber más</a></li>
+        </ul>
+    </section>
+
+    <section id="main-index" class="container">
+
+        <section class="box special">
+            <header class="major">
+                <h2>La plataforma que centraliza
+                    <br />
+                    las necesidades de tu negocio.</h2>
+                <p>Un espacio inteligente para darse a conocer con sus clientes.</p>
+            </header>
+        </section>
+
+        <section id="features" class="box special features">
+            <div class="features-row">
+                <section>
+                    <span class="icon major fa-bolt accent2"></span>
+                    <h3>Tiempo Real</h3>
+                    <p>Badds está preparado para manejar grandes cantidades de datos sin interrupciones.</p>
+                </section>
+                <section>
+                    <span class="icon major fa-area-chart accent3"></span>
+                    <h3>Estadísticas</h3>
+                    <p>Le proveemos extensos gráficos y análisis de sus campañas.</p>
+                </section>
+            </div>
+            <div class="features-row">
+                <section>
+                    <span class="icon major fa-cloud accent4"></span>
+                    <h3>Global</h3>
+                    <p>La plataforma se encuentra preparada para manejar campañas a nivel mundial.</p>
+                </section>
+                <section>
+                    <span class="icon major fa-lock accent5"></span>
+                    <h3>Confidencial</h3>
+                    <p>La información de las campañas son almacenadas, aseguradas y nunca reveladas a terceros.</p>
+                </section>
+            </div>
+        </section>
+
+    </section>
+
+    <section id="cta">
+
+        <h2>¿Necesita ayuda?</h2>
+        <p>No dude en contactarnos si tiene consultas sobre el servicio.</p>
+
+        <form>
+            <div class="row uniform 50%">
+                <div class="12u 12u(mobilep)">
+                    <a href="/contact" class="button fit">Contacto</a>
+                </div>
+            </div>
+        </form>
+
+    </section>
+{% endblock %}
