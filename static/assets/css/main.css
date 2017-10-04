@@ -48,6 +48,10 @@ body {
     -webkit-text-size-adjust: none;
 }
 
+.grecaptcha-badge {
+    display: none;
+}
+
 /* Box Model */
 
 *, *:before, *:after {

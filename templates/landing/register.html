@@ -1,25 +1,58 @@
 {% extends 'landing/base.html' %}
 
 {% block content %}
-    <section id="main" class="container">
+    <section id="main" class="container 50%">
         <header class="page-header">
-            <h2>Generic</h2>
-            <p>A generic page for every non-generic situation.</p>
+            <h2>Registro</h2>
         </header>
+
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+        <script>
+            function onSubmit(token) {
+                document.getElementById("register-form").submit();
+            }
+        </script>
+
         <div class="box">
-            <span class="image featured"><img src="/static/images/pic01.jpg" alt="" /></span>
-            <h3>This is a subheading</h3>
-            <p>Cep risus aliquam gravida cep ut lacus amet. Adipiscing faucibus nunc placerat. Tempus adipiscing turpis non blandit accumsan eget lacinia nunc integer interdum amet aliquam ut orci non col ut ut praesent. Semper amet interdum mi. Phasellus enim laoreet ac ac commodo faucibus faucibus. Curae ante vestibulum ante. Blandit. Ante accumsan nisi eu placerat gravida placerat adipiscing in risus fusce vitae ac mi accumsan nunc in accumsan tempor blandit aliquet aliquet lobortis. Ultricies blandit lobortis praesent turpis. Adipiscing accumsan adipiscing adipiscing ac lacinia cep. Orci blandit a iaculis adipiscing ac. Vivamus ornare laoreet odio vis praesent nunc lorem mi. Erat. Tempus sem faucibus ac id. Vis in blandit. Nascetur ultricies blandit ac. Arcu aliquam. Accumsan mi eget adipiscing nulla. Non vestibulum ac interdum condimentum semper commodo massa arcu.</p>
-            <div class="row">
-                <div class="6u 12u(mobilep)">
-                    <h3>And now a subheading</h3>
-                    <p>Adipiscing faucibus nunc placerat. Tempus adipiscing turpis non blandit accumsan eget lacinia nunc integer interdum amet aliquam ut orci non col ut ut praesent. Semper amet interdum mi. Phasellus enim laoreet ac ac commodo faucibus faucibus. Curae lorem ipsum adipiscing ac. Vivamus ornare laoreet odio vis praesent.</p>
+            <form method="post" action="/register_auth/" id="register-form">
+                {% csrf_token %}
+
+                <div class="row uniform 50%">
+                    <div class="12u">
+                        <input type="text" name="firstname" id="firstname" value="" placeholder="Nombre" />
+                    </div>
                 </div>
-                <div class="6u 12u(mobilep)">
-                    <h3>And another subheading</h3>
-                    <p>Adipiscing faucibus nunc placerat. Tempus adipiscing turpis non blandit accumsan eget lacinia nunc integer interdum amet aliquam ut orci non col ut ut praesent. Semper amet interdum mi. Phasellus enim laoreet ac ac commodo faucibus faucibus. Curae lorem ipsum adipiscing ac. Vivamus ornare laoreet odio vis praesent.</p>
+                <div class="row uniform 50%">
+                    <div class="12u">
+                        <input type="text" name="lastname" id="lastname" value="" placeholder="Apellido" />
+                    </div>
                 </div>
-            </div>
+                <div class="row uniform 50%">
+                    <div class="12u">
+                        <input type="email" name="email" id="email" value="" placeholder="Email" />
+                    </div>
+                </div>
+                <div class="row uniform 50%">
+                    <div class="12u">
+                        <input type="password" name="password" id="password" value="" placeholder="Contraseña" />
+                    </div>
+                </div>
+                <div class="row uniform">
+                    <div class="12u">
+                        <ul class="actions align-center">
+                            <li>
+                                <input  type="submit"
+                                        class="g-recaptcha special"
+                                        data-sitekey="6LfgTzIUAAAAAA_yiLM3Akt1RgwqyHTRqCD018TM"
+                                        data-callback="onSubmit"
+                                        value="Registrarse">
+                                </input>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </form>
         </div>
     </section>
 {% endblock %}

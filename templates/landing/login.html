@@ -1,0 +1,39 @@
+{% extends 'landing/base.html' %}
+
+{% block content %}
+    <section id="main" class="container 50%">
+        <header class="page-header">
+            <h2>Ingresar</h2>
+        </header>
+
+        <div class="box">
+            {% if error %}
+            <div>
+                <strong>Error!</strong> {{ error }}
+            </div>
+            {% endif %}
+
+            <form method="post" action="/login_auth/">
+                {% csrf_token %}
+
+                <div class="row uniform 50%">
+                    <div class="12u">
+                        <input type="text" name="email" id="email" value="{{ email }}" placeholder="Email" />
+                    </div>
+                </div>
+                <div class="row uniform 50%">
+                    <div class="12u">
+                        <input type="password" name="password" id="password" value="{{ password }}" placeholder="Contraseña" />
+                    </div>
+                </div>
+                <div class="row uniform">
+                    <div class="12u">
+                        <ul class="actions align-center">
+                            <li><input type="submit" value="Enviar" /></li>
+                        </ul>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+{% endblock %}
