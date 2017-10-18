@@ -6,30 +6,56 @@
             <h2>Ingresar</h2>
         </header>
 
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+        <script>
+            function onSubmit(token) {
+                document.getElementById("login-form").submit();
+            }
+        </script>
+
         <div class="box">
             {% if error %}
-            <div>
-                <strong>Error!</strong> {{ error }}
-            </div>
+                <div>
+                    <strong>Error!</strong> {{ error }}
+                </div>
             {% endif %}
 
-            <form method="post" action="/login_auth/">
+            <form method="post" id="login-form">
                 {% csrf_token %}
 
-                <div class="row uniform 50%">
-                    <div class="12u">
-                        <input type="text" name="email" id="email" value="{{ email }}" placeholder="Email" />
+                {% for error in form.non_field_errors %}
+                    <div>
+                        <i class="fa fa-times-circle" style="font-size:22px;color:red"></i>
+                        <strong>{{ error|escape }}</strong>
                     </div>
-                </div>
-                <div class="row uniform 50%">
-                    <div class="12u">
-                        <input type="password" name="password" id="password" value="{{ password }}" placeholder="Contraseña" />
+
+                    <br>
+                {% endfor %}
+
+                {% for field in form %}
+
+                    <div class="row uniform 50%">
+                        <div class="12u">
+                            {{ field }}
+                            {% for error in field.errors %}
+                                <p style="color: red">{{ error }}</p>
+                            {% endfor %}
+                        </div>
                     </div>
-                </div>
+
+                {% endfor %}
+
                 <div class="row uniform">
                     <div class="12u">
                         <ul class="actions align-center">
-                            <li><input type="submit" value="Enviar" /></li>
+                            <li>
+                                <input type="submit"
+                                       class="g-recaptcha special"
+                                       data-sitekey="6LfgTzIUAAAAAA_yiLM3Akt1RgwqyHTRqCD018TM"
+                                       data-callback="onSubmit"
+                                       value="Entrar">
+                            </li>
                         </ul>
                     </div>
                 </div>

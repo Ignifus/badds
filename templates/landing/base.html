@@ -21,11 +21,11 @@
                 <li><a href="/">Inicio</a></li>
                 <li><a href="/contact">Contacto</a></li>
                 {% if user.is_authenticated %}
-                    <li><a href="/logout_auth">Salir</a></li>
+                    <li><a href="/logout_auth" class="button">Salir</a></li>
                 {% else %}
                     <li><a href="/login">Ingresar</a></li>
+                    <li><a href="/register" class="button">Registro</a></li>
                 {% endif %}
-                <li><a href="/register" class="button">Registro</a></li>
             </ul>
         </nav>
     </header>

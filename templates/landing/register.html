@@ -15,29 +15,22 @@
         </script>
 
         <div class="box">
-            <form method="post" action="/register_auth/" id="register-form">
+            <form method="post" id="register-form">
                 {% csrf_token %}
 
-                <div class="row uniform 50%">
-                    <div class="12u">
-                        <input type="text" name="firstname" id="firstname" value="" placeholder="Nombre" />
+                {% for field in form %}
+
+                    <div class="row uniform 50%">
+                        <div class="12u">
+                            {{ field }}
+                            {% for error in field.errors %}
+                                <p style="color: red">{{ error }}</p>
+                            {% endfor %}
+                        </div>
                     </div>
-                </div>
-                <div class="row uniform 50%">
-                    <div class="12u">
-                        <input type="text" name="lastname" id="lastname" value="" placeholder="Apellido" />
-                    </div>
-                </div>
-                <div class="row uniform 50%">
-                    <div class="12u">
-                        <input type="email" name="email" id="email" value="" placeholder="Email" />
-                    </div>
-                </div>
-                <div class="row uniform 50%">
-                    <div class="12u">
-                        <input type="password" name="password" id="password" value="" placeholder="Contraseña" />
-                    </div>
-                </div>
+
+                {% endfor %}
+
                 <div class="row uniform">
                     <div class="12u">
                         <ul class="actions align-center">
@@ -47,7 +40,6 @@
                                         data-sitekey="6LfgTzIUAAAAAA_yiLM3Akt1RgwqyHTRqCD018TM"
                                         data-callback="onSubmit"
                                         value="Registrarse">
-                                </input>
                             </li>
                         </ul>
                     </div>
