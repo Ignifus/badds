@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'landing.apps.LandingConfig',
+    'ads.apps.AdsConfig'
 ]
 
 MIDDLEWARE = [
@@ -117,11 +118,13 @@ USE_L10N = True
 
 USE_TZ = True
 
+
 # Email
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'badds.soporte@gmail.com'
-EMAIL_HOST_PASSWORD = ''
+if "BADDS_EMAIL_PASSWORD" in os.environ:
+    EMAIL_HOST_PASSWORD = os.environ['BADDS_EMAIL_PASSWORD']
 EMAIL_PORT = 587
 
 # Static files (CSS, JavaScript, Images)
