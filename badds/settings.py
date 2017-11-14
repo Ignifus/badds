@@ -15,12 +15,12 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'z6zc!v@(a*nl^+5(@#5$h7hl%ocw%1synqij%v*pwc-j5n#vqt'
+if "BADDS_SECRET" in os.environ:
+    SECRET_KEY = os.environ['BADDS_SECRET']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -126,6 +126,12 @@ EMAIL_HOST_USER = 'badds.soporte@gmail.com'
 if "BADDS_EMAIL_PASSWORD" in os.environ:
     EMAIL_HOST_PASSWORD = os.environ['BADDS_EMAIL_PASSWORD']
 EMAIL_PORT = 587
+
+
+# Captcha
+
+if "BADDS_CAPTCHA_SECRET" in os.environ:
+    CAPTCHA_SECRET = os.environ['BADDS_CAPTCHA_SECRET']
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/

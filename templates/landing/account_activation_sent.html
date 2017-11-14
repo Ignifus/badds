@@ -6,8 +6,34 @@
             <h2>Email enviado</h2>
         </header>
 
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+        <script>
+            function onSubmit(token) {
+                document.getElementById("resend-mail-form").submit();
+            }
+        </script>
+
         <div class="box">
             <p>Un email ha sido enviado a su casilla de correo con un link para confirmar su registro.</p>
+
+            <form method="post" id="resend-mail-form" action="/resend_mail/">
+                {% csrf_token %}
+
+                <div class="row uniform">
+                    <div class="12u">
+                        <ul class="actions align-center">
+                            <li>
+                                <input type="submit"
+                                       class="g-recaptcha special"
+                                       data-sitekey="6LfgTzIUAAAAAA_yiLM3Akt1RgwqyHTRqCD018TM"
+                                       data-callback="onSubmit"
+                                       value="Reenviar mail">
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </form>
         </div>
     </section>
 {% endblock %}

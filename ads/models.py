@@ -13,7 +13,7 @@ class Application(models.Model):
     domain = models.TextField(max_length=256, unique=True)
     key = models.TextField(max_length=256)
     category = models.OneToOneField(ApplicationCategory)
-    active = models.BooleanField()
+    active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -43,7 +43,7 @@ class Space(models.Model):
     price = models.FloatField()
     prints = models.IntegerField()
     restrictions = models.ManyToManyField(Restriction, through='SpaceRestriction')
-    active = models.BooleanField()
+    active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

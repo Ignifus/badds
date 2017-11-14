@@ -1,14 +1,17 @@
+import requests
+
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login, logout
-import requests
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
+from badds.settings import CAPTCHA_SECRET
 from landing.forms import SignUpForm, LoginForm
+from landing.models import Profile
 from landing.tokens import account_activation_token
 
 
@@ -19,8 +22,8 @@ def login_auth(request):
             if grecaptcha_verify(request):
                 if form.clean() is not None:
                     user = User.objects.get(username=form.cleaned_data.get('username'))
+                    login(request, form.user_cache)
                     if user.profile.email_confirmed and user.is_active:
-                        login(request, form.user_cache)
                         return redirect('/')
                     else:
                         return redirect('/account_activation_sent')
@@ -42,19 +45,35 @@ def register_auth(request):
                 user = form.save(commit=False)
                 user.is_active = False
                 user.save()
-                current_site = get_current_site(request)
-                subject = 'Active su cuenta de Badds'
-                message = render_to_string('landing/account_activation_email.html', {
-                    'user': user,
-                    'domain': current_site.domain,
-                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                    'token': account_activation_token.make_token(user),
-                })
-                user.email_user(subject, message)
-                return redirect('/account_activation_sent')
+                login(request, user)
+                send_mail(request)
     else:
         form = SignUpForm()
     return render(request, 'landing/register.html', {'form': form})
+
+
+def send_mail(request):
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user=request.user)
+        if not profile.email_confirmed:
+            current_site = get_current_site(request)
+            subject = 'Badds: confirme su cuenta'
+            message = render_to_string('landing/account_activation_email.html', {
+                'user': request.user,
+                'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(request.user.pk)),
+                'token': account_activation_token.make_token(request.user),
+            })
+            request.user.email_user(subject, message)
+            return render(request, 'landing/account_activation_sent.html')
+    return redirect('/')
+
+
+def resend_mail(request):
+    if request.method == 'POST':
+        if grecaptcha_verify(request):
+            send_mail(request)
+    return render(request, 'landing/account_activation_sent.html')
 
 
 def activate_auth(request, uidb64, token):
@@ -89,7 +108,7 @@ def grecaptcha_verify(request):
         captcha_rs = data.get('g-recaptcha-response')
         url = "https://www.google.com/recaptcha/api/siteverify"
         params = {
-            'secret': "6LfgTzIUAAAAAL6wwrLSv5ZcyYpTHjarnft0SSpT",
+            'secret': CAPTCHA_SECRET,
             'response': captcha_rs,
             'remoteip': get_client_ip(request)
         }
