@@ -33,6 +33,9 @@ class Restriction(models.Model):
     description = models.TextField(max_length=256)
     unit = models.TextField(max_length=16)
 
+    def __str__(self):
+        return self.restriction
+
 
 class Space(models.Model):
     application = models.OneToOneField(Application)
@@ -78,6 +81,9 @@ class Auction(models.Model):
     space = models.OneToOneField(Space)
     end_date = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.space.name
 
 
 class Bidding(models.Model):

@@ -8,6 +8,9 @@ class Profile(models.Model):
     credit = models.FloatField(default=0)
     email_confirmed = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.user.username
+
 @receiver(post_save, sender=User)
 def update_user_profile(sender, instance, created, **kwargs):
     if created:
