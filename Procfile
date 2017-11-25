@@ -1,1 +1,1 @@
-web: uwsgi badds/uwsgi.ini
+web: uwsgi uwsgi/badds_uwsgi.ini
