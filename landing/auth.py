@@ -43,7 +43,7 @@ def register_auth(request):
         if grecaptcha_verify(request):
             if form.is_valid():
                 user = form.save(commit=False)
-                user.is_active = False
+                user.is_active = True
                 user.save()
                 login(request, user)
                 send_mail(request)
