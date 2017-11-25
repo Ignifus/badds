@@ -7,8 +7,16 @@
             <p>No dude en contactarnos si tiene consultas sobre el servicio.</p>
         </header>
 
+        <script>
+            function onSubmit(token) {
+                document.getElementById("contact-form").submit();
+            }
+        </script>
+
         <div class="box">
-            <form method="post" action="#">
+            <form method="post" id="contact-form">
+                {% csrf_token %}
+
                 <div class="row uniform 50%">
                     <div class="6u 12u(mobilep)">
                         <input type="text" name="name" id="name" value="" placeholder="Nombre" />
@@ -30,7 +38,13 @@
                 <div class="row uniform">
                     <div class="12u">
                         <ul class="actions align-center">
-                            <li><input type="submit" value="Enviar" /></li>
+                            <li>
+                                <input type="submit"
+                                       class="g-recaptcha special"
+                                       data-sitekey="6LfbVDoUAAAAACEZcQ-EVY2l8hO7Me03t20CNoDE"
+                                       data-callback="onSubmit"
+                                       value="Enviar">
+                            </li>
                         </ul>
                     </div>
                 </div>
