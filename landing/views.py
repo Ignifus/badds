@@ -15,6 +15,7 @@ def contact(request):
         subject = request.POST.get('subject', '')
         body = request.POST.get('body', '')
         send_contact_email(name, email, subject, body)
+        return render(request, 'landing/contact.html', {'success': True})
     else:
         return render(request, 'landing/contact.html')
 
