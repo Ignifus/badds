@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
+from django.forms import Form
 
 
 class LoginForm(AuthenticationForm):
@@ -28,3 +29,10 @@ class SignUpForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', )
+
+
+class ContactForm(Form):
+    name = forms.CharField(min_length=1, max_length=50, widget=forms.TextInput(attrs={'placeholder': 'Nombre'}))
+    email = forms.CharField(min_length=5, max_length=256, widget=forms.TextInput(attrs={'placeholder': 'Email'}))
+    subject = forms.CharField(min_length=10, max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Asunto'}))
+    body = forms.CharField(min_length=1, max_length=2500, widget=forms.Textarea(attrs={'placeholder': 'Mensaje'}))

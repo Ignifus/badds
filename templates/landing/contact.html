@@ -23,24 +23,28 @@
             <form method="post" id="contact-form">
                 {% csrf_token %}
 
-                <div class="row uniform 50%">
-                    <div class="6u 12u(mobilep)">
-                        <input type="text" name="name" id="name" value="" placeholder="Nombre" />
+                {% for error in form.non_field_errors %}
+                    <div>
+                        <i class="fa fa-times-circle" style="font-size:22px;color:red"></i>
+                        <strong>{{ error|escape }}</strong>
                     </div>
-                    <div class="6u 12u(mobilep)">
-                        <input type="email" name="email" id="email" value="" placeholder="Email" />
+
+                    <br>
+                {% endfor %}
+
+                {% for field in form %}
+
+                    <div class="row uniform 50%">
+                        <div class="12u">
+                            {{ field }}
+                            {% for error in field.errors %}
+                                <p style="color: red">{{ error }}</p>
+                            {% endfor %}
+                        </div>
                     </div>
-                </div>
-                <div class="row uniform 50%">
-                    <div class="12u">
-                        <input type="text" name="subject" id="subject" value="" placeholder="Asunto"  />
-                    </div>
-                </div>
-                <div class="row uniform 50%">
-                    <div class="12u">
-                        <textarea name="body" id="body" placeholder="Ingrese su mensaje" rows="6"></textarea>
-                    </div>
-                </div>
+
+                {% endfor %}
+
                 <div class="row uniform">
                     <div class="12u">
                         <ul class="actions align-center">

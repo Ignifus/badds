@@ -15,11 +15,6 @@
         </script>
 
         <div class="box">
-            {% if error %}
-                <div>
-                    <strong>Error!</strong> {{ error }}
-                </div>
-            {% endif %}
 
             <form method="post" id="login-form">
                 {% csrf_token %}

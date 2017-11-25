@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 from landing.auth import register_auth, login_auth, activate_auth
 from landing.email import send_contact_email
+from landing.forms import ContactForm
 from landing.models import Profile
 
 
@@ -10,14 +11,16 @@ def index(request):
 
 def contact(request):
     if request.method == "POST":
-        name = request.POST.get('name', '')
-        email = request.POST.get('email', '')
-        subject = request.POST.get('subject', '')
-        body = request.POST.get('body', '')
-        send_contact_email(name, email, subject, body)
-        return render(request, 'landing/contact.html', {'success': True})
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            send_contact_email(form.cleaned_data.get('name'),
+                               form.cleaned_data.get('email'),
+                               form.cleaned_data.get('subject'),
+                               form.cleaned_data.get('body'))
+            return render(request, 'landing/contact.html', {'success': True, 'form': ContactForm()})
     else:
-        return render(request, 'landing/contact.html')
+        form = ContactForm()
+    return render(request, 'landing/contact.html', {'form': form})
 
 def register(request):
     if request.user.is_authenticated:
