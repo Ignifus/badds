@@ -23,7 +23,7 @@ def login_auth(request):
                 if form.clean() is not None:
                     user = User.objects.get(username=form.cleaned_data.get('username'))
                     login(request, form.user_cache)
-                    if user.profile.email_confirmed and user.is_active:
+                    if user.profile.email_confirmed:
                         return redirect('/')
                     else:
                         return redirect('/account_activation_sent')
@@ -46,7 +46,7 @@ def register_auth(request):
                 user.is_active = True
                 user.save()
                 login(request, user)
-                send_mail(request)
+                return send_mail(request)
     else:
         form = SignUpForm()
     return render(request, 'landing/register.html', {'form': form})
@@ -72,7 +72,7 @@ def send_mail(request):
 def resend_mail(request):
     if request.method == 'POST':
         if grecaptcha_verify(request):
-            send_mail(request)
+            return send_mail(request)
     return render(request, 'landing/account_activation_sent.html')
 
 
