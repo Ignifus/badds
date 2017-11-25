@@ -6,6 +6,9 @@ class ApplicationCategory(models.Model):
     category = models.TextField(max_length=32)
     description = models.TextField(max_length=256)
 
+    def __str__(self):
+        return self.category
+
 
 class Application(models.Model):
     user = models.OneToOneField(User)
@@ -23,9 +26,12 @@ class Application(models.Model):
         ordering = ('name',)
 
 
-class SpaceCategory(models.Model):
+class AdvertisementCategory(models.Model):
     category = models.TextField(max_length=32)
     description = models.TextField(max_length=256)
+
+    def __str__(self):
+        return self.category
 
 
 class Restriction(models.Model):
@@ -39,7 +45,7 @@ class Restriction(models.Model):
 
 class Space(models.Model):
     application = models.OneToOneField(Application)
-    category = models.OneToOneField(SpaceCategory)
+    category = models.OneToOneField(AdvertisementCategory)
     name = models.TextField(max_length=16)
     dimensions = models.TextField(max_length=16)
     unit = models.TextField(max_length=16)
@@ -76,9 +82,13 @@ class AuctionStatus(models.Model):
         default='Acitve',
     )
 
+    def __str__(self):
+        return self.status
+
 
 class Auction(models.Model):
     space = models.OneToOneField(Space)
+    status = models.OneToOneField(AuctionStatus)
     end_date = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -91,3 +101,22 @@ class Bidding(models.Model):
     user = models.OneToOneField(User)
     price = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+class Advertisement(models.Model):
+    name = models.TextField(max_length=256)
+    user = models.OneToOneField(User)
+    advertisement_category = models.OneToOneField(AdvertisementCategory)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+class Resource(models.Model):
+    advertisment = models.OneToOneField(Advertisement)
+    path = models.TextField(max_length=256)
+    data_type = models.TextField(max_length=8)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.advertisment.name
