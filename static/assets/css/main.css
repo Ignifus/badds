@@ -3617,17 +3617,17 @@ body.landing #main-index {
 
     /* Banner */
 
-    #banner {
-        padding: 4em 0;
-    }
+    /*#banner {*/
+        /*padding: 4em 0;*/
+    /*}*/
 
-    #banner h2 {
-        font-size: 2.25em;
-    }
+    /*#banner h2 {*/
+        /*font-size: 2.25em;*/
+    /*}*/
 
-    #banner p {
-        font-size: 1.25em;
-    }
+    /*#banner p {*/
+        /*font-size: 1.25em;*/
+    /*}*/
 
     /* Main */
 
@@ -3759,9 +3759,9 @@ body.landing #main-index {
 
     /* Banner */
 
-    #banner {
-        padding: 5em 1em 4em 1em;
-    }
+    /*#banner {*/
+        /*padding: 5em 1em 4em 1em;*/
+    /*}*/
 
     /* Main */
 
