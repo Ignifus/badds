@@ -24,7 +24,7 @@ def login_auth(request):
                     user = User.objects.get(username=form.cleaned_data.get('username'))
                     login(request, form.user_cache)
                     if user.profile.email_confirmed:
-                        return redirect('/')
+                        return redirect('/ads/')
                     else:
                         return redirect('/account_activation_sent')
     else:
@@ -84,11 +84,10 @@ def activate_auth(request, uidb64, token):
         user = None
 
     if user is not None and account_activation_token.check_token(user, token):
-        user.is_active = True
         user.profile.email_confirmed = True
         user.save()
         login(request, user)
-        return redirect('/')
+        return redirect('/ads/')
     else:
         return render(request, 'landing/account_activation_invalid.html')
 
