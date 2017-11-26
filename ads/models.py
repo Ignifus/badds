@@ -129,6 +129,7 @@ class Contract(models.Model):
 
 class Ip(models.Model):
     ip = models.TextField(max_length=64)
+    country = models.TextField(max_length=16)
 
 
 class ContractIpLog(models.Model):
