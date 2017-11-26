@@ -12,5 +12,5 @@ def index(request):
 
 
 def context(request):
-    user_context = User.objects.get(id=request.user.id)
+    user_context = User.objects.get(pk=request.user.id)
     return JsonResponse({'user': UserSerializer(user_context).data})

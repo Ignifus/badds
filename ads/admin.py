@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from ads.models import Application, Auction, Restriction, Space, Advertisement, Resource, ApplicationCategory, AuctionStatus, AdvertisementCategory
+from ads.models import Application, Auction, Restriction, Space, Advertisement, Resource, ApplicationCategory, AuctionStatus, AdvertisementCategory, \
+    SpaceRestriction
 
 admin.site.register(Application)
 admin.site.register(Auction)
@@ -8,6 +9,8 @@ admin.site.register(Restriction)
 admin.site.register(Space)
 admin.site.register(Advertisement)
 admin.site.register(Resource)
+
+admin.site.register(SpaceRestriction)
 
 admin.site.register(AdvertisementCategory)
 admin.site.register(AuctionStatus)
