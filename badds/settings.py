@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'landing.apps.LandingConfig',
-    'ads.apps.AdsConfig'
+    'ads.apps.AdsConfig',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [

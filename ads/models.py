@@ -11,19 +11,17 @@ class ApplicationCategory(models.Model):
 
 
 class Application(models.Model):
-    user = models.OneToOneField(User)
+    user = models.ForeignKey(User, related_name='applications')
     name = models.TextField(max_length=256)
     domain = models.TextField(max_length=256, unique=True)
     key = models.TextField(max_length=256)
-    category = models.OneToOneField(ApplicationCategory)
+    category = models.ForeignKey(ApplicationCategory)
     active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
 
-    class Meta:
-        ordering = ('name',)
 
 
 class AdvertisementCategory(models.Model):
@@ -44,8 +42,8 @@ class Restriction(models.Model):
 
 
 class Space(models.Model):
-    application = models.OneToOneField(Application)
-    category = models.OneToOneField(AdvertisementCategory)
+    application = models.ForeignKey(Application, related_name='spaces')
+    category = models.ForeignKey(AdvertisementCategory)
     name = models.TextField(max_length=16)
     dimensions = models.TextField(max_length=16)
     unit = models.TextField(max_length=16)
@@ -58,13 +56,10 @@ class Space(models.Model):
     def __str__(self):
         return self.name
 
-    class Meta:
-        ordering = ('name',)
-
 
 class SpaceRestriction(models.Model):
-    space = models.OneToOneField(Space)
-    restriction = models.OneToOneField(Restriction)
+    space = models.ForeignKey(Space, related_name='spaces')
+    restriction = models.ForeignKey(Restriction, related_name='restrictions')
     value = models.TextField(max_length=16)
 
 
@@ -87,8 +82,8 @@ class AuctionStatus(models.Model):
 
 
 class Auction(models.Model):
-    space = models.OneToOneField(Space)
-    status = models.OneToOneField(AuctionStatus)
+    space = models.ForeignKey(Space, related_name='auctions')
+    status = models.ForeignKey(AuctionStatus)
     end_date = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -97,26 +92,26 @@ class Auction(models.Model):
 
 
 class Bidding(models.Model):
-    auction = models.OneToOneField(Auction)
-    user = models.OneToOneField(User)
+    auction = models.ForeignKey(Auction, related_name='biddings')
+    user = models.ForeignKey(User)
     price = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
 
 
 class Advertisement(models.Model):
     name = models.TextField(max_length=256)
-    user = models.OneToOneField(User)
-    advertisement_category = models.OneToOneField(AdvertisementCategory)
+    user = models.ForeignKey(User)
+    advertisement_category = models.ForeignKey(AdvertisementCategory)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
 
 class Resource(models.Model):
-    advertisment = models.OneToOneField(Advertisement)
+    advertisement = models.ForeignKey(Advertisement, related_name='resources')
     path = models.TextField(max_length=256)
     data_type = models.TextField(max_length=8)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.advertisment.name
+        return self.advertisement.name
