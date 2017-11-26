@@ -36,3 +36,7 @@ class RestrictionViewSet(viewsets.ModelViewSet):
 class ResourceViewSet(viewsets.ModelViewSet):
     queryset = Resource.objects.all()
     serializer_class = ResourceSerializer
+
+class ContractViewSet(viewsets.ModelViewSet):
+    queryset = Contract.objects.all()
+    serializer_class = ContractSerializer

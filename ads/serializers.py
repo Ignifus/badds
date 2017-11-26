@@ -3,6 +3,11 @@ from rest_framework import serializers
 from ads.models import *
 
 
+class ContractSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contract
+        fields = '__all__'
+
 class ResourceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Resource

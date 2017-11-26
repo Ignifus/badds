@@ -46,8 +46,6 @@ class Space(models.Model):
     name = models.TextField(max_length=16)
     x_size = models.IntegerField()
     y_size = models.IntegerField()
-    price = models.FloatField()
-    prints = models.IntegerField()
     restrictions = models.ManyToManyField(Restriction, through='SpaceRestriction')
     active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -93,7 +91,7 @@ class Auction(models.Model):
 class Bidding(models.Model):
     auction = models.ForeignKey(Auction, related_name='biddings')
     user = models.ForeignKey(User)
-    price_usd = models.FloatField()
+    ppp_usd = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
 
 
@@ -106,6 +104,7 @@ class Advertisement(models.Model):
     def __str__(self):
         return self.name
 
+
 class Resource(models.Model):
     advertisement = models.ForeignKey(Advertisement, related_name='resources')
     path = models.TextField(max_length=256)
@@ -114,3 +113,25 @@ class Resource(models.Model):
 
     def __str__(self):
         return self.advertisement.name
+
+
+class Contract(models.Model):
+    space = models.ForeignKey(Space)
+    advertisement = models.ForeignKey(Advertisement)
+    prints = models.IntegerField()
+    ppp_usd = models.FloatField()
+    active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.space.name + " " + self.advertisement.name
+
+
+class Ip(models.Model):
+    ip = models.TextField(max_length=64)
+
+
+class ContractIpLog(models.Model):
+    contract = models.ForeignKey(Contract, related_name='ips')
+    ip = models.ForeignKey(Ip)
+    time = models.DateTimeField(auto_now_add=True)

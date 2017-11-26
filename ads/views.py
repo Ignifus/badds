@@ -1,8 +1,6 @@
-from django.contrib.auth.models import User
-from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
-from ads.serializers import UserSerializer
+from ads.api import get_resource
 
 
 def index(request):
@@ -11,6 +9,5 @@ def index(request):
     return redirect('/login')
 
 
-def context(request):
-    user_context = User.objects.get(pk=request.user.id)
-    return JsonResponse({'user': UserSerializer(user_context).data})
+def ad(request):
+    return get_resource(request)

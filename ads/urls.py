@@ -14,12 +14,13 @@ router.register(r'auctions', AuctionViewSet)
 router.register(r'biddings', BiddingViewSet)
 router.register(r'restriction', RestrictionViewSet)
 router.register(r'resources', ResourceViewSet)
+router.register(r'contracts', ContractViewSet)
 
 app_name = 'ads'
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^', include(router.urls)),
-    url(r'^context/$', views.context, name='index')
+    url(r'^ad/$', views.ad, name='index')
 ]
 
 urlpatterns += staticfiles_urlpatterns()
