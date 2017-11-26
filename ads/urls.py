@@ -15,6 +15,8 @@ router.register(r'biddings', BiddingViewSet)
 router.register(r'restriction', RestrictionViewSet)
 router.register(r'resources', ResourceViewSet)
 router.register(r'contracts', ContractViewSet)
+router.register(r'applicationcategories', ApplicationCategoryViewSet)
+router.register(r'advertisementcategories', AdvertisementCategoryViewSet)
 
 app_name = 'ads'
 urlpatterns = [

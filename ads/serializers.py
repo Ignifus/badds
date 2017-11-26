@@ -3,6 +3,16 @@ from rest_framework import serializers
 from ads.models import *
 
 
+class AdvertisementCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AdvertisementCategory
+        fields = '__all__'
+
+class ApplicationCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ApplicationCategory
+        fields = '__all__'
+
 class ContractSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contract

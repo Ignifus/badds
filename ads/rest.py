@@ -40,3 +40,11 @@ class ResourceViewSet(viewsets.ModelViewSet):
 class ContractViewSet(viewsets.ModelViewSet):
     queryset = Contract.objects.all()
     serializer_class = ContractSerializer
+
+class ApplicationCategoryViewSet(viewsets.ModelViewSet):
+    queryset = ApplicationCategory.objects.all()
+    serializer_class = ApplicationCategorySerializer
+
+class AdvertisementCategoryViewSet(viewsets.ModelViewSet):
+    queryset = AdvertisementCategory.objects.all()
+    serializer_class = AdvertisementCategorySerializer
