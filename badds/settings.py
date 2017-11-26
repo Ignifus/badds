@@ -45,7 +45,8 @@ INSTALLED_APPS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'ads.rest_permissions.IsAuthenticatedAndEmailConfirmed',
+        #'ads.rest_permissions.IsAuthenticatedAndEmailConfirmed',
+        'rest_framework.permissions.AllowAny',
     ]
 }
 
