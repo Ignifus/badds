@@ -35,7 +35,6 @@ class AdvertisementCategory(models.Model):
 class Restriction(models.Model):
     restriction = models.TextField(max_length=16)
     description = models.TextField(max_length=256)
-    unit = models.TextField(max_length=16)
 
     def __str__(self):
         return self.restriction
@@ -45,8 +44,8 @@ class Space(models.Model):
     application = models.ForeignKey(Application, related_name='spaces')
     category = models.ForeignKey(AdvertisementCategory)
     name = models.TextField(max_length=16)
-    dimensions = models.TextField(max_length=16)
-    unit = models.TextField(max_length=16)
+    x_size = models.IntegerField()
+    y_size = models.IntegerField()
     price = models.FloatField()
     prints = models.IntegerField()
     restrictions = models.ManyToManyField(Restriction, through='SpaceRestriction')
@@ -94,7 +93,7 @@ class Auction(models.Model):
 class Bidding(models.Model):
     auction = models.ForeignKey(Auction, related_name='biddings')
     user = models.ForeignKey(User)
-    price = models.FloatField()
+    price_usd = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
 
 
