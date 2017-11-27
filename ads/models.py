@@ -107,7 +107,7 @@ class Advertisement(models.Model):
 class Resource(models.Model):
     advertisement = models.ForeignKey(Advertisement, related_name='resources')
     name = models.TextField(max_length=128)
-    path = models.TextField(max_length=256)
+    path = models.TextField()
     restrictions = models.ManyToManyField(Restriction, through='ResourceRestriction')
     created_at = models.DateTimeField(auto_now_add=True)
 

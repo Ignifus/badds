@@ -11,10 +11,10 @@ from badds.utils import get_client_ip
 def get_resource(request):
     if request.method == "GET":
         apikey = request.GET.get("apikey", None)
-        domain = request.GET.get("domain", None)
         space_id = request.GET.get("spaceid", None)
         client_ip = get_client_ip(request)
 
+        # check api key
         # Add ip to ip log, reduce print if unique, add ip with country if unique
         # if reduced print, add credits to Space owner equal to ppp_usd of contract
         # Check if country restriction, if yes, check country and only return if correct
@@ -29,7 +29,3 @@ def get_resource(request):
 
         return JsonResponse({'resource': contract.advertisement.resources.get(advertisement_id=contract.advertisement_id).path})
     return JsonResponse({'error': "Only GET supported."})
-
-
-def upload(request):
-    return JsonResponse(cloudinary.uploader.upload("badds.png", public_id="badds", width=1037, height=677))

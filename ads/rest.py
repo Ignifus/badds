@@ -2,8 +2,8 @@ import os
 from binascii import hexlify
 
 from rest_framework import viewsets
-from rest_framework.authtoken.models import Token
 
+from ads.image import upload
 from ads.serializers import *
 
 
@@ -52,6 +52,9 @@ class RestrictionViewSet(viewsets.ModelViewSet):
 class ResourceViewSet(viewsets.ModelViewSet):
     queryset = Resource.objects.all()
     serializer_class = ResourceSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(path=upload(self.request.data['path']))
 
 class ContractViewSet(viewsets.ModelViewSet):
     queryset = Contract.objects.all()
