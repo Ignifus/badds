@@ -23,7 +23,6 @@ class Application(models.Model):
         return self.name
 
 
-
 class AdvertisementCategory(models.Model):
     category = models.TextField(max_length=32)
     description = models.TextField(max_length=256)
@@ -56,7 +55,7 @@ class Space(models.Model):
 
 class SpaceRestriction(models.Model):
     space = models.ForeignKey(Space, related_name='spaces')
-    restriction = models.ForeignKey(Restriction, related_name='s_restrictions')
+    restriction = models.ForeignKey(Restriction, related_name='space_restrictions')
     value = models.TextField(max_length=16)
 
 
@@ -109,6 +108,7 @@ class Resource(models.Model):
     advertisement = models.ForeignKey(Advertisement, related_name='resources')
     name = models.TextField(max_length=128)
     path = models.TextField(max_length=256)
+    restrictions = models.ManyToManyField(Restriction, through='ResourceRestriction')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -116,8 +116,8 @@ class Resource(models.Model):
 
 
 class ResourceRestriction(models.Model):
-    resource = models.ForeignKey(Space, related_name='resources')
-    restriction = models.ForeignKey(Restriction, related_name='r_restrictions')
+    resource = models.ForeignKey(Resource, related_name='resources')
+    restriction = models.ForeignKey(Restriction, related_name='resource_restrictions')
     value = models.TextField(max_length=16)
 
 

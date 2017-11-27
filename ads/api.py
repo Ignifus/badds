@@ -4,7 +4,7 @@ import cloudinary.api
 from cloudinary.utils import cloudinary_url
 from django.http import HttpResponse, JsonResponse
 
-from ads.models import Resource, Space, Contract
+from ads.models import Resource, Space, Contract, Advertisement
 from badds.utils import get_client_ip
 
 
@@ -22,7 +22,12 @@ def get_resource(request):
 
         # return json response from cloudinary
 
-        return JsonResponse({'resource': Contract.objects.get(space_id=space_id).advertisement.resources.get(data_type='png').path})
+        try:
+            contract = Contract.objects.get(pk=space_id)
+        except Contract.DoesNotExist:
+            return JsonResponse({'error': "Space not found."})
+
+        return JsonResponse({'resource': contract.advertisement.resources.get(advertisement_id=contract.advertisement_id).path})
     return JsonResponse({'error': "Only GET supported."})
 
 

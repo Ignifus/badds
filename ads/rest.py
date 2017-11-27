@@ -1,4 +1,5 @@
 from rest_framework import viewsets
+from rest_framework.authtoken.models import Token
 
 from ads.serializers import *
 
@@ -13,21 +14,33 @@ class ApplicationViewSet(viewsets.ModelViewSet):
     queryset = Application.objects.all()
     serializer_class = ApplicationSerializer
 
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user, key=Token.objects.create(user=self.request.user).key)
+
 class AdvertisementViewSet(viewsets.ModelViewSet):
     queryset = Advertisement.objects.all()
     serializer_class = AdvertisementSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 class SpaceViewSet(viewsets.ModelViewSet):
     queryset = Space.objects.all()
     serializer_class = SpaceSerializer
 
-class AuctionViewSet(viewsets.ModelViewSet):
-    queryset = Auction.objects.all()
-    serializer_class = AuctionSerializer
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 class BiddingViewSet(viewsets.ModelViewSet):
     queryset = Bidding.objects.all()
     serializer_class = BiddingSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+class AuctionViewSet(viewsets.ModelViewSet):
+    queryset = Auction.objects.all()
+    serializer_class = AuctionSerializer
 
 class RestrictionViewSet(viewsets.ModelViewSet):
     queryset = Restriction.objects.all()

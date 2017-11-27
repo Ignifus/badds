@@ -3,6 +3,11 @@ from rest_framework import serializers
 from ads.models import *
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        exclude = ('password', 'is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')
+
 class AdvertisementCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = AdvertisementCategory
@@ -24,46 +29,47 @@ class RestrictionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ResourceSerializer(serializers.ModelSerializer):
-    r_restrictions = RestrictionSerializer(many=True, required=False)
+    restrictions = RestrictionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Resource
         fields = '__all__'
 
 class AdvertisementSerializer(serializers.ModelSerializer):
-    resources = ResourceSerializer(many=True, required=False)
+    user = UserSerializer(read_only=True)
+    resources = ResourceSerializer(many=True, read_only=True)
 
     class Meta:
         model = Advertisement
         fields = '__all__'
 
 class BiddingSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+
     class Meta:
         model = Bidding
         fields = '__all__'
 
 class AuctionSerializer(serializers.ModelSerializer):
-    biddings = BiddingSerializer(many=True, required=False)
+    biddings = BiddingSerializer(many=True, read_only=True)
 
     class Meta:
         model = Auction
         fields = '__all__'
 
 class SpaceSerializer(serializers.ModelSerializer):
-    auctions = AuctionSerializer(many=True, required=False)
-    s_restrictions = RestrictionSerializer(many=True, required=False)
+    user = UserSerializer(read_only=True)
+    auctions = AuctionSerializer(many=True, read_only=True)
+    restrictions = RestrictionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Space
         fields = '__all__'
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        exclude = ('password', 'is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')
-
 class ApplicationSerializer(serializers.ModelSerializer):
-    spaces = SpaceSerializer(many=True, required=False)
+    user = UserSerializer(read_only=True)
+    spaces = SpaceSerializer(many=True, read_only=True)
+    key = serializers.ReadOnlyField()
 
     class Meta:
         model = Application

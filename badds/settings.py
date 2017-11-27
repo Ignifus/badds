@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'ads.apps.AdsConfig',
     'rest_framework',
     'corsheaders',
+    'rest_framework.authtoken'
 ]
 
 REST_FRAMEWORK = {
