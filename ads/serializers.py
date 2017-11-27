@@ -24,7 +24,7 @@ class ResourceSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class AdvertisementSerializer(serializers.ModelSerializer):
-    resources = ResourceSerializer(many=True)
+    resources = ResourceSerializer(many=True, required=False)
 
     class Meta:
         model = Advertisement
@@ -41,15 +41,15 @@ class BiddingSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class AuctionSerializer(serializers.ModelSerializer):
-    biddings = BiddingSerializer(many=True)
+    biddings = BiddingSerializer(many=True, required=False)
 
     class Meta:
         model = Auction
         fields = '__all__'
 
 class SpaceSerializer(serializers.ModelSerializer):
-    auctions = AuctionSerializer(many=True)
-    restrictions = RestrictionSerializer(many=True)
+    auctions = AuctionSerializer(many=True, required=False)
+    restrictions = RestrictionSerializer(many=True, required=False)
 
     class Meta:
         model = Space
@@ -61,7 +61,7 @@ class UserSerializer(serializers.ModelSerializer):
         exclude = ('password', 'is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')
 
 class ApplicationSerializer(serializers.ModelSerializer):
-    spaces = SpaceSerializer(many=True)
+    spaces = SpaceSerializer(many=True, required=False)
 
     class Meta:
         model = Application
