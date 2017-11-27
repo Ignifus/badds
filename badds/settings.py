@@ -41,8 +41,7 @@ INSTALLED_APPS = [
     'landing.apps.LandingConfig',
     'ads.apps.AdsConfig',
     'rest_framework',
-    'corsheaders',
-    'rest_framework.authtoken'
+    'corsheaders'
 ]
 
 REST_FRAMEWORK = {

@@ -1,3 +1,6 @@
+import os
+from binascii import hexlify
+
 from rest_framework import viewsets
 from rest_framework.authtoken.models import Token
 
@@ -15,7 +18,7 @@ class ApplicationViewSet(viewsets.ModelViewSet):
     serializer_class = ApplicationSerializer
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user, key=Token.objects.create(user=self.request.user).key)
+        serializer.save(user=self.request.user, key=hexlify(os.urandom(32)).decode())
 
 class AdvertisementViewSet(viewsets.ModelViewSet):
     queryset = Advertisement.objects.all()
