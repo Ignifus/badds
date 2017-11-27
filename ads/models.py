@@ -56,7 +56,7 @@ class Space(models.Model):
 
 class SpaceRestriction(models.Model):
     space = models.ForeignKey(Space, related_name='spaces')
-    restriction = models.ForeignKey(Restriction, related_name='restrictions')
+    restriction = models.ForeignKey(Restriction, related_name='s_restrictions')
     value = models.TextField(max_length=16)
 
 
@@ -107,12 +107,18 @@ class Advertisement(models.Model):
 
 class Resource(models.Model):
     advertisement = models.ForeignKey(Advertisement, related_name='resources')
+    name = models.TextField(max_length=128)
     path = models.TextField(max_length=256)
-    data_type = models.TextField(max_length=8)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.advertisement.name
+
+
+class ResourceRestriction(models.Model):
+    resource = models.ForeignKey(Space, related_name='resources')
+    restriction = models.ForeignKey(Restriction, related_name='r_restrictions')
+    value = models.TextField(max_length=16)
 
 
 class Contract(models.Model):

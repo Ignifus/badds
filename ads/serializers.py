@@ -18,7 +18,14 @@ class ContractSerializer(serializers.ModelSerializer):
         model = Contract
         fields = '__all__'
 
+class RestrictionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Restriction
+        fields = '__all__'
+
 class ResourceSerializer(serializers.ModelSerializer):
+    r_restrictions = RestrictionSerializer(many=True, required=False)
+
     class Meta:
         model = Resource
         fields = '__all__'
@@ -28,11 +35,6 @@ class AdvertisementSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Advertisement
-        fields = '__all__'
-
-class RestrictionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Restriction
         fields = '__all__'
 
 class BiddingSerializer(serializers.ModelSerializer):
@@ -49,7 +51,7 @@ class AuctionSerializer(serializers.ModelSerializer):
 
 class SpaceSerializer(serializers.ModelSerializer):
     auctions = AuctionSerializer(many=True, required=False)
-    restrictions = RestrictionSerializer(many=True, required=False)
+    s_restrictions = RestrictionSerializer(many=True, required=False)
 
     class Meta:
         model = Space
