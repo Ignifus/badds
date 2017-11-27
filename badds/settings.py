@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'landing.apps.LandingConfig',
     'ads.apps.AdsConfig',
-    'rest_framework'
+    'rest_framework',
+    'corsheaders',
 ]
 
 REST_FRAMEWORK = {
@@ -58,6 +59,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'badds.urls'
@@ -154,5 +157,7 @@ if "BADDS_CAPTCHA_SECRET" in os.environ:
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
-      os.path.join(BASE_DIR, "static/"),
+    os.path.join(BASE_DIR, "static/"),
 )
+
+CORS_ORIGIN_ALLOW_ALL = True

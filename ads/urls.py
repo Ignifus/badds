@@ -2,6 +2,7 @@ from django.conf.urls import url, include
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from rest_framework import routers
 
+from ads import api
 from ads.rest import *
 from . import views
 
@@ -22,7 +23,8 @@ app_name = 'ads'
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^', include(router.urls)),
-    url(r'^ad/$', views.ad, name='index')
+    url(r'^ad/$', views.ad, name='ad'),
+    url(r'^upload/$', api.upload, name='upload')
 ]
 
 urlpatterns += staticfiles_urlpatterns()
