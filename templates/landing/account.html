@@ -8,6 +8,20 @@
 
         <div class="box">
 
+            <h3>Informacion</h3>
+
+            <h4>Usuario</h4>
+            <p>{{ request.user.username }}</p>
+
+            <h4>E-Mail</h4>
+            <p>{{ request.user.email }}</p>
+
+            <h4>Fecha de Ingreso</h4>
+            <p>{{ request.user.date_joined }}</p>
+
+            <h4>Ultimo Acceso</h4>
+            <p>{{ request.user.last_login }}</p>
+
             <h3>Creditos</h3>
 
             <p style="font-size:40px;">${{ user.profile.credits }}</p>
