@@ -1,17 +1,13 @@
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
-from cloudinary.utils import cloudinary_url
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 
-from ads.models import Resource, Space, Contract, Advertisement
+from ads.models import Contract
 from badds.utils import get_client_ip
 
 
 def get_resource(request):
     if request.method == "GET":
         apikey = request.GET.get("apikey", None)
-        space_id = request.GET.get("spaceid", None)
+        space_id = request.GET.get("space", None)
         client_ip = get_client_ip(request)
 
         # check api key
@@ -23,9 +19,12 @@ def get_resource(request):
         # return json response from cloudinary
 
         try:
-            contract = Contract.objects.get(pk=space_id)
+            contract = Contract.objects.get(space_id=space_id, active=True)
         except Contract.DoesNotExist:
-            return JsonResponse({'error': "Space not found."})
+            return JsonResponse({'error': "Contract not found for space."})
 
-        return JsonResponse({'resource': contract.advertisement.resources.get(advertisement_id=contract.advertisement_id).path})
+        if contract.advertisement.resources.all().count() == 0:
+            return JsonResponse({'error': "Advertisement has no resources assigned."})
+
+        return JsonResponse({'resource': contract.advertisement.resources.filter(advertisement_id=contract.advertisement_id).first().path})
     return JsonResponse({'error': "Only GET supported."})

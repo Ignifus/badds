@@ -8,25 +8,30 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         exclude = ('password', 'is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')
 
+
 class AdvertisementCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = AdvertisementCategory
         fields = '__all__'
+
 
 class ApplicationCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = ApplicationCategory
         fields = '__all__'
 
+
 class ContractSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contract
         fields = '__all__'
 
+
 class RestrictionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Restriction
         fields = '__all__'
+
 
 class ResourceSerializer(serializers.ModelSerializer):
     restrictions = RestrictionSerializer(many=True, read_only=True)
@@ -34,6 +39,7 @@ class ResourceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Resource
         fields = '__all__'
+
 
 class AdvertisementSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
@@ -43,6 +49,7 @@ class AdvertisementSerializer(serializers.ModelSerializer):
         model = Advertisement
         fields = '__all__'
 
+
 class BiddingSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
 
@@ -50,12 +57,14 @@ class BiddingSerializer(serializers.ModelSerializer):
         model = Bidding
         fields = '__all__'
 
+
 class AuctionSerializer(serializers.ModelSerializer):
     biddings = BiddingSerializer(many=True, read_only=True)
 
     class Meta:
         model = Auction
         fields = '__all__'
+
 
 class SpaceSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
@@ -65,6 +74,7 @@ class SpaceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Space
         fields = '__all__'
+
 
 class ApplicationSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
