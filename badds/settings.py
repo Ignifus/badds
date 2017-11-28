@@ -46,8 +46,8 @@ INSTALLED_APPS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        #'ads.rest_permissions.IsAuthenticatedAndEmailConfirmed',
-        'rest_framework.permissions.AllowAny',
+        'ads.rest_permissions.IsAuthenticatedAndEmailConfirmed',
+        #'rest_framework.permissions.AllowAny',
     ]
 }
 
@@ -160,4 +160,4 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static/"),
 )
 
-CORS_ORIGIN_ALLOW_ALL = True
+#CORS_ORIGIN_ALLOW_ALL = True
