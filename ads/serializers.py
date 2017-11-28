@@ -79,8 +79,7 @@ class SpaceSerializer(serializers.ModelSerializer):
 class ApplicationSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     spaces = SpaceSerializer(many=True, read_only=True)
-    key = serializers.ReadOnlyField()
 
     class Meta:
         model = Application
-        fields = '__all__'
+        exclude = ("key",)
