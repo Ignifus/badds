@@ -9,6 +9,14 @@ from ads.api import get_resource
 def index(request):
     return render(request, 'ads/index.html')
 
+@login_required(login_url='/login')
+def publisher(request):
+    return render(request, 'ads/panel-publisher.html')
+
+@login_required(login_url='/login')
+def advertiser(request):
+    return render(request, 'ads/panel-advertiser.html')
+
 @csrf_exempt
 def ad(request):
     return get_resource(request)

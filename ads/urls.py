@@ -21,6 +21,8 @@ router.register(r'advertisementcategories', AdvertisementCategoryViewSet)
 app_name = 'ads'
 urlpatterns = [
     url(r'^$', views.index, name='index'),
+    url(r'^publisher/$', views.publisher, name='publisher'),
+    url(r'^advertiser/$', views.advertiser, name='advertiser'),
     url(r'^', include(router.urls)),
     url(r'^ad/$', views.ad, name='ad'),
 ]
