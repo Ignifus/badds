@@ -1,13 +1,14 @@
-from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 
 from ads.api import get_resource
 
 
+@login_required(login_url='/login')
 def index(request):
-    if request.user.is_authenticated:
-        return render(request, 'ads/index.html')
-    return redirect('/login')
+    return render(request, 'ads/index.html')
 
-
+@csrf_exempt
 def ad(request):
     return get_resource(request)

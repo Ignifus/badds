@@ -5,9 +5,9 @@ from badds.utils import get_client_ip
 
 
 def get_resource(request):
-    if request.method == "GET":
-        apikey = request.GET.get("apikey", None)
-        space_id = request.GET.get("space", None)
+    if request.method == "POST":
+        apikey = request.POST.get("apikey", None)
+        space_id = request.POST.get("space", None)
         client_ip = get_client_ip(request)
 
         # check api key
@@ -21,10 +21,13 @@ def get_resource(request):
         try:
             contract = Contract.objects.get(space_id=space_id, active=True)
         except Contract.DoesNotExist:
-            return JsonResponse({'error': "Contract not found for space."})
+            return JsonResponse({'error': "Contract not found for space."}, status=400)
+
+        if contract.space.application.key != apikey:
+            return JsonResponse({'error': "Bad API key."}, status=403)
 
         if contract.advertisement.resources.all().count() == 0:
-            return JsonResponse({'error': "Advertisement has no resources assigned."})
+            return JsonResponse({'error': "Advertisement has no resources assigned."}, status=500)
 
         return JsonResponse({'resource': contract.advertisement.resources.filter(advertisement_id=contract.advertisement_id).first().path})
-    return JsonResponse({'error': "Only GET supported."})
+    return JsonResponse({'error': "Only POST supported."}, status=405)
