@@ -26,7 +26,7 @@ def contact(request):
 
 def register(request):
     if request.user.is_authenticated:
-        return render(request, 'landing/index.html')
+        return render(request, 'ads/index.html')
     return register_auth(request)
 
 
