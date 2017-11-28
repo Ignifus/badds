@@ -6,7 +6,7 @@ from django.dispatch import receiver
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    credit = models.FloatField(default=0)
+    credits = models.FloatField(default=0)
     email_confirmed = models.BooleanField(default=False)
 
     def __str__(self):

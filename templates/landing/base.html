@@ -23,6 +23,7 @@
                 <li><a href="/contact">Contacto</a></li>
                 {% if user.is_authenticated %}
                     <li><a href="/ads/" class="button">Panel</a></li>
+                    <li><a href="/account" class="button">Cuenta</a></li>
                     <li><a href="/logout_auth" class="button">Salir</a></li>
                 {% else %}
                     <li><a href="/login">Ingresar</a></li>

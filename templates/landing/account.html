@@ -1,0 +1,34 @@
+{% extends 'landing/base.html' %}
+
+{% block content %}
+    <section id="main" class="container 50%">
+        <header class="page-header">
+            <h2>Cuenta</h2>
+        </header>
+
+        <div class="box">
+
+            <h3>Creditos</h3>
+
+            <p style="font-size:40px;">${{ user.profile.credits }}</p>
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="row uniform 50%">
+                    <div class="12u">
+                        <input name="credits" id="credits" type="number" min="0" placeholder="Cantidad"/>
+                    </div>
+                </div>
+                <div class="row uniform">
+                    <div class="12u">
+                        <ul class="actions">
+                            <li>
+                                <input type="submit" value="Cargar">
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+{% endblock %}

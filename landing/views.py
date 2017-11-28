@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.shortcuts import render
 
 from landing.auth import register_auth, login_auth, activate_auth
@@ -44,6 +46,15 @@ def login(request):
 
 def activate(request, uidb64, token):
     return activate_auth(request, uidb64, token)
+
+
+@login_required(login_url="/")
+def account(request):
+    if request.method == "POST":
+        user = User.objects.get(pk=request.user.id)
+        user.profile.credits += int(request.POST.get('credits'))
+        user.save()
+    return render(request, 'landing/account.html', {'credits': request.user.profile.credits})
 
 
 def elements(request):
