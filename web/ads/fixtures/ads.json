@@ -1,0 +1,46 @@
+[
+  {
+    "model": "ads.applicationcategory",
+    "pk": 1,
+    "fields": {
+      "category": "Web",
+      "description": "Aplicacion Web"
+    }
+  },
+  {
+    "model": "ads.applicationcategory",
+    "pk": 2,
+    "fields": {
+      "category": "Android",
+      "description": "Aplicacion Android"
+    }
+  },
+  {
+    "model": "ads.auctionstatus",
+    "pk": 1,
+    "fields": {
+      "status": "Active"
+    }
+  },
+  {
+    "model": "ads.auctionstatus",
+    "pk": 2,
+    "fields": {
+      "status": "Extended"
+    }
+  },
+  {
+    "model": "ads.auctionstatus",
+    "pk": 3,
+    "fields": {
+      "status": "Closed"
+    }
+  },
+  {
+    "model": "ads.auctionstatus",
+    "pk": 5,
+    "fields": {
+      "status": "Removed"
+    }
+  }
+]
