@@ -1,6 +1,4 @@
-# Badds
-
-
+# Badds Web
 
 ## Installation
 
@@ -18,8 +16,11 @@ For Cloudinary, add CLOUDINARY_URL env variable with the Cloudinary API key.
 
 For Google captcha, add a BADDS_CAPTCHA_SECRET env variable.
 
-## Running
+After configuring env variables...
+
 * `python manage.py migrate`
 * `python manage.py loaddata ads`
+
+## Running
 * `python manage.py runserver`
 
