@@ -10,6 +10,10 @@ def index(request):
     return render(request, 'ads/index.html')
 
 @login_required(login_url='/login')
+def panel(request):
+    return render(request, 'ads/panel.html')
+
+@login_required(login_url='/login')
 def publisher(request):
     return render(request, 'ads/panel-publisher.html')
 
