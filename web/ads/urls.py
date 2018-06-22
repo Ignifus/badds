@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^advertiser/$', views.advertiser, name='advertiser'),
     url(r'^', include(router.urls)),
     url(r'^ad/$', views.ad, name='ad'),
+    url(r'^api/application-count/$', ApplicationCountView.as_view(), name='application-count'),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

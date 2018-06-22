@@ -9,7 +9,7 @@ import Refresher from "../../components/Refresher";
 import Spinner from "../../components/Spinner";
 import {fetchData, postData} from "../../actions";
 import {connect} from "react-redux";
-import Error from "../../components/Error";
+import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
 
 class Wiki extends Component {
   constructor(props) {
@@ -116,7 +116,7 @@ class Wiki extends Component {
     if (this.props.hasErrored) {
       return (
         <div>
-          <Error hasErrored={this.props.hasErrored}/>
+          <ErrorMessage hasErrored={this.props.hasErrored}/>
           {this.getRefresher()}
         </div>
       );

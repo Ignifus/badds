@@ -8,7 +8,7 @@ import "react-table/react-table.css";
 
 import {fetchData, postData} from "../../actions";
 import {connect} from "react-redux";
-import Error from "../../components/Error";
+import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
 import Spinner from "../../components/Spinner";
 import Refresher from "../../components/Refresher";
 import {toast} from "react-toastify";
@@ -56,7 +56,7 @@ class Tokens extends Component {
     if (this.props.hasErrored) {
       return (
         <div>
-          <Error hasErrored={this.props.hasErrored}/>
+          <ErrorMessage hasErrored={this.props.hasErrored}/>
           {this.getRefresher()}
         </div>
       );

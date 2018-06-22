@@ -10,13 +10,12 @@ import Footer from '../../components/Footer/';
 import Dashboard from '../../views/Dashboard/';
 import Agencies from '../../views/Agencies/';
 import Tokens from '../../views/Tokens/';
-import Lottery from '../../views/Lottery/';
-import Configuration from '../../views/Configuration/';
+import Applications from '../../views/Applications/';
 import Wiki from '../../views/Wiki/';
 import {ScaleLoader} from "react-spinners";
 import {connect} from "react-redux";
 import {fetchData} from "../../actions/index";
-import Error from "../../components/Error";
+import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
 import Toast from "../../components/Toast";
 
 class Full extends Component {
@@ -43,7 +42,7 @@ class Full extends Component {
     if (this.props.state.hasErrored) {
       return (
         <Container className="center-absolute">
-          <Error hasErrored={this.props.state.hasErrored}/>
+          <ErrorMessage hasErrored={this.props.state.hasErrored}/>
           {this.getVersionDisplay()}
         </Container>
       );
@@ -67,10 +66,9 @@ class Full extends Component {
             <Container fluid>
               <Switch>
                 <Route path="/dashboard" name="Panel" component={Dashboard}/>
+                <Route path="/applications" name="Mis Aplicaciones" component={Applications}/>
                 <Route path="/agencies" name="Agencias" component={Agencies}/>
                 <Route path="/tokens" name="Tokens" component={Tokens}/>
-                <Route path="/lottery" name="Loteria" component={Lottery}/>
-                <Route path="/configuration" name="Configuracion" component={Configuration}/>
                 <Route path="/wiki" name="Preguntas" component={Wiki}/>
                 <Redirect from="/" to="/dashboard"/>
               </Switch>

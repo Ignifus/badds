@@ -60,6 +60,16 @@ class Header extends Component {
           <span className="navbar-toggler-icon"/>
         </NavbarToggler>
 
+        <Nav>
+          <NavItem>
+            <a href="/account/"><img src={avatar} className="img-avatar"/></a>
+          </NavItem>
+
+          <NavItem>
+            <br/>
+          </NavItem>
+        </Nav>
+
         {/*<NavbarToggler className="d-md-down-none" onClick={this.asideToggle}>*/}
         {/*<span className="navbar-toggler-icon"></span>*/}
         {/*</NavbarToggler>*/}

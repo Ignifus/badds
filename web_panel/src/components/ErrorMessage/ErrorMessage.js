@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 
-class Error extends Component {
+class ErrorMessage extends Component {
   render () {
     return (
       <div className="inner-center-absolute text-center" >
@@ -13,4 +13,4 @@ class Error extends Component {
   }
 }
 
-export default Error;
+export default ErrorMessage;

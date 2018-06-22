@@ -1,84 +1,56 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {Card, CardDeck, CardBody, CardTitle, CardSubtitle, Col, Row} from 'reactstrap';
-import Refresher from "../../components/Refresher";
-import Spinner from "../../components/Spinner";
 import {connect} from "react-redux";
-import {fetchData} from "../../actions";
-import Error from "../../components/Error";
+import SmartComponent, {mapDispatchToProps} from "../smart";
 
-class Dashboard extends Component {
+class Dashboard extends SmartComponent {
   fetch() {
-    // this.props.fetchData({
-    //   url: "/api/agencies-count",
-    //   respKey: "agencies",
-    // }, "DASHBOARD");
+    this.props.fetchData({
+      url: "/ads/api/application-count/",
+      respKey: "applications",
+    }, "dash");
   }
 
-  componentDidMount() {
-    this.fetch();
-  }
-
-  getRefresher() {
-    return <Refresher refreshFunction={this.fetch.bind(this)} refreshDate={this.props.state.lastUpdated}/>;
-  }
-
-  render() {
-    if (this.props.hasErrored) {
-      return (
-        <div>
-          <Error hasErrored={this.props.hasErrored}/>
-          {this.getRefresher()}
-        </div>
-      );
-    }
-
-    if (this.props.isLoading) {
-      return <Spinner loading={true} refreshFunction={this.fetch.bind(this)} refreshDate={this.props.lastUpdated}/>
-    }
-
+  renderContent() {
     return (
-      <div className="animated fadeIn">
-        <Row>
-          <Col>
-            <CardDeck>
-              {/*<Card body inverse color="primary">*/}
-                {/*<CardBody>*/}
-                  {/*<div className="h1 text-muted text-right mb-2"><i className="icon-people"/></div>*/}
-                  {/*<CardTitle>{this.props.state.agencies.count}</CardTitle>*/}
-                  {/*<CardSubtitle>Agencias en linea</CardSubtitle>*/}
-                {/*</CardBody>*/}
-              {/*</Card>*/}
+      <Row>
+        <Col>
+          <CardDeck>
+            <Card body inverse color="primary">
+              <CardBody>
+                <div className="h1 text-muted text-right mb-2"><i className="icon-people"/></div>
+                <CardTitle>{this.props.state.data.applications.count}</CardTitle>
+                <CardSubtitle>Aplicaciones</CardSubtitle>
+              </CardBody>
+            </Card>
 
-              {/*<Card body inverse color="info">*/}
-                {/*<CardBody>*/}
-                  {/*<div className="h1 text-muted text-right mb-2"><i className="icon-paper-plane"/></div>*/}
-                  {/*<CardTitle>3</CardTitle>*/}
-                  {/*<CardSubtitle>Sorteos en vivo</CardSubtitle>*/}
-                {/*</CardBody>*/}
-              {/*</Card>*/}
+            <Card body inverse color="info">
+              <CardBody>
+                <div className="h1 text-muted text-right mb-2"><i className="icon-paper-plane"/></div>
+                <CardTitle>3</CardTitle>
+                <CardSubtitle>Espacios</CardSubtitle>
+              </CardBody>
+            </Card>
 
-              {/*<Card body inverse color="warning">*/}
-                {/*<CardBody>*/}
-                  {/*<div className="h1 text-muted text-right mb-2"><i className="icon-lock"/></div>*/}
-                  {/*<CardTitle>10</CardTitle>*/}
-                  {/*<CardSubtitle>Tokens sin activar</CardSubtitle>*/}
-                {/*</CardBody>*/}
-              {/*</Card>*/}
+            <Card body inverse color="warning">
+              <CardBody>
+                <div className="h1 text-muted text-right mb-2"><i className="icon-lock"/></div>
+                <CardTitle>10</CardTitle>
+                <CardSubtitle>Publicidades</CardSubtitle>
+              </CardBody>
+            </Card>
 
-              {/*<Card body inverse color="danger">*/}
-                {/*<CardBody>*/}
-                  {/*<div className="h1 text-muted text-right mb-2"><i className="icon-eye"/></div>*/}
-                  {/*<CardTitle>5</CardTitle>*/}
-                  {/*<CardSubtitle>Agencias morosas</CardSubtitle>*/}
-                {/*</CardBody>*/}
-              {/*</Card>*/}
-            </CardDeck>
+            <Card body inverse color="danger">
+              <CardBody>
+                <div className="h1 text-muted text-right mb-2"><i className="icon-eye"/></div>
+                <CardTitle>5</CardTitle>
+                <CardSubtitle>Contratos</CardSubtitle>
+              </CardBody>
+            </Card>
+          </CardDeck>
 
-          </Col>
-        </Row>
-
-        {this.getRefresher()}
-      </div>
+        </Col>
+      </Row>
     )
   }
 }
@@ -89,10 +61,4 @@ function mapStateToProps(state) {
   };
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchData: (calls, section, sc) => dispatch(fetchData(calls, section, sc))
-  };
-};
-
-export default connect(mapStateToProps,mapDispatchToProps)(Dashboard);
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

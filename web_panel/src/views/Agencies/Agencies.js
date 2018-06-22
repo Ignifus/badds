@@ -6,7 +6,7 @@ import { Col, Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap
 
 import ReactTable from "react-table";
 import "react-table/react-table.css";
-import Error from "../../components/Error";
+import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
 import Refresher from "../../components/Refresher";
 import Spinner from "../../components/Spinner";
 import {fetchData, postData, putData} from "../../actions";
@@ -100,7 +100,7 @@ class Agencies extends Component {
     if (this.props.hasErrored) {
       return (
         <div>
-          <Error hasErrored={this.props.hasErrored}/>
+          <ErrorMessage hasErrored={this.props.hasErrored}/>
           {this.getRefresher()}
         </div>
       );

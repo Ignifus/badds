@@ -3,6 +3,9 @@ from binascii import hexlify
 
 from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.renderers import JSONRenderer
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from ads.image import upload
 from ads.serializers import *
@@ -32,6 +35,15 @@ class ApplicationViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user, key=hexlify(os.urandom(32)).decode())
+
+
+class ApplicationCountView(APIView):
+    renderer_classes = (JSONRenderer, )
+
+    def get(self, request, format=None):
+        count = Application.objects.count()
+        content = {'count': count}
+        return Response(content)
 
 
 class AdvertisementViewSet(viewsets.ModelViewSet):

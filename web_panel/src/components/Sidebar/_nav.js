@@ -9,6 +9,14 @@ export default {
       }
     },
     {
+      name: 'Mis Aplicaciones',
+      url: '/applications',
+      icon: 'icon-settings',
+      badge: {
+        variant: 'info',
+      }
+    },
+    {
       name: 'Agencias',
       url: '/agencies',
       icon: 'icon-briefcase',
@@ -20,22 +28,6 @@ export default {
       name: 'Tokens',
       url: '/tokens',
       icon: 'icon-badge',
-      badge: {
-        variant: 'info',
-      }
-    },
-    {
-      name: 'Loteria',
-      url: '/lottery',
-      icon: 'icon-diamond',
-      badge: {
-        variant: 'info',
-      }
-    },
-    {
-      name: 'Configuracion',
-      url: '/configuration',
-      icon: 'icon-settings',
       badge: {
         variant: 'info',
       }
