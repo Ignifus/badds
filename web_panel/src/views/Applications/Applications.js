@@ -8,11 +8,16 @@ import {connect} from "react-redux";
 
 class Applications extends SmartComponent {
   fetch() {
-
+    this.props.fetchData({
+      url: "/ads/applications/",
+      respKey: "applications",
+    }, "apps");
   }
 
   renderContent() {
     return (
+      // TODO: Show detail of each application, in each detail show spaces, let user add a space
+
       <div className="animated fadeIn">
         <Card>
           <CardHeader tag="h3"><i className="fa fa-newspaper-o"/> Example</CardHeader>

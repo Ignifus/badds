@@ -17,17 +17,9 @@ export default {
       }
     },
     {
-      name: 'Agencias',
-      url: '/agencies',
+      name: 'Mis Publicidades',
+      url: '/advertisements',
       icon: 'icon-briefcase',
-      badge: {
-        variant: 'info',
-      }
-    },
-    {
-      name: 'Tokens',
-      url: '/tokens',
-      icon: 'icon-badge',
       badge: {
         variant: 'info',
       }

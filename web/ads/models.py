@@ -119,7 +119,7 @@ class ResourceRestriction(models.Model):
 
 class Contract(models.Model):
     space = models.ForeignKey(Space, on_delete=models.PROTECT)
-    advertisement = models.ForeignKey(Advertisement, on_delete=models.PROTECT)
+    advertisement = models.ForeignKey(Advertisement, related_name='contracts', on_delete=models.PROTECT)
     prints = models.IntegerField()
     ppp_usd = models.FloatField()
     active = models.BooleanField(default=True)

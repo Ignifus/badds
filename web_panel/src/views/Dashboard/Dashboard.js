@@ -6,8 +6,20 @@ import SmartComponent, {mapDispatchToProps} from "../smart";
 class Dashboard extends SmartComponent {
   fetch() {
     this.props.fetchData({
-      url: "/ads/api/application-count/",
+      url: "/ads/application-count/",
       respKey: "applications",
+      next: {
+        url: "/ads/space-count/",
+        respKey: "spaces",
+        next: {
+          url: "/ads/advertisement-count/",
+          respKey: "advertisements",
+          next: {
+            url: "/ads/contract-count/",
+            respKey: "contracts"
+          }
+        }
+      }
     }, "dash");
   }
 
@@ -27,7 +39,7 @@ class Dashboard extends SmartComponent {
             <Card body inverse color="info">
               <CardBody>
                 <div className="h1 text-muted text-right mb-2"><i className="icon-paper-plane"/></div>
-                <CardTitle>3</CardTitle>
+                <CardTitle>{this.props.state.data.spaces.count}</CardTitle>
                 <CardSubtitle>Espacios</CardSubtitle>
               </CardBody>
             </Card>
@@ -35,7 +47,7 @@ class Dashboard extends SmartComponent {
             <Card body inverse color="warning">
               <CardBody>
                 <div className="h1 text-muted text-right mb-2"><i className="icon-lock"/></div>
-                <CardTitle>10</CardTitle>
+                <CardTitle>{this.props.state.data.advertisements.count}</CardTitle>
                 <CardSubtitle>Publicidades</CardSubtitle>
               </CardBody>
             </Card>
@@ -43,7 +55,7 @@ class Dashboard extends SmartComponent {
             <Card body inverse color="danger">
               <CardBody>
                 <div className="h1 text-muted text-right mb-2"><i className="icon-eye"/></div>
-                <CardTitle>5</CardTitle>
+                <CardTitle>{this.props.state.data.contracts.count}</CardTitle>
                 <CardSubtitle>Contratos</CardSubtitle>
               </CardBody>
             </Card>

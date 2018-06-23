@@ -24,7 +24,10 @@ urlpatterns = [
     url(r'^advertiser/$', views.advertiser, name='advertiser'),
     url(r'^', include(router.urls)),
     url(r'^ad/$', views.ad, name='ad'),
-    url(r'^api/application-count/$', ApplicationCountView.as_view(), name='application-count'),
+    url(r'^application-count/$', ApplicationCountView.as_view(), name='application-count'),
+    url(r'^advertisement-count/$', AdvertisementCountView.as_view(), name='advertisement-count'),
+    url(r'^space-count/$', SpaceCountView.as_view(), name='space-count'),
+    url(r'^contract-count/$', ContractCountView.as_view(), name='contract-count'),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

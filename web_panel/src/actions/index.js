@@ -1,16 +1,16 @@
 import axios from "axios";
 
-export function putData(call, section, sc, fc) {
+export function putData(call, section, successCallback, failCallback) {
   return (dispatch) => {
     dispatch(baseHasErrored("", section));
-    apiPut(dispatch, call, section, sc, fc);
+    apiPut(dispatch, call, section, successCallback, failCallback);
   };
 }
 
-export function postData(call, section, sc, fc) {
+export function postData(call, section, successCallback, failCallback) {
   return (dispatch) => {
     dispatch(baseHasErrored("", section));
-    apiPost(dispatch, call, section, sc, fc);
+    apiPost(dispatch, call, section, successCallback, failCallback);
   };
 }
 
@@ -22,26 +22,26 @@ export function fetchData(calls, section) {
   };
 }
 
-function apiPut(dispatch, call, section, sc, fc) {
+function apiPut(dispatch, call, section, successCallback, failCallback) {
   axios.put(call.url, call.data, {xsrfCookieName: "csrftoken", xsrfHeaderName: "X-CSRFToken"})
     .then(function (response) {
       if (response.status !== 200)
         throw Error(response.statusText);
 
-      if (sc)
-        sc();
-    }).catch((error) => handleError(dispatch, error, section, fc));
+      if (successCallback)
+        successCallback();
+    }).catch((error) => handleError(dispatch, error, section, failCallback));
 }
 
-function apiPost(dispatch, call, section, sc, fc) {
+function apiPost(dispatch, call, section, successCallback, failCallback) {
   axios.post(call.url, call.data, {xsrfCookieName: "csrftoken", xsrfHeaderName: "X-CSRFToken"})
     .then(function (response) {
       if (response.status !== 201)
         throw Error(response.statusText);
 
-      if (sc)
-        sc();
-    }).catch((error) => handleError(dispatch, error, section, fc));
+      if (successCallback)
+        successCallback();
+    }).catch((error) => handleError(dispatch, error, section, failCallback));
 }
 
 function recursiveApiFetch(dispatch, calls, section, prevState = {}) {
@@ -95,10 +95,10 @@ function baseHasErrored(bool, section) {
   };
 }
 
-function handleError(dispatch, error, section, fc) {
-  console.log(error); // TODO: Log to sentry using react sentry. Sentry will generate ID, display to user.
+function handleError(dispatch, error, section, failCallback) {
+  console.log(error);
   dispatch(baseHasErrored(error.message, section));
 
-  if (fc)
-    fc();
+  if (failCallback)
+    failCallback();
 }

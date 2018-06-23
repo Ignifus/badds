@@ -41,7 +41,7 @@ class ApplicationCountView(APIView):
     renderer_classes = (JSONRenderer, )
 
     def get(self, request, format=None):
-        count = Application.objects.count()
+        count = Application.objects.filter(user=request.user).count()
         content = {'count': count}
         return Response(content)
 
@@ -55,6 +55,15 @@ class AdvertisementViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
 
+class AdvertisementCountView(APIView):
+    renderer_classes = (JSONRenderer, )
+
+    def get(self, request, format=None):
+        count = Advertisement.objects.filter(user=request.user).count()
+        content = {'count': count}
+        return Response(content)
+
+
 class SpaceViewSet(viewsets.ModelViewSet):
     queryset = Space.objects.all()
     serializer_class = SpaceSerializer
@@ -62,6 +71,15 @@ class SpaceViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+class SpaceCountView(APIView):
+    renderer_classes = (JSONRenderer, )
+
+    def get(self, request, format=None):
+        count = Space.objects.filter(application__user=request.user).count()
+        content = {'count': count}
+        return Response(content)
 
 
 class BiddingViewSet(viewsets.ModelViewSet):
@@ -98,6 +116,15 @@ class ContractViewSet(viewsets.ModelViewSet):
     queryset = Contract.objects.all()
     serializer_class = ContractSerializer
     authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)
+
+
+class ContractCountView(APIView):
+    renderer_classes = (JSONRenderer, )
+
+    def get(self, request, format=None):
+        count = Contract.objects.filter(advertisement__user=request.user).count()
+        content = {'count': count}
+        return Response(content)
 
 
 class ApplicationCategoryViewSet(viewsets.ModelViewSet):

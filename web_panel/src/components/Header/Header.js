@@ -54,7 +54,7 @@ class Header extends Component {
           <span className="navbar-toggler-icon"/>
         </NavbarToggler>
 
-        <NavbarBrand href="/ads/"/>
+        <NavbarBrand href="/"/>
 
         <NavbarToggler className="d-md-down-none mr-auto" onClick={this.sidebarToggle}>
           <span className="navbar-toggler-icon"/>

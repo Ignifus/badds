@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Refresher from "../components/Refresher";
 import Spinner from "../components/Spinner";
-import {fetchData, postData} from "../actions";
+import {fetchData, postData, putData} from "../actions";
 import ErrorMessage from "../components/ErrorMessage/ErrorMessage";
 
 class SmartComponent extends Component {
@@ -51,7 +51,8 @@ class SmartComponent extends Component {
 export const mapDispatchToProps = (dispatch) => {
   return {
     fetchData: (calls, section) => dispatch(fetchData(calls, section)),
-    postData: (call, section, sc, fc) => dispatch(postData(call, section, sc, fc))
+    postData: (call, section, successCallback, failCallback) => dispatch(postData(call, section, successCallback, failCallback)),
+    putData: (call, section, successCallback, failCallback) => dispatch(putData(call, section, successCallback, failCallback))
   };
 };
 

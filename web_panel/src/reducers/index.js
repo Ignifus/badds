@@ -14,6 +14,11 @@ let initialState = {
     isLoading:false,
     hasErrored:"",
     lastUpdated: Date.now()
+  },
+  ads:{
+    isLoading:false,
+    hasErrored:"",
+    lastUpdated: Date.now()
   }
 };
 

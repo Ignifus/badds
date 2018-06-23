@@ -128,25 +128,25 @@ class Wiki extends Component {
 
     return (
       <div className="animated fadeIn">
-        {this.props.state.questions.map((val) => {
-          return <Card key={val.id}>
-            <CardHeader><i className="fa fa-angle-double-down fa-lg" onClick={() => this.toggleQuestion(val.id)} style={{cursor: 'pointer'}}/>{val.question}</CardHeader>
-            <Collapse isOpen={this.state.collapses[val.id]}>
-              <CardBody>
-                <CardText>{val.answer}</CardText>
-                <CardSubtitle className="text-right">
-                  {val.categories.map(function (val) {
-                    return <Badge color="primary" key={val.id} pill>{val.category}</Badge>
-                  })}
-                  <br/>
-                  {val.groups.map(function (val) {
-                    return <Badge color="light" key={val.id} pill>{val.name}</Badge>
-                  })}
-                </CardSubtitle>
-              </CardBody>
-            </Collapse>
-          </Card>;
-        })}
+        {/*{this.props.state.questions.map((val) => {*/}
+          {/*return <Card key={val.id}>*/}
+            {/*<CardHeader><i className="fa fa-angle-double-down fa-lg" onClick={() => this.toggleQuestion(val.id)} style={{cursor: 'pointer'}}/>{val.question}</CardHeader>*/}
+            {/*<Collapse isOpen={this.state.collapses[val.id]}>*/}
+              {/*<CardBody>*/}
+                {/*<CardText>{val.answer}</CardText>*/}
+                {/*<CardSubtitle className="text-right">*/}
+                  {/*{val.categories.map(function (val) {*/}
+                    {/*return <Badge color="primary" key={val.id} pill>{val.category}</Badge>*/}
+                  {/*})}*/}
+                  {/*<br/>*/}
+                  {/*{val.groups.map(function (val) {*/}
+                    {/*return <Badge color="light" key={val.id} pill>{val.name}</Badge>*/}
+                  {/*})}*/}
+                {/*</CardSubtitle>*/}
+              {/*</CardBody>*/}
+            {/*</Collapse>*/}
+          {/*</Card>;*/}
+        {/*})}*/}
 
         <Card>
           <CardHeader tag="h3"><i className="fa fa-plus"/> Nueva pregunta</CardHeader>
@@ -173,9 +173,9 @@ class Wiki extends Component {
               <FormGroup>
                 <Label for="questionCategory">Categorias</Label>
                 <Input type="select" multiple id="questionCategory" onChange={(e) => this.setInputStateArray(e, "questionCategories")} value={this.state.questionCategories}>
-                  {this.props.state.availableQuestionCategories.map(function (val) {
-                    return <option key={val.id} value={val.id}>{val.category}</option>
-                  })}
+                  {/*{this.props.state.availableQuestionCategories.map(function (val) {*/}
+                    {/*return <option key={val.id} value={val.id}>{val.category}</option>*/}
+                  {/*})}*/}
                 </Input>
                 <FormText color="muted">
                   Mantenga la tecla CTRL para seleccionar multiples opciones.
@@ -185,9 +185,9 @@ class Wiki extends Component {
               <FormGroup>
                 <Label for="group">Grupos</Label>
                 <Input type="select" multiple id="group" onChange={(e) => this.setInputStateArray(e, "questionGroups")} value={this.state.questionGroups}>
-                  {this.props.siteState.groups.map(function (val) {
-                    return <option key={val.id} value={val.id}>{val.name}</option>
-                  })}
+                  {/*{this.props.siteState.groups.map(function (val) {*/}
+                    {/*return <option key={val.id} value={val.id}>{val.name}</option>*/}
+                  {/*})}*/}
                 </Input>
                 <FormText color="muted">
                   Mantenga la tecla CTRL para seleccionar multiples opciones.
@@ -223,7 +223,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchData: (calls, section) => dispatch(fetchData(calls, section)),
-    postData: (call, section, sc, fc) => dispatch(postData(call, section, sc, fc))
+    postData: (call, section, successCallback, failCallback) => dispatch(postData(call, section, successCallback, failCallback))
   };
 };
 

@@ -1,9 +1,8 @@
 const routes = {
   '/': 'Home',
   '/dashboard': 'Panel',
-  '/applications': 'Aplicaciones',
-  '/agencies': 'Agencias',
-  '/tokens': 'Tokens',
+  '/applications': 'Mis Aplicaiones',
+  '/advertisements': 'Mis Publicidades',
   '/wiki': 'Preguntas'
 };
 export default routes;

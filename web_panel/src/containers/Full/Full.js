@@ -8,8 +8,7 @@ import Aside from '../../components/Aside/';
 import Footer from '../../components/Footer/';
 
 import Dashboard from '../../views/Dashboard/';
-import Agencies from '../../views/Agencies/';
-import Tokens from '../../views/Tokens/';
+import Advertisements from '../../views/Advertisements/';
 import Applications from '../../views/Applications/';
 import Wiki from '../../views/Wiki/';
 import {ScaleLoader} from "react-spinners";
@@ -67,8 +66,7 @@ class Full extends Component {
               <Switch>
                 <Route path="/dashboard" name="Panel" component={Dashboard}/>
                 <Route path="/applications" name="Mis Aplicaciones" component={Applications}/>
-                <Route path="/agencies" name="Agencias" component={Agencies}/>
-                <Route path="/tokens" name="Tokens" component={Tokens}/>
+                <Route path="/advertisements" name="Mis Publicidades" component={Advertisements}/>
                 <Route path="/wiki" name="Preguntas" component={Wiki}/>
                 <Redirect from="/" to="/dashboard"/>
               </Switch>

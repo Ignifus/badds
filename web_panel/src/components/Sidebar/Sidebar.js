@@ -123,7 +123,7 @@ class Sidebar extends Component {
           <Nav>
             {navList(nav.items)}
             <NavItem>
-              <a className="nav-link" href="/logout"><i className="icon-logout"/>Desconectarse</a>
+              <a className="nav-link" href="/logout_auth"><i className="icon-logout"/>Desconectarse</a>
             </NavItem>
           </Nav>
         </nav>

@@ -1,37 +1,25 @@
 import React, { Component } from 'react';
-
 import {Card, CardText, CardBody, CardHeader, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
-
 import { Col, Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
-
 import ReactTable from "react-table";
 import "react-table/react-table.css";
-import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
-import Refresher from "../../components/Refresher";
-import Spinner from "../../components/Spinner";
-import {fetchData, postData, putData} from "../../actions";
 import {connect} from "react-redux";
-import {toast} from "react-toastify";
 import Moment from "moment";
+import SmartComponent, {mapDispatchToProps} from "../smart";
 
-class Agencies extends Component {
+class Advertisements extends SmartComponent {
   constructor(props) {
     super(props);
     this.state = this.getInitialState();
 
-    this.setUserId = this.setUserId.bind(this);
     this.toggleConfirmModal = this.toggleConfirmModal.bind(this);
   }
 
   fetch() {
     this.props.fetchData({
-      url: "/api/agencies",
-      respKey: "agencies",
-    }, "AGENCIES");
-  }
-
-  componentDidMount() {
-    this.fetch();
+      url: "/ads/advertisements",
+      respKey: "ads",
+    }, "ads");
   }
 
   getInitialState() {
@@ -44,76 +32,17 @@ class Agencies extends Component {
     };
   }
 
-  getRefresher() {
-    return <Refresher refreshFunction={this.fetch.bind(this)} refreshDate={this.props.lastUpdated}/>;
-  }
-
-  flipUserState() {
-    let agency = this.props.state.agencies.find(o => o.id.toString() === this.state.userId);
-
-    if (!agency) {
-      toast.error("Agencia no encontrada.");
-      return;
-    }
-
-    this.setFoundAgency(agency);
-
-    this.toggleConfirmModal();
-  }
-
-  performUserStateFlip() {
-    this.props.putData({
-      url:"/api/users/" + this.state.foundAgency.user.id + "/",
-      data:
-        {
-          is_active: !this.state.foundAgency.user.is_active
-        }}, "AGENCIES", () => {
-      this.fetch();
-      this.setState(this.getInitialState());
-      toast.success("Exito! Usuario " + (this.state.foundAgency.user.is_active ? "desactivado." : "activado."));
-    }, () => {
-      toast.error("Error!")
-    });
-
-    this.toggleConfirmModal();
-  }
-
-  setFoundAgency(agency) {
-    const state = this.state;
-    state.foundAgency = agency;
-    this.setState(state);
-  }
-
-  setUserId(event) {
-    const state = this.state;
-    state.userId = event.target.value;
-    this.setState(state);
-  }
-
   toggleConfirmModal() {
     const state = this.state;
     state.confirmModal = !this.state.confirmModal;
     this.setState(state);
   }
 
-  render() {
-    if (this.props.hasErrored) {
-      return (
-        <div>
-          <ErrorMessage hasErrored={this.props.hasErrored}/>
-          {this.getRefresher()}
-        </div>
-      );
-    }
-
-    if (this.props.isLoading) {
-      return <Spinner loading={true} refreshFunction={this.fetch.bind(this)} refreshDate={this.props.lastUpdated}/>
-    }
-
+  renderContent() {
     return (
-      <div className="animated fadeIn">
+      <div>
         <ReactTable
-          data={this.props.state.agencies}
+          // data={}
           filterable
           previousText='Anterior'
           nextText='Siguiente'
@@ -188,7 +117,7 @@ class Agencies extends Component {
               <FormGroup row>
                 <Label for="agency" sm={12}>ID de Agencia</Label>
                 <Col sm={12}>
-                  <Input name="agency" id="agency" placeholder="Ingrese el identificador de la agencia." onChange={(e) => this.setUserId(e)} value={this.state.userId} />
+                  <Input name="agency" id="agency" placeholder="Ingrese el identificador de la agencia." />
                   <FormText color="muted">
                     El identificador puede encontrarlo en la tabla superior.
                   </FormText>
@@ -199,7 +128,7 @@ class Agencies extends Component {
               </FormGroup>
 
               <FormGroup check inline>
-                <Button color="primary" onClick={() => {this.flipUserState()}}><i className="fa fa-random"/> Cambiar estado</Button>
+                <Button color="primary"><i className="fa fa-random"/> Cambiar estado</Button>
               </FormGroup>
             </Form>
           </CardBody>
@@ -208,15 +137,12 @@ class Agencies extends Component {
         <Modal isOpen={this.state.confirmModal} toggle={this.toggleConfirmModal}>
           <ModalHeader toggle={this.toggleConfirmModal}>Confirmacion</ModalHeader>
           <ModalBody>
-            Esta seguro que quiere {this.state.foundAgency.user.is_active ? "desactivar" : "activar"} a la agencia de ID {this.state.foundAgency.id} y nombre {this.state.foundAgency.user.username}?
           </ModalBody>
           <ModalFooter>
-            <Button color="success" onClick={() => this.performUserStateFlip()}>Confirmar</Button>{' '}
+            <Button color="success">Confirmar</Button>{' '}
             <Button color="danger" onClick={() => this.toggleConfirmModal()}>Cancelar</Button>
           </ModalFooter>
         </Modal>
-
-        {this.getRefresher()}
       </div>
     )
   }
@@ -224,18 +150,8 @@ class Agencies extends Component {
 
 function mapStateToProps(state) {
   return {
-    state: state.agenciesData,
-    isLoading: state.agenciesIsLoading,
-    hasErrored: state.agenciesHasErrored,
-    lastUpdated: state.agenciesLastUpdated,
+    state: state.base.ads
   };
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchData: (calls, section) => dispatch(fetchData(calls, section)),
-    putData: (call, section, sc, fc) => dispatch(putData(call, section, sc, fc))
-  };
-};
-
-export default connect(mapStateToProps,mapDispatchToProps)(Agencies);
+export default connect(mapStateToProps,mapDispatchToProps)(Advertisements);
