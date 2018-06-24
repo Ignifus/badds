@@ -1,6 +1,6 @@
-import os
+from badds.settings import CAPTCHA_PUBLIC
 
 
 def export_vars(request):
-    data = {'captcha_key': '6LfgTzIUAAAAAA_yiLM3Akt1RgwqyHTRqCD018TM'}
+    data = {'captcha_key': CAPTCHA_PUBLIC}
     return data

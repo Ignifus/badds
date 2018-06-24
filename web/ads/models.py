@@ -57,7 +57,6 @@ class AuctionStatus(models.Model):
     AUCTION_STATUS = (
         ('Active', 'Active'),
         ('Extended', 'Extended'),
-        ('Finished', 'Finished'),
         ('Closed', 'Closed'),
         ('Removed', 'Removed')
     )
@@ -103,7 +102,8 @@ class Advertisement(models.Model):
 class Resource(models.Model):
     advertisement = models.ForeignKey(Advertisement, related_name='resources', on_delete=models.PROTECT)
     name = models.TextField(max_length=128)
-    path = models.TextField()
+    path = models.TextField(max_length=128)
+    url_link = models.TextField(max_length=128)
     restrictions = models.ManyToManyField(Restriction, through='ResourceRestriction')
     created_at = models.DateTimeField(auto_now_add=True)
 

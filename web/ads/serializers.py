@@ -28,43 +28,30 @@ class RestrictionSerializer(serializers.ModelSerializer):
 
 
 class ResourceSerializer(serializers.ModelSerializer):
-    restrictions = RestrictionSerializer(many=True, read_only=True)
-
     class Meta:
         model = Resource
         fields = '__all__'
 
 
 class AdvertisementSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
-    resources = ResourceSerializer(many=True, read_only=True)
-
     class Meta:
         model = Advertisement
         fields = '__all__'
 
 
 class BiddingSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
-
     class Meta:
         model = Bidding
         fields = '__all__'
 
 
 class AuctionSerializer(serializers.ModelSerializer):
-    biddings = BiddingSerializer(many=True, read_only=True)
-
     class Meta:
         model = Auction
         fields = '__all__'
 
 
 class SpaceSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
-    auctions = AuctionSerializer(many=True, read_only=True)
-    restrictions = RestrictionSerializer(many=True, read_only=True)
-
     class Meta:
         model = Space
         fields = '__all__'

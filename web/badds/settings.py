@@ -65,6 +65,8 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
 ]
 
+#CORS_ORIGIN_ALLOW_ALL = True
+
 ROOT_URLCONF = 'badds.urls'
 
 TEMPLATES = [
@@ -164,4 +166,5 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static/"),
 )
 
-#CORS_ORIGIN_ALLOW_ALL = True
+IPSTACK_KEY = 'ae67433df4643aace54675f302dc8731'
+CAPTCHA_PUBLIC = '6LfgTzIUAAAAAA_yiLM3Akt1RgwqyHTRqCD018TM'
