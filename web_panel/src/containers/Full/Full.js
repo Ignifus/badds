@@ -25,24 +25,11 @@ class Full extends Component {
     }, "site");
   }
 
-  getVersionDisplay() {
-    return (<Row className="mt-2">
-      <Col className="text-center">
-        <small className="text-muted"><pre id="app-version">v{this.getVersion()}</pre></small>
-      </Col>
-    </Row>);
-  }
-
-  getVersion() {
-    return VERSION;
-  }
-
   render() {
     if (this.props.state.hasErrored) {
       return (
         <Container className="center-absolute">
           <ErrorMessage hasErrored={this.props.state.hasErrored}/>
-          {this.getVersionDisplay()}
         </Container>
       );
     }

@@ -1,1 +1,6 @@
+.idea/
 *.pyc
+uwsgi/uwsgi.sock
+
+static/admin/
+static/rest_framework/

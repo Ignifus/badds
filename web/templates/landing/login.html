@@ -6,14 +6,6 @@
             <h2>Ingresar</h2>
         </header>
 
-        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
-        <script>
-            function onSubmit(token) {
-                document.getElementById("login-form").submit();
-            }
-        </script>
-
         <div class="box">
 
             <form method="post" id="login-form">
@@ -45,11 +37,7 @@
                     <div class="12u">
                         <ul class="actions align-center">
                             <li>
-                                <input type="submit"
-                                       class="g-recaptcha special"
-                                       data-sitekey="{{ captcha_key }}"
-                                       data-callback="onSubmit"
-                                       value="Entrar">
+                                <input type="submit" value="Entrar">
                             </li>
                         </ul>
                     </div>

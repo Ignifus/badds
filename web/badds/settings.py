@@ -11,27 +11,17 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
-import dj_database_url
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-if "BADDS_SECRET" in os.environ:
-    SECRET_KEY = os.environ['BADDS_SECRET']
+if "SECRET" in os.environ:
+    SECRET_KEY = os.environ['SECRET']
 else:
     SECRET_KEY = 'z6zc!v@(a*nl^+5(@#5$h7hl%ocw%1synqij%v*pwc-j5n#vqt'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = "DEBUG" in os.environ
 
 ALLOWED_HOSTS = ['*']
-
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -81,7 +71,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'badds.context_processors.export_vars',
             ],
         },
     },
@@ -89,28 +78,27 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'badds.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-
-if "DATABASE_URL" in os.environ:
+if "DEV" in os.environ:
     DATABASES = {
-        'default': dj_database_url.config()
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ['USER'],
+            'USER': os.environ['USER'],
+            'HOST': 'localhost',
+            'PORT': '5432'
+        }
     }
 else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'badds',
-            'USER': 'badds',
-            'HOST': '127.0.0.1',
+            'NAME': os.environ['USER'],
+            'USER': os.environ['USER'],
+            'PASSWORD': os.environ['PASSWORD'],
+            'HOST': 'db',
             'PORT': '5432'
         }
     }
-
-
-# Password validation
-# https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -127,10 +115,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/1.11/topics/i18n/
-
 LANGUAGE_CODE = 'es-AR'
 
 TIME_ZONE = 'UTC'
@@ -141,30 +125,22 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-# Email
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'badds.soporte@gmail.com'
-if "BADDS_EMAIL_PASSWORD" in os.environ:
-    EMAIL_HOST_PASSWORD = os.environ['BADDS_EMAIL_PASSWORD']
+EMAIL_HOST_PASSWORD = os.environ['PASSWORD']
 EMAIL_PORT = 587
 
-
-# Captcha
-
-if "BADDS_CAPTCHA_SECRET" in os.environ:
-    CAPTCHA_SECRET = os.environ['BADDS_CAPTCHA_SECRET']
-else:
-    CAPTCHA_SECRET = ''
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.11/howto/static-files/
-
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "static/"),
-)
 
-IPSTACK_KEY = 'ae67433df4643aace54675f302dc8731'
-CAPTCHA_PUBLIC = '6LfgTzIUAAAAAA_yiLM3Akt1RgwqyHTRqCD018TM'
+if "DEV" in os.environ:
+    STATICFILES_DIRS = (
+        os.path.join(BASE_DIR, "static/"),
+    )
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+if "IPSTACK_KEY" in os.environ:
+    IPSTACK_KEY = os.environ['IPSTACK_KEY']
+else:
+    IPSTACK_KEY = ''

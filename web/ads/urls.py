@@ -1,5 +1,4 @@
 from django.conf.urls import url, include
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from rest_framework import routers
 
 from ads.rest import *
@@ -19,9 +18,7 @@ router.register(r'applicationcategories', ApplicationCategoryViewSet)
 
 app_name = 'ads'
 urlpatterns = [
-    url(r'^$', views.panel, name='panel'),
-    url(r'^publisher/$', views.publisher, name='publisher'),
-    url(r'^advertiser/$', views.advertiser, name='advertiser'),
+    url(r'^$', views.index, name='index'),
     url(r'^', include(router.urls)),
     url(r'^ad/$', views.ad, name='ad'),
     url(r'^application-count/$', ApplicationCountView.as_view(), name='application-count'),
@@ -29,5 +26,3 @@ urlpatterns = [
     url(r'^space-count/$', SpaceCountView.as_view(), name='space-count'),
     url(r'^contract-count/$', ContractCountView.as_view(), name='contract-count'),
 ]
-
-urlpatterns += staticfiles_urlpatterns()

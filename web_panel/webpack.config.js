@@ -3,15 +3,12 @@ const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const GitRevisionPlugin = require('git-revision-webpack-plugin');
 
 const extractCSS = new ExtractTextPlugin('[name].fonts.css');
 const extractSCSS = new ExtractTextPlugin('[name].styles.css');
 
 const BUILD_DIR = path.resolve(__dirname, 'build');
 const SRC_DIR = path.resolve(__dirname, 'src');
-
-const gitRevisionPlugin = new GitRevisionPlugin({versionCommand: 'describe --tags'});
 
 console.log('BUILD_DIR', BUILD_DIR);
 console.log('SRC_DIR', SRC_DIR);
@@ -23,7 +20,7 @@ module.exports = (env = {}) => {
     },
     output: {
       path: BUILD_DIR,
-      publicPath: '/static/dashboard_bundles/',
+      publicPath: '/static/panel/',
       filename: '[name].bundle.js'
     },
     // watch: true,
@@ -103,11 +100,6 @@ module.exports = (env = {}) => {
       new webpack.NamedModulesPlugin(),
       extractCSS,
       extractSCSS,
-      new webpack.DefinePlugin({
-        'VERSION': JSON.stringify(gitRevisionPlugin.version()),
-        'COMMITHASH': JSON.stringify(gitRevisionPlugin.commithash()),
-        'BRANCH': JSON.stringify(gitRevisionPlugin.branch()),
-      }),
       new HtmlWebpackPlugin(
         {
           minify: {

@@ -7,12 +7,6 @@
             <p>No dude en contactarnos si tiene consultas sobre el servicio.</p>
         </header>
 
-        <script>
-            function onSubmit(token) {
-                document.getElementById("contact-form").submit();
-            }
-        </script>
-
         <div class="box">
             {% if success %}
                 <div class="alert alert-success" role="alert">
@@ -49,11 +43,7 @@
                     <div class="12u">
                         <ul class="actions align-center">
                             <li>
-                                <input type="submit"
-                                       class="g-recaptcha special"
-                                       data-sitekey="{{ captcha_key }}"
-                                       data-callback="onSubmit"
-                                       value="Enviar">
+                                <input type="submit" value="Enviar">
                             </li>
                         </ul>
                     </div>

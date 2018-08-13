@@ -1,0 +1,43 @@
+version: "3.7"
+
+services:
+    db:
+        image: postgres:alpine
+        env_file:
+          - ./db.env
+        restart: always
+        volumes:
+          - db_data:/var/lib/postgresql/data
+    web:
+        build: web/
+        restart: always
+        env_file:
+          - ./web.env
+        depends_on:
+          - "db"
+        volumes:
+          - web_static:/usr/src/web/static
+          - web_uwsgi:/usr/src/web/uwsgi
+          - panel_build:/usr/src/web/static/panel
+    panel:
+        build: web_panel/
+        restart: always
+        volumes:
+          - panel_build:/usr/src/panel/build
+    nginx:
+        image: nginx:alpine
+        restart: always
+        ports:
+          - "8080:80"
+        depends_on:
+          - "web"
+        volumes:
+          - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+          - web_static:/usr/src/web/static
+          - web_uwsgi:/usr/src/web/uwsgi
+
+volumes:
+  db_data:
+  web_static:
+  web_uwsgi:
+  panel_build:

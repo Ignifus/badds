@@ -1,5 +1,4 @@
 from django.conf.urls import url
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from . import auth
 from . import views
@@ -18,5 +17,3 @@ urlpatterns = [
     url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         views.activate_auth, name='activate')
 ]
-
-urlpatterns += staticfiles_urlpatterns()

@@ -2,8 +2,7 @@ django
 psycopg2
 uwsgi
 requests
-dj_config_url
-djangorestframework
 cloudinary
+djangorestframework
 django-cors-headers
 django-cors-middleware
