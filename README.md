@@ -7,16 +7,10 @@ Software solution for ads across Web and Android platforms.
 Contains a Java Client with its demo, as well as a Python Client with the demo.
 Also contains the full Badds website, with the control panel developed in React.
 
-## Environment Variables
-### db.env
-POSTGRES_USER=
-POSTGRES_PASSWORD=
-
-### web.env
-USER=
-PASSWORD=
-IPSTACK_KEY=
-CLOUDINARY_URL=
-
 ## Running
+* Install docker.
+* Install docker-compose.
+* Run `cp preset.env .env`
+* Add environment variables to .env accordingly.
 * Run `docker-compose -p badds up`
+* App will run in localhost:80.

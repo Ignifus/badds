@@ -9,7 +9,7 @@ import {connect} from "react-redux";
 class Applications extends SmartComponent {
   fetch() {
     this.props.fetchData({
-      url: "/ads/applications/",
+      url: "/ads/api/applications/",
       respKey: "applications",
     }, "apps");
   }

@@ -20,7 +20,7 @@ import Toast from "../../components/Toast";
 class Full extends Component {
   componentDidMount() {
     this.props.fetchData({
-      url: "/ads/users",
+      url: "/ads/api/users",
       respKey: "user"
     }, "site");
   }

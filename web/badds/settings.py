@@ -82,8 +82,8 @@ if "DEV" in os.environ:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ['USER'],
-            'USER': os.environ['USER'],
+            'NAME': os.environ['POSTGRES_USER'],
+            'USER': os.environ['POSTGRES_USER'],
             'HOST': 'localhost',
             'PORT': '5432'
         }
@@ -92,9 +92,9 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ['USER'],
-            'USER': os.environ['USER'],
-            'PASSWORD': os.environ['PASSWORD'],
+            'NAME': os.environ['POSTGRES_USER'],
+            'USER': os.environ['POSTGRES_USER'],
+            'PASSWORD': os.environ['POSTGRES_PASSWORD'],
             'HOST': 'db',
             'PORT': '5432'
         }
@@ -128,7 +128,7 @@ USE_TZ = True
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'badds.soporte@gmail.com'
-EMAIL_HOST_PASSWORD = os.environ['PASSWORD']
+EMAIL_HOST_PASSWORD = os.environ['EMAIL_PASSWORD']
 EMAIL_PORT = 587
 
 STATIC_URL = '/static/'

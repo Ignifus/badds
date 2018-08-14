@@ -32,10 +32,10 @@ class Wiki extends Component {
 
   fetch() {
     this.props.fetchData({
-      url: "/api/wiki",
+      url: "/api/api/wiki",
       respKey: "questions",
       next: {
-        url: "/api/questioncategories",
+        url: "/api/api/questioncategories",
         respKey: "availableQuestionCategories"
       }
     }, "WIKI");

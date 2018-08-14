@@ -4,7 +4,7 @@ services:
     db:
         image: postgres:alpine
         env_file:
-          - ./db.env
+          - ./.env
         restart: always
         volumes:
           - db_data:/var/lib/postgresql/data
@@ -12,7 +12,7 @@ services:
         build: web/
         restart: always
         env_file:
-          - ./web.env
+          - ./.env
         depends_on:
           - "db"
         volumes:

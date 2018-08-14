@@ -6,16 +6,16 @@
   class Dashboard extends SmartComponent {
     fetch() {
       this.props.fetchData({
-        url: "/ads/application-count",
+        url: "/ads/api/application-count",
         respKey: "applications",
         next: {
-          url: "/ads/space-count",
+          url: "/ads/api/space-count",
           respKey: "spaces",
           next: {
-            url: "/ads/badds-count",
+            url: "/ads/api/badds-count",
             respKey: "advertisements",
             next: {
-              url: "/ads/contract-count",
+              url: "/ads/api/contract-count",
               respKey: "contracts"
             }
           }
