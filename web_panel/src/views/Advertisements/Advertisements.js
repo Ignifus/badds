@@ -17,7 +17,7 @@ class Advertisements extends SmartComponent {
 
   fetch() {
     this.props.fetchData({
-      url: "/ads/advertisements",
+      url: "/ads/badds",
       respKey: "ads",
     }, "ads");
   }

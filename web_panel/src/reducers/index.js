@@ -8,7 +8,21 @@ let initialState = {
   dash:{
     isLoading:true,
     hasErrored:"",
-    lastUpdated: Date.now()
+    lastUpdated: Date.now(),
+    data: {
+      applications: {
+        count: 0
+      },
+      spaces: {
+        count: 0
+      },
+      advertisements: {
+        count: 0
+      },
+      contracts: {
+        count: 0
+      }
+    }
   },
   apps:{
     isLoading:false,

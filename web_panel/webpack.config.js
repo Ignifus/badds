@@ -32,6 +32,10 @@ module.exports = (env = {}) => {
       hot: true,
       open: true
     },
+    watchOptions: {
+    aggregateTimeout: 300,
+    poll: 1000
+    },
     module: {
       rules: [
         {
