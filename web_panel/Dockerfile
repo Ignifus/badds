@@ -1,17 +1,9 @@
-FROM node:alpine
-
-VOLUME /usr/src/panel/build
-VOLUME /usr/src/panel/src
+FROM node:12
 
 WORKDIR /usr/src/panel
 
-COPY package.json package.json
-run apk --no-cache add --virtual native-deps \
-  g++ gcc libgcc libstdc++ linux-headers make python && \
-  npm install --quiet node-gyp -g &&\
-  npm install --quiet && \
-  apk del native-deps
-
 COPY . .
 
-CMD npm run dev
+VOLUME /usr/src/panel/build
+VOLUME /usr/src/panel/src
+ENTRYPOINT ["./entrypoint.sh"]

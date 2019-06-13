@@ -1,7 +1,7 @@
 version: "3.7"
 
 services:
-    db:
+    postgres:
         image: postgres:alpine
         env_file:
           - ./.env
@@ -21,9 +21,10 @@ services:
           - panel_build:/usr/src/web/static/panel
     panel:
         build: web_panel/
-        restart: always
         volumes:
-          - panel_build:/usr/src/panel/build
+          - ./web_panel/build:/usr/src/panel/build
+          - ./web_panel/node_modules:/usr/src/panel/node_modules
+          - ./web_panel/package-lock.json:/usr/src/panel/package-lock.json
           - ./web_panel/src:/usr/src/panel/src:rw
     nginx:
         image: nginx:alpine

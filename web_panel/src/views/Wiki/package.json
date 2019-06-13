@@ -1,6 +1,0 @@
-{
-  "name": "Wiki",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./Wiki.js"
-}

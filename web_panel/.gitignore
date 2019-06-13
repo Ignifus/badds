@@ -1,13 +1,15 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # dependencies
-node_modules
+node_modules/
+!node_modules/.keep
 
 # testing
 coverage
 
 # production
-build
+build/
+!build/.keep
 
 # misc
 .DS_Store
@@ -16,5 +18,3 @@ Thumbs.db
 npm-debug.log
 compilation-stats.json
 
-# build
-dashboard_bundle_tracker.json

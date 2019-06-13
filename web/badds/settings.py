@@ -82,7 +82,7 @@ if "DEV" in os.environ:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ['POSTGRES_USER'],
+            'NAME': "badds",
             'USER': os.environ['POSTGRES_USER'],
             'HOST': 'localhost',
             'PORT': '5432'
@@ -92,10 +92,10 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ['POSTGRES_USER'],
+            'NAME': "badds",
             'USER': os.environ['POSTGRES_USER'],
             'PASSWORD': os.environ['POSTGRES_PASSWORD'],
-            'HOST': 'db',
+            'HOST': 'postgres',
             'PORT': '5432'
         }
     }

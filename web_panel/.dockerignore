@@ -1,4 +1,4 @@
 build/
 node_modules/
-compilation-stats.json/
-dashboard_bundle_tracker.json/
+
+package-lock.json

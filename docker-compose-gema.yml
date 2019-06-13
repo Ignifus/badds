@@ -1,0 +1,42 @@
+version: "3.7"
+
+services:
+    badds:
+        image: localhost:5000/gema/badds
+        labels:
+          gema.service: badds
+          gema.auth: 1
+          gema.port: 8080
+          gema.subdomain: badds
+        env_file:
+          - ./.env
+        deploy:
+          mode: replicated
+          replicas: 1
+          restart_policy:
+            condition: on-failure
+            delay: 5s
+            max_attempts: 3
+            window: 120s
+          placement:
+            constraints: [node.labels.category == main]
+        networks:
+          - gema
+        volumes:
+          - ./web_panel/build:/usr/src/web/static/panel
+    badds_panel:
+        image: localhost:5000/gema/badds-panel
+        networks:
+          - gema
+        volumes:
+          - ./web_panel/build:/usr/src/panel/build
+          - ./web_panel/node_modules:/usr/src/panel/node_modules
+          - ./web_panel/package-lock.json:/usr/src/panel/package-lock.json
+          - ./web_panel/src:/usr/src/panel/src:rw
+
+networks:
+  gema:
+    external: true
+
+volumes:
+  panel_build:
