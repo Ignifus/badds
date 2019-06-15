@@ -1,8 +1,9 @@
 django
-psycopg2
+psycopg2-binary
 uwsgi
 requests
 cloudinary
 djangorestframework
 django-cors-headers
 django-cors-middleware
+mercadopago

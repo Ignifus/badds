@@ -26,6 +26,16 @@ services:
           - ./web_panel/build:/usr/src/web/static/panel
     badds_panel:
         image: localhost:5000/gema/badds-panel
+        deploy:
+          mode: replicated
+          replicas: 1
+          restart_policy:
+            condition: on-failure
+            delay: 5s
+            max_attempts: 3
+            window: 120s
+          placement:
+            constraints: [node.labels.category == main]
         networks:
           - gema
         volumes:

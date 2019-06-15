@@ -9,6 +9,7 @@ from ads.api import get_resource
 def index(request):
     return redirect("/static/panel/index.html")
 
+
 @csrf_exempt
 def ad(request):
     return get_resource(request)

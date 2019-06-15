@@ -26,23 +26,49 @@
 
             <p style="font-size:40px;">${{ user.profile.credits }}</p>
 
-            <form method="post">
-                {% csrf_token %}
-                <div class="row uniform 50%">
-                    <div class="12u">
-                        <input name="credits" id="credits" type="number" min="0" placeholder="Cantidad"/>
+                <form method="post" action="/pay/">
+                    {% csrf_token %}
+                    <div class="row uniform 50%">
+                        <div class="12u">
+                            <input name="credits" id="credits" type="number" min="0" placeholder="Cantidad"/>
+                        </div>
                     </div>
-                </div>
-                <div class="row uniform">
-                    <div class="12u">
-                        <ul class="actions">
-                            <li>
-                                <input type="submit" value="Cargar">
-                            </li>
-                        </ul>
+                    <div class="row uniform">
+                        <div class="12u">
+                            <ul class="actions">
+                                <li>
+                                    {% if init_point != none %}
+                                        <input type="submit" value="Nuevo Pago">
+                                    {% else %}
+                                        <input type="submit" value="Cargar">
+                                    {% endif %}
+                                </li>
+                            </ul>
+                        </div>
                     </div>
+                </form>
+            {% if init_point != none %}
+                <div class="alert alert-warning" role="alert">
+                    <strong>Transaccion pendiente.</strong>
                 </div>
-            </form>
+                <a href="{{ init_point }}" target="_blank" class="button special">Abonar Pendiente</a>
+                <form method="post" action="/cancel/">
+                    {% csrf_token %}
+                    <input type="submit" value="Cancelar">
+                </form>
+            {% endif %}
+
+            {% if success %}
+                <div class="alert alert-success" role="alert">
+                    <strong>Exito!</strong> {{ success }}
+                </div>
+            {% endif %}
+
+            {% if error %}
+                <div class="alert alert-error" role="alert">
+                    <strong>Error!</strong> {{ error }}
+                </div>
+            {% endif %}
         </div>
     </section>
 {% endblock %}

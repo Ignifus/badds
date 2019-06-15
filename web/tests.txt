@@ -1,0 +1,8 @@
+SELLER
+{"id":444291730,"nickname":"TETE5773584","password":"qatest1497","site_status":"active","email":"test_user_8663851@testuser.com"}
+
+
+BUYER
+{"id":444290702,"nickname":"TEST1XA5TIOG","password":"qatest3781","site_status":"active","email":"test_user_56726019@testuser.com"}
+
+4509 9535 6623 3704

@@ -12,12 +12,11 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 
+import mercadopago
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-if "SECRET" in os.environ:
-    SECRET_KEY = os.environ['SECRET']
-else:
-    SECRET_KEY = 'z6zc!v@(a*nl^+5(@#5$h7hl%ocw%1synqij%v*pwc-j5n#vqt'
+SECRET_KEY = os.environ.get("SECRET", 'z6zc!v@(a*nl^+5(@#5$h7hl%ocw%1synqij%v*pwc-j5n#vqt')
 
 DEBUG = "DEBUG" in os.environ
 
@@ -128,7 +127,7 @@ USE_TZ = True
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'badds.soporte@gmail.com'
-EMAIL_HOST_PASSWORD = os.environ['EMAIL_PASSWORD']
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD', None)
 EMAIL_PORT = 587
 
 STATIC_URL = '/static/'
@@ -140,7 +139,7 @@ if "DEV" in os.environ:
 else:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-if "IPSTACK_KEY" in os.environ:
-    IPSTACK_KEY = os.environ['IPSTACK_KEY']
-else:
-    IPSTACK_KEY = ''
+IPSTACK_KEY = os.environ.get("IPSTACK_KEY", None)
+
+MP = mercadopago.MP(os.environ.get("MP_CLIENT", None), os.environ.get("MP_SECRET", None))
+MP.sandbox_mode(enable=True)
