@@ -17,14 +17,6 @@
   },
   {
     "model": "ads.restriction",
-    "pk": 1,
-    "fields": {
-      "restriction": "APPLICATIONS",
-      "description": "Comma separated app restriction in App Categories."
-    }
-  },
-  {
-    "model": "ads.restriction",
     "pk": 2,
     "fields": {
       "restriction": "AGE",
@@ -35,7 +27,7 @@
     "model": "ads.restriction",
     "pk": 3,
     "fields": {
-      "restriction": "COUNTRY_WITELIST",
+      "restriction": "COUNTRY_WHITELIST",
       "description": "Included countries, if empty all countries are included."
     }
   },

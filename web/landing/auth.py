@@ -9,7 +9,6 @@ from django.urls import reverse
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
-from badds.utils import get_client_ip
 from landing.forms import SignUpForm, LoginForm
 from landing.models import Profile
 from landing.tokens import account_activation_token

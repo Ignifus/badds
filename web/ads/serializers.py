@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.fields import DateField
 
 from ads.models import *
 
@@ -27,7 +28,24 @@ class RestrictionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class SpaceRestrictionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SpaceRestriction
+        fields = '__all__'
+
+
+class ResourceRestrictionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ResourceRestriction
+        fields = '__all__'
+
+
 class ResourceSerializer(serializers.ModelSerializer):
+    base_64 = serializers.CharField(source='path')
+    path = serializers.ReadOnlyField()
+
+    restrictions = RestrictionSerializer(read_only=True, many=True)
+
     class Meta:
         model = Resource
         fields = '__all__'
@@ -46,12 +64,16 @@ class BiddingSerializer(serializers.ModelSerializer):
 
 
 class AuctionSerializer(serializers.ModelSerializer):
+    end_date = DateField()
+
     class Meta:
         model = Auction
         fields = '__all__'
 
 
 class SpaceSerializer(serializers.ModelSerializer):
+    restrictions = RestrictionSerializer(read_only=True, many=True)
+
     class Meta:
         model = Space
         fields = '__all__'

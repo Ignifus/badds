@@ -1,37 +1,52 @@
 from django.http import JsonResponse
 
-from ads.models import Contract
+from ads.models import Contract, Ip, ContractIpLog
 from badds.utils import get_client_country, get_client_ip
 
 
 def get_resource(request):
-    if request.method == "POST":
-        apikey = request.POST.get("apikey", None)
-        space_id = request.POST.get("space", None)
-        client_ip = request.POST.get("clientIp", None)
+    apikey = request.POST.get("apikey", None)
+    space_id = request.POST.get("space", None)
+    client_ip = request.POST.get("clientIp", None)
+    age = request.POST.get("age", None)
+    gender = request.POST.get("gender", None)
 
-        if client_ip is None:
-            client_ip = get_client_ip(request)
+    if client_ip is None:
+        client_ip = get_client_ip(request)
 
-        country = get_client_country(client_ip)
+    ip = Ip.objects.filter(ip=client_ip)
+    if ip not in client_ip:
+        ip = Ip()
+        ip.ip = client_ip
+        ip.country = get_client_country(client_ip)
+        ip.save()
 
-        # Check if country restriction, if yes, check country and only return if correct
-        # Add ip to ip log if not added, reduce print if unique
-        # if reduced print, add credits to Space owner equal to ppp_usd of contract
-        # Check if print count is 0 after reducing, if 0, end contract active = false
+    try:
+        contract = Contract.objects.get(space_id=space_id, active=True)
+    except Contract.DoesNotExist:
+        return JsonResponse({'error': "Contract not found for space."}, status=404)
 
-        # return json response from cloudinary
+    if contract.space.application.key != apikey:
+        return JsonResponse({'error': "Bad API key."}, status=403)
 
-        try:
-            contract = Contract.objects.get(space_id=space_id, active=True)
-        except Contract.DoesNotExist:
-            return JsonResponse({'error': "Contract not found for space."}, status=404)
+    if contract.advertisement.resources.all().count() == 0:
+        return JsonResponse({'error': "Advertisement has no resources assigned."}, status=500)
 
-        if contract.space.application.key != apikey:
-            return JsonResponse({'error': "Bad API key."}, status=403)
+    ip_log = ContractIpLog.objects.filter(contract=contract, ip=ip)
 
-        if contract.advertisement.resources.all().count() == 0:
-            return JsonResponse({'error': "Advertisement has no resources assigned."}, status=500)
+    if len(ip_log) == 0:
+        ip_log = ContractIpLog()
+        ip_log.contract = contract
+        ip_log.ip = ip
+        ip_log.save()
+    else:
+        contract.prints -= 1
+        if contract.prints == 0:
+            contract.active = False
+        contract.save()
+        user = contract.space.application.user
+        user.profile.credits += contract.ppp_usd
 
-        return JsonResponse({'resource': contract.advertisement.resources.filter(advertisement_id=contract.advertisement_id).first().path})
-    return JsonResponse({'error': "Only POST supported."}, status=405)
+    # TODO Check age, gender and country restrictions to filter the advertisement ID
+
+    return JsonResponse({'resource': contract.advertisement.resources.filter(advertisement_id=contract.advertisement_id).first().path})

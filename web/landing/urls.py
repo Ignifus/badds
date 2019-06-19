@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^contact/$', views.contact, name='contact'),
     url(r'^account/$', views.account, name='account'),
     url(r'^pay/$', views.pay, name='pay'),
+    url(r'^cancel/$', views.cancel, name='cancel'),
     url(r'^elements/$', views.elements, name='elements'),
     url(r'^account_activation_sent/$', views.account_activation_sent, name='account_activation_sent'),
     url(r'^logout_auth/$', auth.logout_auth, name='logout_auth'),

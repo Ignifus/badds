@@ -58,9 +58,6 @@ class SpaceViewSet(viewsets.ModelViewSet):
     queryset = Space.objects.all()
     serializer_class = SpaceSerializer
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
 
 class SpaceCountView(APIView):
     renderer_classes = (JSONRenderer, )
@@ -89,12 +86,22 @@ class RestrictionViewSet(viewsets.ModelViewSet):
     serializer_class = RestrictionSerializer
 
 
+class SpaceRestrictionViewSet(viewsets.ModelViewSet):
+    queryset = SpaceRestriction.objects.all()
+    serializer_class = SpaceRestrictionSerializer
+
+
+class ResourceRestrictionViewSet(viewsets.ModelViewSet):
+    queryset = ResourceRestriction.objects.all()
+    serializer_class = ResourceRestrictionSerializer
+
+
 class ResourceViewSet(viewsets.ModelViewSet):
     queryset = Resource.objects.all()
     serializer_class = ResourceSerializer
 
     def perform_create(self, serializer):
-        serializer.save(path=upload(self.request.data['base64_image']))
+        serializer.save(path=upload(self.request.data['base_64']))
 
 
 class ContractViewSet(viewsets.ModelViewSet):

@@ -1,10 +1,8 @@
-import json
 import random
 import string
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.http import HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 
@@ -12,7 +10,6 @@ from badds.settings import MP
 from landing.auth import register_auth, login_auth, activate_auth
 from landing.email import send_contact_email
 from landing.forms import ContactForm
-from landing.models import Profile
 
 
 def index(request):
@@ -39,14 +36,6 @@ def register(request):
     return register_auth(request)
 
 
-def account_activation_sent(request):
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user=request.user)
-        if profile.email_confirmed:
-            return render(request, 'landing/index.html')
-    return render(request, 'landing/account_activation_sent.html')
-
-
 def login(request):
     return login_auth(request)
 
@@ -55,14 +44,27 @@ def activate(request, uidb64, token):
     return activate_auth(request, uidb64, token)
 
 
+@login_required(login_url="/login/")
+def account_activation_sent(request):
+    if User.objects.count() == 1:
+        request.user.profile.email_confirmed = True
+        request.user.save()
+
+    if request.user.profile.email_confirmed:
+        return render(request, 'landing/index.html')
+
+    return render(request, 'landing/account_activation_sent.html')
+
+
 @require_http_methods('GET')
-@login_required(login_url="/")
+@login_required(login_url="/login/")
 def account(request):
     if request.user.profile.pending_purchase_id is not None:
         if request.GET["payment"] is not None:
             if request.GET["payment"] == request.user.profile.pending_purchase_id:
                 request.user.profile.credits += request.user.profile.pending_purchase_amount
                 request.user.profile.pending_purchase_id = None
+                request.user.profile.pending_purchase_amount = None
                 request.user.profile.pending_purchase_link = None
                 request.user.save()
                 return render(request, 'landing/account.html', {'credits': request.user.profile.credits})
@@ -74,7 +76,7 @@ def account(request):
 
 
 @require_http_methods('POST')
-@login_required(login_url="/")
+@login_required(login_url="/login/")
 def pay(request):
     desired_credits = int(request.POST["credits"])
 
@@ -109,6 +111,20 @@ def pay(request):
 
     return render(request, 'landing/account.html', {'success': "Transaccion realizada! En espera del pago.",
                                                     'init_point': preference_result["response"]["sandbox_init_point"]})
+
+
+@require_http_methods('POST')
+@login_required(login_url="/login/")
+def cancel(request):
+    if request.user.profile.pending_purchase_id is None:
+        return render(request, 'landing/account.html', {'credits': request.user.profile.credits})
+
+    request.user.profile.pending_purchase_id = None
+    request.user.profile.pending_purchase_amount = None
+    request.user.profile.pending_purchase_link = None
+    request.user.save()
+
+    return render(request, 'landing/account.html', {'credits': request.user.profile.credits})
 
 
 def elements(request):

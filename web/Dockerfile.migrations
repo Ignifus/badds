@@ -1,0 +1,14 @@
+FROM python:3.7
+ENV PYTHONUNBUFFERED 1
+
+WORKDIR /usr/src/web
+
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+
+COPY . .
+
+VOLUME /usr/src/web/landing/migrations
+VOLUME /usr/src/web/ads/migrations
+
+ENTRYPOINT ["./migrations-entrypoint.sh"]

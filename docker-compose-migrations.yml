@@ -1,0 +1,25 @@
+version: "3.7"
+
+services:
+    postgres:
+        image: postgres:alpine
+        env_file:
+          - ./.env
+        restart: "no"
+        volumes:
+          - db_data:/var/lib/postgresql/data
+    migrate:
+        build:
+          context: ./web
+          dockerfile: Dockerfile.migrations
+        restart: "no"
+        env_file:
+          - ./.env
+        depends_on:
+          - postgres
+        volumes:
+        - ./web/ads/migrations:/usr/src/web/ads/migrations
+        - ./web/landing/migrations:/usr/src/web/landing/migrations
+
+volumes:
+  db_data:

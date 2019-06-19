@@ -1,4 +1,4 @@
-from cloudinary.templatetags import cloudinary
+import cloudinary.uploader
 
 
 def upload(base64):

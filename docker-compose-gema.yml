@@ -47,6 +47,3 @@ services:
 networks:
   gema:
     external: true
-
-volumes:
-  panel_build:
