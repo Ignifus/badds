@@ -5,10 +5,11 @@
     "dependencies": {
         "react": "^16.8.6",
         "react-dom": "^16.8.6",
-        "react-scripts": "3.0.1"
+        "react-scripts": "3.0.1",
+        "cra-build-watch": "1.4.1"
     },
     "scripts": {
-        "start": "react-scripts start",
+        "build-dev": "cra-build-watch --public-path /static/panel/",
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject"
@@ -28,5 +29,5 @@
             "last 1 safari version"
         ]
     },
-    "homepage": "http://mywebsite.com/static/panel"
+    "homepage": "http://mywebsite.com/static/panel/"
 }

@@ -12,8 +12,8 @@ Also contains the full Badds website, with the control panel developed in React.
 * Install docker-compose.
 * Run `cp preset.env .env`
 * Add environment variables to .env accordingly.
-* Run `docker-compose -p badds up`
-* App will run in localhost:80.
+* Run `docker-compose -p badds up --build`
+* App will run in localhost:8080.
 
 ## Running in GEMA
 * Clone the code in GEMA-enabled serer

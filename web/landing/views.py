@@ -1,5 +1,6 @@
 import random
 import string
+import os
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -60,7 +61,7 @@ def account_activation_sent(request):
 @login_required(login_url="/login/")
 def account(request):
     if request.user.profile.pending_purchase_id is not None:
-        if request.GET["payment"] is not None:
+        if "payment" in request.GET:
             if request.GET["payment"] == request.user.profile.pending_purchase_id:
                 request.user.profile.credits += request.user.profile.pending_purchase_amount
                 request.user.profile.pending_purchase_id = None
@@ -78,7 +79,12 @@ def account(request):
 @require_http_methods('POST')
 @login_required(login_url="/login/")
 def pay(request):
-    desired_credits = int(request.POST["credits"])
+    c = request.POST["credits"]
+
+    if c is None or c == "":
+        return render(request, 'landing/account.html', {'error': "Inserte un valor mayor o igual a 10 creditos."})
+
+    desired_credits = int(c)
 
     if desired_credits < 10:
         return render(request, 'landing/account.html', {'error': "Inserte un valor mayor o igual a 10 creditos."})
@@ -95,7 +101,7 @@ def pay(request):
             }
         ],
         "back_urls": {
-            "success": "http://badds.hq.localhost/account/?payment="+id
+            "success": f"http://{os.environ['DEPLOY_URL']}/account/?payment="+id
         },
         "auto_return": "approved",
         "external_reference": id

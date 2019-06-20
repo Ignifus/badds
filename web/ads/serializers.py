@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from rest_framework.fields import DateField
 
 from ads.models import *
 
@@ -16,21 +15,9 @@ class ApplicationCategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ContractSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Contract
-        fields = '__all__'
-
-
 class RestrictionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Restriction
-        fields = '__all__'
-
-
-class SpaceRestrictionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SpaceRestriction
         fields = '__all__'
 
 
@@ -52,26 +39,27 @@ class ResourceSerializer(serializers.ModelSerializer):
 
 
 class AdvertisementSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+
     class Meta:
         model = Advertisement
         fields = '__all__'
+        read_only_fields = ('user',)
 
 
-class BiddingSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Bidding
-        fields = '__all__'
-
-
-class AuctionSerializer(serializers.ModelSerializer):
-    end_date = DateField()
+class ApplicationSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    key = serializers.ReadOnlyField()  # TODO Hide
+    category = ApplicationCategorySerializer()
 
     class Meta:
-        model = Auction
+        model = Application
         fields = '__all__'
+        read_only_fields = ('user', )
 
 
 class SpaceSerializer(serializers.ModelSerializer):
+    application = ApplicationSerializer(read_only=True)
     restrictions = RestrictionSerializer(read_only=True, many=True)
 
     class Meta:
@@ -79,9 +67,41 @@ class SpaceSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ApplicationSerializer(serializers.ModelSerializer):
-    key = serializers.ReadOnlyField()
+class ContractSerializer(serializers.ModelSerializer):
+    space = SpaceSerializer(read_only=True)
+    advertisement = AdvertisementSerializer(read_only=True)
 
     class Meta:
-        model = Application
+        model = Contract
+        fields = '__all__'
+
+
+class SpaceRestrictionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SpaceRestriction
+        fields = '__all__'
+
+
+class AuctionStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AuctionStatus
+        fields = '__all__'
+
+
+class AuctionSerializer(serializers.ModelSerializer):
+    space = SpaceSerializer(read_only=True)
+    status = AuctionStatusSerializer(read_only=True)
+    end_date = serializers.DateTimeField()
+
+    class Meta:
+        model = Auction
+        fields = '__all__'
+
+
+class BiddingSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    auction = AuctionSerializer(read_only=True)
+
+    class Meta:
+        model = Bidding
         fields = '__all__'

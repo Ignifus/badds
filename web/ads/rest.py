@@ -21,9 +21,6 @@ class ApplicationViewSet(viewsets.ModelViewSet):
     queryset = Application.objects.all()
     serializer_class = ApplicationSerializer
 
-    def get_queryset(self):
-        return Application.objects.filter(user_id=self.request.user.id)
-
     def perform_create(self, serializer):
         serializer.save(user=self.request.user, key=hexlify(os.urandom(32)).decode())
 
