@@ -19,3 +19,8 @@ Also contains the full Badds website, with the control panel developed in React.
 * Clone the code in GEMA-enabled serer
 * Add environment variables to .env accordingly.
 * Run `./deploy.sh`
+
+## Other commands
+
+* Delete data volume `docker volume rm badds_db_data -f`
+* Access docker web with `docker exec -it badds_panel_1 sh`
