@@ -20,7 +20,11 @@ Also contains the full Badds website, with the control panel developed in React.
 * Add environment variables to .env accordingly.
 * Run `./deploy.sh`
 
+## API calls
+
+* hit `ads/api/applications` to get the app list. (login first)
+
 ## Other commands
 
-* Delete data volume `docker volume rm badds_db_data -f`
-* Access docker web with `docker exec -it badds_panel_1 sh`
+* Delete data volume `docker volume rm badds_db_data -f` => `docker container prune` & `docker volume prune`
+* Access docker web with `docker exec -it badds_postgres_1 sh` and then `psql -U badds` or whatever username you selected
