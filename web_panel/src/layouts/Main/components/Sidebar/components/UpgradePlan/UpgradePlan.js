@@ -55,17 +55,17 @@ const UpgradePlan = props => {
           align="center"
           variant="body2"
         >
-          Upgrade to Devias Kit PRO and get even more components
+          Upgrade your plan to get more views
         </Typography>
       </div>
       <div className={classes.actions}>
         <Button
           color="primary"
           component="a"
-          href="https://devias.io/products/devias-kit-pro"
+          href="#"
           variant="contained"
         >
-          Upgrade
+          Upgrade My Plan
         </Button>
       </div>
     </div>
