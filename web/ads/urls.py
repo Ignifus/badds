@@ -20,11 +20,11 @@ router.register(r'applicationcategories', ApplicationCategoryViewSet)
 
 app_name = 'ads'
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
     url(r'^ad/$', views.ad, name='ad'),
     url(r'^api/', include(router.urls)),
     url(r'^api/application-count/$', ApplicationCountView.as_view(), name='application-count'),
     url(r'^api/badds-count/$', AdvertisementCountView.as_view(), name='advertisement-count'),
     url(r'^api/space-count/$', SpaceCountView.as_view(), name='space-count'),
     url(r'^api/contract-count/$', ContractCountView.as_view(), name='contract-count'),
+    url(r'^', views.index, name='index'),
 ]

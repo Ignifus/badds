@@ -46,6 +46,7 @@ def get_resource(request):
         contract.save()
         user = contract.space.application.user
         user.profile.credits += contract.ppp_usd
+        user.save()
 
     # TODO Check age, gender and country restrictions to filter the advertisement ID
 
