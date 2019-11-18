@@ -70,7 +70,7 @@ const Main = props => {
 };
 
 Main.propTypes = {
-  Sidebar: PropTypes.element,
+  Sidebar: PropTypes.func,
   children: PropTypes.node
 };
 

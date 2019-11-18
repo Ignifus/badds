@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { Divider, Drawer } from '@material-ui/core';
 
-import { Profile, SidebarNav, UpgradePlan } from './components';
+import { Profile, SidebarNav } from './components';
 
 const useStyles = makeStyles(theme => ({
   drawer: {
@@ -60,7 +60,7 @@ const Sidebar = props => {
 Sidebar.propTypes = {
   className: PropTypes.string,
   onClose: PropTypes.func,
-  pages: PropTypes.isRequired,
+  pages: PropTypes.array.isRequired,
   open: PropTypes.bool.isRequired,
   variant: PropTypes.string.isRequired
 };

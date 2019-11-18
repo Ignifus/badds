@@ -8,6 +8,7 @@ import {
   Area as SelectArea,
   Dashboard as DashboardView,
   ProductList as ProductListView,
+  ProductForm as ProductFormView,
   UserList as UserListView,
   Typography as TypographyView,
   Icons as IconsView,
@@ -124,6 +125,12 @@ const PublishersRoutes = () => (
       exact
       layout={PublisherLayout}
       path="/ads/publishers/products"
+    />
+    <RouteWithLayout
+      component={ProductFormView}
+      exact
+      layout={PublisherLayout}
+      path="/ads/publishers/products/add"
     />
   </React.Fragment>
 );

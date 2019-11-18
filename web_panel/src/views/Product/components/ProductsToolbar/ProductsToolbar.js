@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/styles';
 import { Button } from '@material-ui/core';
@@ -29,9 +30,19 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ProductsToolbar = props => {
-  const { className, ...rest } = props;
+  const { className, showSearch, ...rest } = props;
 
   const classes = useStyles();
+
+  let searchBar = null;
+  if (showSearch != null && showSearch !== false) {
+    searchBar = (<div className={classes.row}>
+        <SearchInput
+          className={classes.searchInput}
+          placeholder="Search product"
+        />
+      </div>);
+  }
 
   return (
     <div
@@ -45,22 +56,20 @@ const ProductsToolbar = props => {
         <Button
           color="primary"
           variant="contained"
+          component={Link}
+          to="/ads/publishers/products/add"
         >
           Add product
         </Button>
       </div>
-      <div className={classes.row}>
-        <SearchInput
-          className={classes.searchInput}
-          placeholder="Search product"
-        />
-      </div>
+      {searchBar}
     </div>
   );
 };
 
 ProductsToolbar.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
+  showSearch: PropTypes.bool
 };
 
-export default ProductsToolbar;
+export {ProductsToolbar};
