@@ -16,6 +16,11 @@ const useStyles = makeStyles(theme => ({
     width: 60,
     height: 60
   },
+  orangeAvatar: {
+    width: 60,
+    height: 60,
+    backgroundColor: "orange"
+  },
   name: {
     marginTop: theme.spacing(1)
   }
@@ -34,10 +39,11 @@ const Profile = props => {
 
   let avatar = (<Avatar
       alt="Person"
-      className={classes.avatar}
+      className={classes.orangeAvatar}
       component={RouterLink}
       to="/settings"
-    ></Avatar>)
+    >{user.name.split(" ").map(name => name[0]).join("")}</Avatar>);
+
   if (user.avatar != null) {
     avatar = (<Avatar
         alt="Person"
