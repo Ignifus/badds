@@ -14,17 +14,17 @@ import Sidebar from './Sidebar';
 const pages = [
   {
     title: 'Dashboard',
-    href: '/adds/publishers',
+    href: '/ads/publishers',
     icon: <DashboardIcon />
   },
   {
     title: 'Apps',
-    href: '/adds/apps',
+    href: '/ads/publishers/products',
     icon: <AppsIcon />
   },
   {
     title: 'Contracts',
-    href: '/contracts',
+    href: '/ads/publishers/contracts',
     icon: <BusinessCenterIcon />
   },
   // {

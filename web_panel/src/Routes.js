@@ -114,10 +114,16 @@ const AdvertiserRoutes = () => (
 const PublishersRoutes = () => (
   <React.Fragment>
     <RouteWithLayout
-          component={DashboardView}
-          exact
-          layout={PublisherLayout}
-          path="/ads/publishers"
+      component={DashboardView}
+      exact
+      layout={PublisherLayout}
+      path="/ads/publishers"
+    />
+    <RouteWithLayout
+      component={ProductListView}
+      exact
+      layout={PublisherLayout}
+      path="/ads/publishers/products"
     />
   </React.Fragment>
 );

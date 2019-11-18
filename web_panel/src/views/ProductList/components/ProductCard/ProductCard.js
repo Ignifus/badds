@@ -8,13 +8,20 @@ import {
   CardActions,
   Typography,
   Grid,
-  Divider
+  Divider,
+  CardHeader
 } from '@material-ui/core';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import GetAppIcon from '@material-ui/icons/GetApp';
+import {ActionMenu} from './ActionMenu';
 
 const useStyles = makeStyles(theme => ({
-  root: {},
+  root: {
+    minHeight: '260px',
+  },
+  productDescription: {
+    minHeight: '65px',
+  },
   imageContainer: {
     height: 64,
     width: 64,
@@ -49,6 +56,7 @@ const ProductCard = props => {
       {...rest}
       className={clsx(classes.root, className)}
     >
+      <CardHeader action={<ActionMenu />} title={product.title}/>
       <CardContent>
         <div className={classes.imageContainer}>
           <img
@@ -67,6 +75,7 @@ const ProductCard = props => {
         <Typography
           align="center"
           variant="body1"
+          className={classes.productDescription}
         >
           {product.description}
         </Typography>
