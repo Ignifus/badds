@@ -24,16 +24,14 @@ const Footer = props => {
         &copy;{' '}
         <Link
           component="a"
-          href="https://devias.io/"
-          target="_blank"
+          href="/"
         >
-          Devias IO
+          Badds
         </Link>
-        . 2019
+          . {new Date().getFullYear()}
       </Typography>
       <Typography variant="caption">
-        Created with love for the environment. By designers and developers who
-        love to work together in offices!
+        Badds, serving adds to the world wide web.
       </Typography>
     </div>
   );

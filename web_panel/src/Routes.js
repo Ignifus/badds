@@ -1,10 +1,11 @@
 import React from 'react';
-import { Switch, Redirect } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 import { RouteWithLayout } from './components';
-import { Main as MainLayout, Minimal as MinimalLayout } from './layouts';
+import { AdvertiserLayout, PublisherLayout, Minimal as MinimalLayout } from './layouts';
 
 import {
+  Area as SelectArea,
   Dashboard as DashboardView,
   ProductList as ProductListView,
   UserList as UserListView,
@@ -26,6 +27,14 @@ const Routes = () => {
         to="/dashboard"
       />
       <RouteWithLayout
+        component={SelectArea}
+        exact
+        layout={MinimalLayout}
+        path="/ads"
+      />
+      <Route path="/ads/publishers" component={PublishersRoutes} />
+      <AdvertiserRoutes />
+      {/* <RouteWithLayout
         component={DashboardView}
         exact
         layout={MainLayout}
@@ -71,23 +80,46 @@ const Routes = () => {
         component={SignUpView}
         exact
         layout={MinimalLayout}
-        path="/sign-up"
+        path="/ads/sign-up"
       />
       <RouteWithLayout
         component={SignInView}
         exact
         layout={MinimalLayout}
-        path="/sign-in"
-      />
+        path="/ads/sign-in"
+      /> */}
       <RouteWithLayout
         component={NotFoundView}
         exact
         layout={MinimalLayout}
-        path="/not-found"
+        path="/ads/not-found"
       />
-      <Redirect to="/not-found" />
+      <Redirect to="/ads/not-found" />
     </Switch>
   );
 };
+
+const AdvertiserRoutes = () => (
+  <React.Fragment>
+    <RouteWithLayout
+          component={DashboardView}
+          exact
+          layout={AdvertiserLayout}
+          path="/ads/advertisers"
+    />
+  </React.Fragment>
+);
+
+
+const PublishersRoutes = () => (
+  <React.Fragment>
+    <RouteWithLayout
+          component={DashboardView}
+          exact
+          layout={PublisherLayout}
+          path="/ads/publishers"
+    />
+  </React.Fragment>
+);
 
 export default Routes;

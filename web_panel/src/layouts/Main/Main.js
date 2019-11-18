@@ -4,7 +4,12 @@ import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/styles';
 import { useMediaQuery } from '@material-ui/core';
 
-import { Sidebar, Topbar, Footer } from './components';
+import {
+  AdvertiserSidebar,
+  PublisherSidebar,
+  Topbar,
+  Footer
+} from './components';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -23,7 +28,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Main = props => {
-  const { children } = props;
+  const { Sidebar, children } = props;
 
   const classes = useStyles();
   const theme = useTheme();
@@ -65,7 +70,23 @@ const Main = props => {
 };
 
 Main.propTypes = {
+  Sidebar: PropTypes.element,
   children: PropTypes.node
 };
 
-export default Main;
+const AdvertiserLayout = props => {
+  const { children } = props;
+
+  return <Main Sidebar={AdvertiserSidebar}>{children}</Main>
+}
+
+const PublisherLayout = props => {
+  const { children } = props;
+
+  return <Main Sidebar={PublisherSidebar}>{children}</Main>
+}
+
+export {
+  AdvertiserLayout,
+  PublisherLayout
+};
