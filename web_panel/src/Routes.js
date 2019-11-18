@@ -33,7 +33,7 @@ const Routes = () => {
         path="/ads"
       />
       <Route path="/ads/publishers" component={PublishersRoutes} />
-      <AdvertiserRoutes />
+      <Route path="/ads/advertisers" component={AdvertiserRoutes} />
       {/* <RouteWithLayout
         component={DashboardView}
         exact
