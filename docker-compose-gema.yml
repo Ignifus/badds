@@ -5,7 +5,7 @@ services:
         image: localhost:5000/gema/badds
         labels:
           gema.service: badds
-          gema.auth: 1
+          gema.auth: 0
           gema.port: 8080
           gema.subdomain: badds
         env_file:

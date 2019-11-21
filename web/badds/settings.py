@@ -125,8 +125,8 @@ USE_L10N = True
 USE_TZ = True
 
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'badds.soporte@gmail.com'
+EMAIL_HOST = 'mail.privateemail.com'
+EMAIL_HOST_USER = 'admin@geminis.io'
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD', None)
 EMAIL_PORT = 587
 

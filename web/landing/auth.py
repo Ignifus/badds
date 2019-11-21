@@ -9,6 +9,8 @@ from django.urls import reverse
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
+from django.core.mail import send_mail
+
 from landing.forms import SignUpForm, LoginForm
 from landing.models import Profile
 from landing.tokens import account_activation_token
@@ -43,33 +45,33 @@ def register_auth(request):
             user.is_active = True
             user.save()
             login(request, user)
-            return send_mail(request)
+            return send_mail_int(request)
     else:
         form = SignUpForm()
     return render(request, 'landing/register.html', {'form': form})
 
 
-def send_mail(request):
+def send_mail_int(request):
     if request.user.is_authenticated:
         profile = Profile.objects.get(user=request.user)
         if not profile.email_confirmed:
             current_site = get_current_site(request)
             subject = 'Badds: confirme su cuenta'
-            query = reverse('landing:activate', kwargs={'uidb64': urlsafe_base64_encode(force_bytes(request.user.pk)).decode("utf-8"),
+            query = reverse('landing:activate', kwargs={'uidb64': urlsafe_base64_encode(force_bytes(request.user.pk)),
                                                         'token': account_activation_token.make_token(request.user)})
             message = render_to_string('landing/account_activation_email.html', {
                 'user': request.user,
                 'domain': current_site.domain,
                 'query': query,
             })
-            request.user.email_user(subject, message)
+            send_mail(subject, message, 'admin@geminis.io', [request.user.email], fail_silently=False)
             return render(request, 'landing/account_activation_sent.html')
     return redirect('/')
 
 
 def resend_mail(request):
     if request.method == 'POST':
-        return send_mail(request)
+        return send_mail_int(request)
     return render(request, 'landing/account_activation_sent.html')
 
 
