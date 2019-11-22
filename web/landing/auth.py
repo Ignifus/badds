@@ -1,4 +1,7 @@
 import requests
+import string
+import random
+
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.models import User
@@ -14,8 +17,6 @@ from django.core.mail import send_mail
 from landing.forms import SignUpForm, LoginForm, RecoverForm
 from landing.models import Profile
 from landing.tokens import account_activation_token
-
-import random
 
 
 def login_auth(request):
