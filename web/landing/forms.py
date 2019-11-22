@@ -36,3 +36,7 @@ class ContactForm(Form):
     email = forms.CharField(min_length=5, max_length=256, widget=forms.TextInput(attrs={'placeholder': 'Email'}))
     subject = forms.CharField(min_length=10, max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Asunto'}))
     body = forms.CharField(min_length=1, max_length=2500, widget=forms.Textarea(attrs={'placeholder': 'Mensaje'}))
+
+
+class RecoverForm(Form):
+    email = forms.CharField(min_length=5, max_length=256, widget=forms.TextInput(attrs={'placeholder': 'Email'}))

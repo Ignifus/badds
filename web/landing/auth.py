@@ -1,6 +1,6 @@
 import requests
 from django.contrib.auth import login, logout
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import redirect, render
@@ -11,9 +11,11 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 from django.core.mail import send_mail
 
-from landing.forms import SignUpForm, LoginForm
+from landing.forms import SignUpForm, LoginForm, RecoverForm
 from landing.models import Profile
 from landing.tokens import account_activation_token
+
+import random
 
 
 def login_auth(request):
@@ -51,6 +53,17 @@ def register_auth(request):
     return render(request, 'landing/register.html', {'form': form})
 
 
+def change_pass_auth(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(data=request.POST)
+        if form.is_valid():
+            if form.clean() is not None:
+                pass
+    else:
+        form = PasswordChangeForm()
+    return render(request, 'landing/change_pass.html', {'form': form})
+
+
 def send_mail_int(request):
     if request.user.is_authenticated:
         profile = Profile.objects.get(user=request.user)
@@ -67,6 +80,24 @@ def send_mail_int(request):
             send_mail(subject, message, 'admin@geminis.io', [request.user.email], fail_silently=False)
             return render(request, 'landing/account_activation_sent.html')
     return redirect('/')
+
+
+def recover_auth(request):
+    if request.method == 'POST':
+        form = RecoverForm(data=request.POST)
+        if form.is_valid():
+            if form.clean() is not None:
+                temp_password = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(8)])
+                u = User.objects.get(email=form.cleaned_data.get('email'))
+                if u is None:
+                    return render(request, 'landing/recover_sent.html')
+                u.set_password(temp_password)
+                u.save()
+                send_mail("Badds: recupere su cuenta", f"Utilice la siguiente contraseña temporal: {temp_password}", [form.cleaned_data.get('email')], fail_silently=True)
+                return render(request, 'landing/recover_sent.html')
+    else:
+        form = RecoverForm()
+    return render(request, 'landing/recover.html', {'form': form})
 
 
 def resend_mail(request):
