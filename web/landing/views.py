@@ -4,7 +4,7 @@ import os
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
 
 from badds.settings import MP
@@ -38,6 +38,8 @@ def register(request):
 
 
 def login(request):
+    if request.user.is_authenticated:
+        return redirect('/')
     return login_auth(request)
 
 
