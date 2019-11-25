@@ -1,7 +1,7 @@
-import { axios } from 'axios';
+import axios from 'axios';
 import { fromJS } from 'immutable';
 
-// Actions
+// Types
 export const NAMESPACE = 'badds/apps';
 export const LOADING = `${NAMESPACE}/LOADING`;
 export const FETCH = `${NAMESPACE}/FETCH`;
@@ -58,8 +58,8 @@ export const fetchApp = (id) => dispatch => {
 }
 
 export const createApp = (app) => dispatch => {
-
-  return axios.post(`/api/applications`, app)
+  console.log(app)
+  return axios.post(`/ads/api/applications/`, app)
     .then(() => dispatch(appCreated()));
 }
 
@@ -76,3 +76,9 @@ export const removeApp = (id) => dispatch => {
 }
 
 // Selectors
+
+// util TODO move to an lower layer
+
+function getCSRFToken() {
+  return document.cookie.split('=')[0]
+}
