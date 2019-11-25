@@ -48,14 +48,12 @@ class AdvertisementSerializer(serializers.ModelSerializer):
 
 
 class ApplicationSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
     key = serializers.ReadOnlyField()  # TODO Hide
-    category = ApplicationCategorySerializer()
 
     class Meta:
         model = Application
         fields = '__all__'
-        read_only_fields = ('user', )
+        read_only_fields = ('user', 'active')
 
 
 class SpaceSerializer(serializers.ModelSerializer):
