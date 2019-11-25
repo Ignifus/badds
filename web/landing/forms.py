@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordResetForm
 from django.contrib.auth.models import User
 from django.forms import Form
 
@@ -38,5 +38,5 @@ class ContactForm(Form):
     body = forms.CharField(min_length=1, max_length=2500, widget=forms.Textarea(attrs={'placeholder': 'Mensaje'}))
 
 
-class RecoverForm(Form):
-    email = forms.CharField(min_length=5, max_length=256, widget=forms.TextInput(attrs={'placeholder': 'Email'}))
+class RecoverForm(PasswordResetForm):
+    email = forms.CharField(max_length=254, widget=forms.TextInput(attrs={'placeholder': 'Email'}))

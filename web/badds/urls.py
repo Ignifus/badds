@@ -16,10 +16,14 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 
+from django.contrib.auth import views as auth_views
+
 
 urlpatterns = [
     url(r'^', include('landing.urls')),
     url(r'^ads/', include('ads.urls')),
     url(r'^admin/', admin.site.urls),
+    url(r'^password_reset/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+    url(r'^password_reset_done/', auth_views.PasswordChangeDoneView.as_view(), name='password_change_done'),
 ]
 

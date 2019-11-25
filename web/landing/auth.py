@@ -1,7 +1,3 @@
-import requests
-import string
-import random
-
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.models import User
@@ -14,6 +10,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 from django.core.mail import send_mail
 
+from badds.settings import DEFAULT_FROM_EMAIL
 from landing.forms import SignUpForm, LoginForm, RecoverForm
 from landing.models import Profile
 from landing.tokens import account_activation_token
@@ -54,17 +51,6 @@ def register_auth(request):
     return render(request, 'landing/register.html', {'form': form})
 
 
-def change_pass_auth(request):
-    if request.method == 'POST':
-        form = PasswordChangeForm(data=request.POST)
-        if form.is_valid():
-            if form.clean() is not None:
-                pass
-    else:
-        form = PasswordChangeForm()
-    return render(request, 'landing/change_pass.html', {'form': form})
-
-
 def send_mail_int(request):
     if request.user.is_authenticated:
         profile = Profile.objects.get(user=request.user)
@@ -88,13 +74,13 @@ def recover_auth(request):
         form = RecoverForm(data=request.POST)
         if form.is_valid():
             if form.clean() is not None:
-                temp_password = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(8)])
-                u = User.objects.get(email=form.cleaned_data.get('email'))
-                if u is None:
-                    return render(request, 'landing/recover_sent.html')
-                u.set_password(temp_password)
-                u.save()
-                send_mail("Badds: recupere su cuenta", f"Utilice la siguiente contraseña temporal: {temp_password}", [form.cleaned_data.get('email')], fail_silently=True)
+                form.save(
+                    subject_template_name='landing/password_reset_subject.txt',
+                    email_template_name='landing/password_reset_email.html',
+                    use_https=False,
+                    from_email=DEFAULT_FROM_EMAIL, request=request
+                )
+
                 return render(request, 'landing/recover_sent.html')
     else:
         form = RecoverForm()

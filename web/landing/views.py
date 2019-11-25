@@ -8,9 +8,9 @@ from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 
 from badds.settings import MP
-from landing.auth import register_auth, login_auth, activate_auth, recover_auth, change_pass_auth
+from landing.auth import register_auth, login_auth, activate_auth, recover_auth
 from landing.email import send_contact_email
-from landing.forms import ContactForm, RecoverForm
+from landing.forms import ContactForm
 
 
 def index(request):
@@ -49,11 +49,6 @@ def recover(request):
 
 def activate(request, uidb64, token):
     return activate_auth(request, uidb64, token)
-
-
-@login_required(login_url="/login/")
-def change_pass(request):
-    return change_pass_auth(request)
 
 
 @login_required(login_url="/login/")

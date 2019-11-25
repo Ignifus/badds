@@ -127,6 +127,7 @@ USE_TZ = True
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'mail.privateemail.com'
 EMAIL_HOST_USER = 'admin@geminis.io'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD', None)
 EMAIL_PORT = 587
 
