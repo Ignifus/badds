@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from rest_framework.fields import ChoiceField
+from rest_framework.relations import PrimaryKeyRelatedField
 
 from ads.models import *
 
@@ -39,8 +41,6 @@ class ResourceSerializer(serializers.ModelSerializer):
 
 
 class AdvertisementSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
-
     class Meta:
         model = Advertisement
         fields = '__all__'
@@ -48,7 +48,7 @@ class AdvertisementSerializer(serializers.ModelSerializer):
 
 
 class ApplicationSerializer(serializers.ModelSerializer):
-    key = serializers.ReadOnlyField()  # TODO Hide
+    key = serializers.ReadOnlyField()
 
     class Meta:
         model = Application
@@ -57,12 +57,28 @@ class ApplicationSerializer(serializers.ModelSerializer):
 
 
 class SpaceSerializer(serializers.ModelSerializer):
-    application = ApplicationSerializer(read_only=True)
-    restrictions = RestrictionSerializer(read_only=True, many=True)
-
     class Meta:
         model = Space
         fields = '__all__'
+        read_only_fields = ('active',)
+
+    def __init__(self, *args, **kwargs):
+        super(SpaceSerializer, self).__init__(*args, **kwargs)
+
+        if 'request' in self.context:
+            user = self.context['request'].user
+            self.fields['application'] = PrimaryKeyRelatedField(queryset=Application.objects.filter(user=user))
+
+
+class SpaceRestrictionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SpaceRestriction
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(SpaceRestrictionSerializer, self).__init__(*args, **kwargs)
+        user = self.context['request'].user
+        self.fields['space'] = PrimaryKeyRelatedField(queryset=Space.objects.filter(application__user=user))
 
 
 class ContractSerializer(serializers.ModelSerializer):
@@ -71,12 +87,6 @@ class ContractSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Contract
-        fields = '__all__'
-
-
-class SpaceRestrictionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SpaceRestriction
         fields = '__all__'
 
 

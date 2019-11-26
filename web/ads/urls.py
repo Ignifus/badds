@@ -6,17 +6,17 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet, base_name='User')
-router.register(r'applications', ApplicationViewSet)
-router.register(r'advertisements', AdvertisementViewSet)
-router.register(r'spaces', SpaceViewSet)
-router.register(r'auctions', AuctionViewSet)
-router.register(r'biddings', BiddingViewSet)
-router.register(r'restriction', RestrictionViewSet)
-router.register(r'spacerestriction', SpaceRestrictionViewSet)
-router.register(r'resources', ResourceViewSet)
-router.register(r'resourcerestriction', ResourceRestrictionViewSet)
-router.register(r'contracts', ContractViewSet)
-router.register(r'applicationcategories', ApplicationCategoryViewSet)
+router.register(r'applications', ApplicationViewSet, base_name='Application')
+router.register(r'advertisements', AdvertisementViewSet, base_name='Advertisement')
+router.register(r'spaces', SpaceViewSet, base_name='Space')
+router.register(r'auctions', AuctionViewSet, base_name='Auction')
+router.register(r'biddings', BiddingViewSet, base_name='Bidding')
+router.register(r'restriction', RestrictionViewSet, base_name='Restriction')
+router.register(r'spacerestriction', SpaceRestrictionViewSet, base_name='SpaceRestriction')
+router.register(r'resources', ResourceViewSet, base_name='Resource')
+router.register(r'resourcerestriction', ResourceRestrictionViewSet, base_name='ResourceRestriction')
+router.register(r'contracts', ContractViewSet, base_name='Contract')
+router.register(r'applicationcategories', ApplicationCategoryViewSet, base_name='ApplicationCategory')
 
 app_name = 'ads'
 urlpatterns = [

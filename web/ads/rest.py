@@ -18,8 +18,10 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class ApplicationViewSet(viewsets.ModelViewSet):
-    queryset = Application.objects.all()
     serializer_class = ApplicationSerializer
+
+    def get_queryset(self):
+        return Application.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user, key=hexlify(os.urandom(32)).decode())
@@ -35,8 +37,10 @@ class ApplicationCountView(APIView):
 
 
 class AdvertisementViewSet(viewsets.ModelViewSet):
-    queryset = Advertisement.objects.all()
     serializer_class = AdvertisementSerializer
+
+    def get_queryset(self):
+        return Advertisement.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -84,8 +88,13 @@ class RestrictionViewSet(viewsets.ModelViewSet):
 
 
 class SpaceRestrictionViewSet(viewsets.ModelViewSet):
-    queryset = SpaceRestriction.objects.all()
     serializer_class = SpaceRestrictionSerializer
+
+    def get_serializer_context(self):
+        return {'request': self.request}
+
+    def get_queryset(self):
+        return SpaceRestriction.objects.filter(space__application__user=self.request.user)
 
 
 class ResourceRestrictionViewSet(viewsets.ModelViewSet):
