@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from rest_framework.fields import ChoiceField
 from rest_framework.relations import PrimaryKeyRelatedField
 
 from ads.models import *
@@ -32,8 +31,6 @@ class ResourceRestrictionSerializer(serializers.ModelSerializer):
 class ResourceSerializer(serializers.ModelSerializer):
     base_64 = serializers.CharField(source='path')
     path = serializers.ReadOnlyField()
-
-    restrictions = RestrictionSerializer(read_only=True, many=True)
 
     class Meta:
         model = Resource

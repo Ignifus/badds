@@ -82,7 +82,7 @@ class AuctionViewSet(viewsets.ModelViewSet):
     serializer_class = AuctionSerializer
 
 
-class RestrictionViewSet(viewsets.ModelViewSet):
+class RestrictionViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Restriction.objects.all()
     serializer_class = RestrictionSerializer
 
@@ -124,6 +124,6 @@ class ContractCountView(APIView):
         return Response(content)
 
 
-class ApplicationCategoryViewSet(viewsets.ModelViewSet):
+class ApplicationCategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = ApplicationCategory.objects.all()
     serializer_class = ApplicationCategorySerializer
