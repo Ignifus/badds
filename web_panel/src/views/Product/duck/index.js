@@ -1,3 +1,1 @@
-import * as ProductDuck from './duck';
-
-export {ProductDuck}
+export * from './duck';
