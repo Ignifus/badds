@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { withStyles, makeStyles } from '@material-ui/styles';
+import { withStyles } from '@material-ui/styles';
 import {
   Button,
   Grid,
@@ -10,12 +10,11 @@ import {
   InputLabel,
   FormControl,
   LinearProgress,
-  Snackbar,
-  SnackbarContent
 } from '@material-ui/core';
 
 import { ToolbarActions } from '../ToolbarActions';
 import { withProductLayout } from '../../../layouts/Main';
+import { FailedSnackbar, SuccessSnackbar } from '../../../components'
 import { actions, selectors } from '../duck';
 
 const styles = theme => ({
@@ -32,7 +31,6 @@ class ProductFormBase extends React.Component {
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    console.log(this.props);
   }
 
   handleSubmit(e) {
@@ -44,21 +42,41 @@ class ProductFormBase extends React.Component {
     this.setState({[e.target.name]: e.target.value});
   }
 
+  reset() {
+    const { success, reset } = this.props;
+    if (success) {
+      setTimeout(() => {
+          this.setState({
+          name: '',
+          domain: '',
+          category: ''
+        });
+        reset();
+      }, 2000)
+    }
+
+  }
+
   render () {
-    const { isLoading, hasError } = this.props;
+    const { isLoading, hasError, success } = this.props;
     let progressBar = null;
 
-    if (isLoading) {
+    if (isLoading & !hasError) {
       progressBar = (<Grid item xs={12}>
         <LinearProgress />
       </Grid>)
     }
-    console.log(hasError)
+    if (success) {
+      this.reset()
+    }
 
     return (
       <form onSubmit={this.handleSubmit}>
         {
           hasError && <FailedSnackbar message="Tuvimos un problema al procesar su request" />
+        },
+        {
+          success && <SuccessSnackbar message="La app fue creada exitosamente" />
         }
         <Grid container spacing={2}>
           {progressBar}
@@ -111,36 +129,16 @@ class ProductFormBase extends React.Component {
   }
 };
 
-
-const useStyles = makeStyles({
-  failed: {
-    backgroundColor: 'red',
-    color: 'yellow',
-    fontWeight: 'bold',
-    textTransform: 'uppercase'
-  }
-})
-const FailedSnackbar = props => {
-  const classes = useStyles();
-  const [open, setOpen] = React.useState(true)
-
-  return (
-    <Snackbar anchorOrigin={{vertical: 'top', horizontal: 'center'}}
-      open={open} autoHideDuration={5000}
-      onClose={() => setOpen(false)}
-    >
-      <SnackbarContent message={props.message} className={classes.failed} />
-    </Snackbar>);
-}
-
 const mapStateToProps = state => ({
   isLoading: selectors.isLoading(state),
-  hasError: selectors.hasError(state)
-})
+  hasError: selectors.hasError(state),
+  success: selectors.success(state)
+});
 
 const mapActionsToProps = {
-  createApp: actions.createApp
-}
+  createApp: actions.create,
+  reset: actions.reset
+};
 
 const Connected = connect(mapStateToProps, mapActionsToProps)(ProductFormBase);
 
@@ -150,6 +148,5 @@ const ProductForm = withProductLayout({
     withPagination: false,
     Buttons: ToolbarActions
   })(Styled);
-
 
 export { ProductForm };
