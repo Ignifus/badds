@@ -28,6 +28,45 @@ services:
           - ./web/landing:/usr/src/web/landing
           - ./web/badds:/usr/src/web/badds
           - ./web/ads:/usr/src/web/ads
+
+    celery:
+      image: localhost:5000/gema/badds
+      entrypoint: /bin/bash
+      command: -c "celery -A badds worker -l info"
+      env_file:
+          - ./.env
+      deploy:
+          mode: replicated
+          replicas: 1
+          restart_policy:
+            condition: on-failure
+            delay: 5s
+            max_attempts: 3
+            window: 120s
+          placement:
+            constraints: [node.labels.category == main]
+      networks:
+          - gema
+
+    celery-beat:
+      image: localhost:5000/gema/badds
+      entrypoint: /bin/bash
+      command: -c "celery -A badds beat -l info"
+      env_file:
+          - ./.env
+      deploy:
+          mode: replicated
+          replicas: 1
+          restart_policy:
+            condition: on-failure
+            delay: 5s
+            max_attempts: 3
+            window: 120s
+          placement:
+            constraints: [node.labels.category == main]
+      networks:
+          - gema
+
     badds_panel:
         image: localhost:5000/gema/badds-panel
         deploy:

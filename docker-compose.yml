@@ -8,6 +8,7 @@ services:
         restart: always
         volumes:
           - db_data:/var/lib/postgresql/data
+          
     web:
         build: web/
         restart: always
@@ -23,6 +24,24 @@ services:
           - ./web/landing:/usr/src/web/landing
           - ./web/badds:/usr/src/web/badds
           - ./web/ads:/usr/src/web/ads
+    
+    celery:
+      build: web/
+      entrypoint: /bin/bash
+      command: -c "celery -A badds worker -l info"
+      env_file:
+          - ./.env
+
+    celery-beat:
+      build: web/
+      entrypoint: /bin/bash
+      command: -c "celery -A badds beat -l info"
+      env_file:
+          - ./.env
+
+    redis:
+      image: redis:alpine
+
     panel:
         build: web_panel/
         volumes:

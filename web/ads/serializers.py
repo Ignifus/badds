@@ -27,14 +27,28 @@ class ResourceRestrictionSerializer(serializers.ModelSerializer):
         model = ResourceRestriction
         fields = '__all__'
 
+    def __init__(self, *args, **kwargs):
+        super(ResourceRestrictionSerializer, self).__init__(*args, **kwargs)
+
+        if 'request' in self.context:
+            user = self.context['request'].user
+            self.fields['resource'] = PrimaryKeyRelatedField(queryset=Resource.objects.filter(advertisement__user=user))
+
 
 class ResourceSerializer(serializers.ModelSerializer):
-    base_64 = serializers.CharField(source='path')
+    image = serializers.FileField(source='path')
     path = serializers.ReadOnlyField()
 
     class Meta:
         model = Resource
         fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(ResourceSerializer, self).__init__(*args, **kwargs)
+
+        if 'request' in self.context:
+            user = self.context['request'].user
+            self.fields['advertisement'] = PrimaryKeyRelatedField(queryset=Advertisement.objects.filter(user=user))
 
 
 class AdvertisementSerializer(serializers.ModelSerializer):
@@ -79,12 +93,10 @@ class SpaceRestrictionSerializer(serializers.ModelSerializer):
 
 
 class ContractSerializer(serializers.ModelSerializer):
-    space = SpaceSerializer(read_only=True)
-    advertisement = AdvertisementSerializer(read_only=True)
-
     class Meta:
         model = Contract
         fields = '__all__'
+        read_only_fields = ('active', )
 
 
 class AuctionStatusSerializer(serializers.ModelSerializer):
@@ -94,19 +106,23 @@ class AuctionStatusSerializer(serializers.ModelSerializer):
 
 
 class AuctionSerializer(serializers.ModelSerializer):
-    space = SpaceSerializer(read_only=True)
-    status = AuctionStatusSerializer(read_only=True)
     end_date = serializers.DateTimeField()
 
     class Meta:
         model = Auction
         fields = '__all__'
+        read_only_fields = ('status',)
+
+    def __init__(self, *args, **kwargs):
+        super(AuctionSerializer, self).__init__(*args, **kwargs)
+
+        if 'request' in self.context:
+            user = self.context['request'].user
+            self.fields['space'] = PrimaryKeyRelatedField(queryset=Space.objects.filter(application__user=user))
 
 
 class BiddingSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
-    auction = AuctionSerializer(read_only=True)
-
     class Meta:
         model = Bidding
         fields = '__all__'
+        read_only_fields = ('user',)

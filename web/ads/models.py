@@ -36,7 +36,7 @@ class Restriction(models.Model):
 
 class Space(models.Model):
     application = models.ForeignKey(Application, related_name='spaces', on_delete=models.PROTECT)
-    name = models.TextField(max_length=16)
+    name = models.TextField(max_length=64)
     x_size = models.IntegerField()
     y_size = models.IntegerField()
     restrictions = models.ManyToManyField(Restriction, through='SpaceRestriction')
@@ -52,6 +52,9 @@ class SpaceRestriction(models.Model):
     restriction = models.ForeignKey(Restriction, related_name='space_restrictions', on_delete=models.PROTECT)
     value = models.TextField(max_length=16)
 
+    def __str__(self):
+        return self.space.name + " " + self.restriction.restriction
+
 
 class AuctionStatus(models.Model):
     AUCTION_STATUS = (
@@ -63,19 +66,19 @@ class AuctionStatus(models.Model):
     status = models.CharField(
         max_length=16,
         choices=AUCTION_STATUS,
-        default='Acitve',
+        default='Active',
     )
 
     def __str__(self):
         return self.status
 
     class Meta:
-        verbose_name_plural = "Auction Statuses"
+        verbose_name_plural = "Auction Status"
 
 
 class Auction(models.Model):
     space = models.ForeignKey(Space, related_name='auctions', on_delete=models.PROTECT)
-    status = models.ForeignKey(AuctionStatus, on_delete=models.PROTECT)
+    status = models.ForeignKey(AuctionStatus, blank=True, null=True, default=1, on_delete=models.PROTECT)
     end_date = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -88,6 +91,9 @@ class Bidding(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     ppp_usd = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.auction.space.name + " for " + str(self.ppp_usd)
 
 
 class Advertisement(models.Model):
@@ -116,6 +122,9 @@ class ResourceRestriction(models.Model):
     restriction = models.ForeignKey(Restriction, related_name='resource_restrictions', on_delete=models.PROTECT)
     value = models.TextField(max_length=16)
 
+    def __str__(self):
+        return self.resource.name + " " + self.restriction.restriction
+
 
 class Contract(models.Model):
     space = models.ForeignKey(Space, on_delete=models.PROTECT)
@@ -131,7 +140,7 @@ class Contract(models.Model):
 
 class Ip(models.Model):
     ip = models.TextField(max_length=64)
-    country = models.TextField(max_length=16)
+    country = models.TextField(max_length=32)
 
 
 class ContractIpLog(models.Model):

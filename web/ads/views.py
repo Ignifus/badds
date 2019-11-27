@@ -6,11 +6,13 @@ from django.views.decorators.http import require_http_methods
 from django.http import HttpResponse
 
 from ads.api import get_resource
+from ads.tasks import test
 
 
 @require_http_methods('GET')
 @login_required(login_url='/login/')
 def index(request):
+    test.delay()
     if not request.user.profile.email_confirmed:
         return redirect('/account_activation_sent')
     f = open("static/panel/index.html", "r")
