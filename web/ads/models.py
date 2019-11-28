@@ -16,6 +16,7 @@ class ApplicationCategory(models.Model):
 class Application(models.Model):
     user = models.ForeignKey(User, related_name='applications', on_delete=models.PROTECT)
     name = models.TextField(max_length=256)
+    description = models.TextField(max_length=256)
     domain = models.TextField(max_length=256, unique=True)
     key = models.TextField(max_length=256)
     category = models.ForeignKey(ApplicationCategory, on_delete=models.PROTECT)
@@ -98,6 +99,7 @@ class Bidding(models.Model):
 
 class Advertisement(models.Model):
     name = models.TextField(max_length=256)
+    description = models.TextField(max_length=256)
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -133,6 +135,7 @@ class Contract(models.Model):
     ppp_usd = models.FloatField()
     active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    end_date = models.DateTimeField()
 
     def __str__(self):
         return self.space.name + " " + self.advertisement.name

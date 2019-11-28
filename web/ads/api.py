@@ -24,13 +24,13 @@ def get_resource(request):
     try:
         contract = Contract.objects.get(space_id=space_id, active=True)
     except Contract.DoesNotExist:
-        return JsonResponse({'error': "Contract not found for space."}, status=404)
+        return JsonResponse({'error': "Contract not found for space."}, status=400)
 
     if contract.space.application.key != apikey:
         return JsonResponse({'error': "Bad API key."}, status=403)
 
     if contract.advertisement.resources.all().count() == 0:
-        return JsonResponse({'error': "Advertisement has no resources assigned."}, status=500)
+        return JsonResponse({'error': "Advertisement has no resources assigned."}, status=400)
 
     ip_log = ContractIpLog.objects.filter(contract=contract, ip=ip)
 
@@ -39,11 +39,12 @@ def get_resource(request):
         ip_log.contract = contract
         ip_log.ip = ip
         ip_log.save()
-    else:
+
         contract.prints -= 1
         if contract.prints == 0:
             contract.active = False
         contract.save()
+
         user = contract.space.application.user
         user.profile.credits += contract.ppp_usd
         user.save()
