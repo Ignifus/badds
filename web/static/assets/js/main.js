@@ -98,3 +98,11 @@
 	});
 
 })(jQuery);
+
+function captcha(action, cb) {
+	grecaptcha.ready(function() {
+		grecaptcha.execute('6LdVMMUUAAAAANDLhPW8tkzO0pULMIxrUyAzsb-z', {action: action}).then(function(token) {
+			cb(token);
+		});
+	});
+}

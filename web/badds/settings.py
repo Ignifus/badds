@@ -156,5 +156,7 @@ else:
 
 IPSTACK_KEY = os.environ.get("IPSTACK_KEY", None)
 
+CAPTCHA_SECRET = os.environ.get("CAPTCHA_SECRET", None)
+
 MP = mercadopago.MP(os.environ.get("MP_CLIENT", None), os.environ.get("MP_SECRET", None))
 MP.sandbox_mode(enable=True)

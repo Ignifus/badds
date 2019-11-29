@@ -80,7 +80,7 @@ class AuctionStatus(models.Model):
 class Auction(models.Model):
     space = models.ForeignKey(Space, related_name='auctions', on_delete=models.PROTECT)
     status = models.ForeignKey(AuctionStatus, blank=True, null=True, default=1, on_delete=models.PROTECT)
-    end_date = models.DateTimeField()
+    contract_duration_days = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

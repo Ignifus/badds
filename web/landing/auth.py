@@ -1,5 +1,5 @@
 from django.contrib.auth import login, logout
-from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import redirect, render
@@ -11,6 +11,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.core.mail import send_mail
 
 from badds.settings import DEFAULT_FROM_EMAIL
+from landing.captcha import check_captcha
 from landing.forms import SignUpForm, LoginForm, RecoverForm
 from landing.models import Profile
 from landing.tokens import account_activation_token
@@ -19,6 +20,11 @@ from landing.tokens import account_activation_token
 def login_auth(request):
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
+
+        if not check_captcha(request):
+            form.add_error(None, "Bad Captcha")
+            render(request, 'landing/login.html', {'form': form})
+
         if form.is_valid():
             if form.clean() is not None:
                 user = User.objects.get(username=form.cleaned_data.get('username'))
