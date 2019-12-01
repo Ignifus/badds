@@ -4,13 +4,13 @@ import os
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
 
-from badds.settings import MP
+from badds.settings import MP, EMAIL_HOST_USER
 from landing.auth import register_auth, login_auth, activate_auth, recover_auth
 from landing.captcha import check_captcha
-from landing.email import send_contact_email
 from landing.forms import ContactForm
 
 
@@ -27,10 +27,17 @@ def contact(request):
             render(request, 'landing/contact.html', {'form': form})
 
         if form.is_valid():
-            send_contact_email(form.cleaned_data.get('name'),
-                               form.cleaned_data.get('email'),
-                               form.cleaned_data.get('subject'),
-                               form.cleaned_data.get('body'))
+            name = form.cleaned_data.get('name')
+            email = form.cleaned_data.get('email')
+            subject = form.cleaned_data.get('subject')
+            body = form.cleaned_data.get('body')
+
+            send_mail(f'{subject} | Soporte para: {email}',
+                      f'De {name}:\n{body}',
+                      'admin@geminis.io',
+                      [EMAIL_HOST_USER],
+                      fail_silently=False)
+
             return render(request, 'landing/contact.html', {'success': True, 'form': ContactForm()})
     else:
         form = ContactForm()
