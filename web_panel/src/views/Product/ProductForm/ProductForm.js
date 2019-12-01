@@ -13,8 +13,8 @@ import {
   LinearProgress,
 } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
+import validate from 'validate.js';
 
-import { ToolbarActions } from '../ToolbarActions';
 import { withProductLayout } from '../../../layouts/Main';
 import { FailedSnackbar, SuccessSnackbar } from '../../../components';
 import { actions, selectors } from '../duck';
@@ -30,18 +30,23 @@ class ProductFormBase extends React.Component {
       name: '',
       domain: '',
       category: '',
-      description: ''
+      description: '',
+      errors: {}
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    console.log(this.props)
   }
 
   handleSubmit(e) {
     e.preventDefault();
 
     if (this.props.match.params.id == null) {
-      this.props.createApp(this.state);
+      const validationErrors = this.validate();
+      if (!validationErrors) {
+        this.props.createApp(this.state);
+      } else {
+        this.setState({ errors: validationErrors });
+      }
     } else {
       this.props.updateApp(this.state.id, this.state)
     }
@@ -49,6 +54,15 @@ class ProductFormBase extends React.Component {
 
   handleChange(e) {
     this.setState({[e.target.name]: e.target.value});
+  }
+
+  validate() {
+    return validate(this.state, {
+      name: {
+        presence: true,
+        length: { minimum: 3 }
+      }
+    });
   }
 
   reset() {
@@ -92,7 +106,7 @@ class ProductFormBase extends React.Component {
     }
 
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={this.handleSubmit} noValidate>
         {
           hasError && <FailedSnackbar message="Tuvimos un problema al procesar su request" />
         }
@@ -107,6 +121,8 @@ class ProductFormBase extends React.Component {
                 name="name"
                 placeholder="Nombre de la app"
                 value={this.state.name}
+                error={this.state.errors.name != null}
+                errorText={this.state.errors.name != null ? this.state.errors.name[0] : ''}
                 onChange={this.handleChange}
               />
             </FormControl>
@@ -119,6 +135,7 @@ class ProductFormBase extends React.Component {
                 placeholder="myapp.com"
                 value={this.state.domain}
                 onChange={this.handleChange}
+                required
               />
             </FormControl>
           </Grid>
@@ -130,6 +147,7 @@ class ProductFormBase extends React.Component {
                 value={this.state.category}
                 onChange={this.handleChange}
                 name="category"
+                required
               >
                 <MenuItem value="1">Web</MenuItem>
                 <MenuItem value="2">Android</MenuItem>
@@ -147,6 +165,7 @@ class ProductFormBase extends React.Component {
                 value={this.state.description}
                 onChange={this.handleChange}
                 InputLabelProps={{ shrink: this.state.name !== '' }}
+                required
               />
             </FormControl>
           </Grid>
