@@ -6,7 +6,6 @@ from django.views.decorators.http import require_http_methods
 from django.http import HttpResponse
 
 from ads.api import get_resource
-from ads.tasks import test
 
 
 @require_http_methods('GET')

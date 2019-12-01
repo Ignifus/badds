@@ -95,7 +95,7 @@ class AuctionViewSet(viewsets.ModelViewSet):
         raise PermissionDenied()
 
     def perform_create(self, serializer):
-        auctions = Auction.objects.filter(space=serializer.validated_data["space"], status=1)
+        auctions = Auction.objects.filter(space=serializer.validated_data["space"], status=AuctionStatus.objects.filter(status='Active'))
         if len(auctions) != 0:
             raise ValidationError()
 

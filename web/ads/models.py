@@ -79,22 +79,14 @@ class AuctionStatus(models.Model):
 
 class Auction(models.Model):
     space = models.ForeignKey(Space, related_name='auctions', on_delete=models.PROTECT)
+    prints = models.IntegerField()
     status = models.ForeignKey(AuctionStatus, blank=True, null=True, default=1, on_delete=models.PROTECT)
+    end_date = models.DateTimeField()
     contract_duration_days = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.space.name
-
-
-class Bidding(models.Model):
-    auction = models.ForeignKey(Auction, related_name='biddings', on_delete=models.PROTECT)
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
-    ppp_usd = models.FloatField()
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.auction.space.name + " for " + str(self.ppp_usd)
 
 
 class Advertisement(models.Model):
@@ -105,6 +97,17 @@ class Advertisement(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Bidding(models.Model):
+    auction = models.ForeignKey(Auction, related_name='biddings', on_delete=models.PROTECT)
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    advertisement = models.ForeignKey(Advertisement, related_name='biddings', on_delete=models.PROTECT)
+    ppp_usd = models.FloatField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.auction.space.name + " for " + str(self.ppp_usd)
 
 
 class Resource(models.Model):

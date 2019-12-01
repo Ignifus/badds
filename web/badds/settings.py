@@ -139,9 +139,13 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
 CELERY_BEAT_SCHEDULE = {
-    'hello': {
-        'task': 'ads.tasks.test',
-        'schedule': crontab()  # execute every minute
+    'contracts': {
+        'task': 'ads.tasks.check_contracts_end',
+        'schedule': crontab()
+    },
+    'auctions': {
+        'task': 'ads.tasks.check_auctions_end',
+        'schedule': crontab()
     }
 }
 
