@@ -46,6 +46,11 @@ def logout_auth(request):
 def register_auth(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
+
+        if not check_captcha(request):
+            form.add_error(None, "Bad Captcha")
+            render(request, 'landing/register.html', {'form': form})
+
         if form.is_valid():
             user = form.save(commit=False)
             user.is_active = True
@@ -78,6 +83,11 @@ def send_mail_int(request):
 def recover_auth(request):
     if request.method == 'POST':
         form = RecoverForm(data=request.POST)
+
+        if not check_captcha(request):
+            form.add_error(None, "Bad Captcha")
+            render(request, 'landing/recover.html', {'form': form})
+
         if form.is_valid():
             if form.clean() is not None:
                 form.save(

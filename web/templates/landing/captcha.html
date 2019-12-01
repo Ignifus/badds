@@ -1,0 +1,7 @@
+<input type="hidden" name="captcha" id="captcha"/>
+
+<script>
+    captcha({{ section }}, function(token) {
+        $("#captcha").val(token);
+    });
+</script>

@@ -126,3 +126,10 @@ class BiddingSerializer(serializers.ModelSerializer):
         model = Bidding
         fields = '__all__'
         read_only_fields = ('user',)
+
+    def __init__(self, *args, **kwargs):
+        super(BiddingSerializer, self).__init__(*args, **kwargs)
+
+        if 'request' in self.context:
+            user = self.context['request'].user
+            self.fields['advertisement'] = PrimaryKeyRelatedField(queryset=Advertisement.objects.filter(user=user))

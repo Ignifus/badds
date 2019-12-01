@@ -58,13 +58,16 @@ class BiddingViewSet(viewsets.ModelViewSet):
     queryset = Bidding.objects.all()
     serializer_class = BiddingSerializer
 
+    def get_serializer_context(self):
+        return {'request': self.request}
+
     def perform_create(self, serializer):
         if self.request.user.profile.credits < serializer.validated_data['ppp_usd']:
-            raise ValidationError()
+            raise ValidationError(detail="User does not have enough credits.")
 
         serializer.save(user=self.request.user)
 
-        self.request.user.profile.credits -= serializer.validated_data['ppp_usd']
+        self.request.user.profile.credits -= serializer.validated_data['ppp_usd'] * serializer.validated_data['auction'].prints
         self.request.user.save()
 
     def perform_update(self, serializer):
@@ -77,7 +80,7 @@ class BiddingViewSet(viewsets.ModelViewSet):
             raise PermissionDenied()
         instance.delete()
 
-        self.request.user.profile.credits += instance.ppp_usd
+        self.request.user.profile.credits += instance.ppp_usd * instance.auction.prints
         self.request.user.save()
 
 
@@ -97,11 +100,11 @@ class AuctionViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         auctions = Auction.objects.filter(space=serializer.validated_data["space"], status=AuctionStatus.objects.filter(status='Active'))
         if len(auctions) != 0:
-            raise ValidationError()
+            raise ValidationError(detail="There is an active auction with that space.")
 
         contract = Contract.objects.filter(space=serializer.validated_data["space"], active=True)
         if len(contract) != 0:
-            raise ValidationError()
+            raise ValidationError(detail="There is an active contract with that space.")
         serializer.save()
 
 

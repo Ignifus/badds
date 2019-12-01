@@ -9,6 +9,7 @@ from django.views.decorators.http import require_http_methods
 
 from badds.settings import MP
 from landing.auth import register_auth, login_auth, activate_auth, recover_auth
+from landing.captcha import check_captcha
 from landing.email import send_contact_email
 from landing.forms import ContactForm
 
@@ -20,6 +21,11 @@ def index(request):
 def contact(request):
     if request.method == "POST":
         form = ContactForm(request.POST)
+
+        if not check_captcha(request):
+            form.add_error(None, "Bad Captcha")
+            render(request, 'landing/contact.html', {'form': form})
+
         if form.is_valid():
             send_contact_email(form.cleaned_data.get('name'),
                                form.cleaned_data.get('email'),
