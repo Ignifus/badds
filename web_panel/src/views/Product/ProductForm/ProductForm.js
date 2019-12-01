@@ -1,4 +1,5 @@
 import React from 'react';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/styles';
 import {
@@ -11,10 +12,11 @@ import {
   FormControl,
   LinearProgress,
 } from '@material-ui/core';
+import { withRouter } from 'react-router-dom';
 
 import { ToolbarActions } from '../ToolbarActions';
 import { withProductLayout } from '../../../layouts/Main';
-import { FailedSnackbar, SuccessSnackbar } from '../../../components'
+import { FailedSnackbar, SuccessSnackbar } from '../../../components';
 import { actions, selectors } from '../duck';
 
 const styles = theme => ({
@@ -27,15 +29,22 @@ class ProductFormBase extends React.Component {
     this.state = {
       name: '',
       domain: '',
-      category: ''
+      category: '',
+      description: ''
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    console.log(this.props)
   }
 
   handleSubmit(e) {
     e.preventDefault();
-    this.props.createApp(this.state);
+
+    if (this.props.match.params.id == null) {
+      this.props.createApp(this.state);
+    } else {
+      this.props.updateApp(this.state.id, this.state)
+    }
   }
 
   handleChange(e) {
@@ -49,12 +58,24 @@ class ProductFormBase extends React.Component {
           this.setState({
           name: '',
           domain: '',
-          category: ''
+          category: '',
+          description: ''
         });
         reset();
       }, 2000)
     }
+  }
 
+  componentDidMount() {
+    if (this.props.match.params.id != null) {
+      this.props.fetchApp(this.props.match.params.id);
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.app.name !== this.props.app.name) {
+      this.setState({ ...this.props.app });
+    }
   }
 
   render () {
@@ -67,16 +88,16 @@ class ProductFormBase extends React.Component {
       </Grid>)
     }
     if (success) {
-      this.reset()
+      if (this.props.match.params.id === null) this.reset();
     }
 
     return (
       <form onSubmit={this.handleSubmit}>
         {
           hasError && <FailedSnackbar message="Tuvimos un problema al procesar su request" />
-        },
+        }
         {
-          success && <SuccessSnackbar message="La app fue creada exitosamente" />
+          success && <SuccessSnackbar message="La app fue creada/actualizada exitosamente" />
         }
         <Grid container spacing={2}>
           {progressBar}
@@ -117,6 +138,20 @@ class ProductFormBase extends React.Component {
           </Grid>
         </Grid>
         <Grid container>
+          <Grid item xs={4}>
+            <FormControl fullWidth>
+              <TextField
+                label="Descripcion"
+                name="description"
+                placeholder="Escriba descripcion de la aplicacion"
+                value={this.state.description}
+                onChange={this.handleChange}
+                InputLabelProps={{ shrink: this.state.name !== '' }}
+              />
+            </FormControl>
+          </Grid>
+        </Grid>
+        <Grid container>
           <Grid item>
             <Button
               type="submit"
@@ -132,21 +167,26 @@ class ProductFormBase extends React.Component {
 const mapStateToProps = state => ({
   isLoading: selectors.isLoading(state),
   hasError: selectors.hasError(state),
-  success: selectors.success(state)
+  success: selectors.success(state),
+  app: selectors.getApp(state)
 });
 
 const mapActionsToProps = {
   createApp: actions.create,
+  updateApp: actions.update,
+  fetchApp: actions.fetch,
   reset: actions.reset
 };
 
-const Connected = connect(mapStateToProps, mapActionsToProps)(ProductFormBase);
-
-const Styled = withStyles(styles)(Connected);
-const ProductForm = withProductLayout({
+const ProductForm = compose(
+  withProductLayout({
     title: 'Form',
     withPagination: false,
-    Buttons: ToolbarActions
-  })(Styled);
+    Buttons: () => <span />
+  }),
+  connect(mapStateToProps, mapActionsToProps),
+  withStyles(styles),
+  withRouter,
+)(ProductFormBase);
 
 export { ProductForm };

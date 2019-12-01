@@ -132,6 +132,12 @@ const PublishersRoutes = () => (
       layout={PublisherLayout}
       path="/ads/publishers/products/add"
     />
+    <RouteWithLayout
+      component={ProductFormView}
+      exact
+      layout={PublisherLayout}
+      path="/ads/publishers/products/update/:id"
+    />
   </React.Fragment>
 );
 

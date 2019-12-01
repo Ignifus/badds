@@ -47,7 +47,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ProductCard = props => {
-  const { className, product, ...rest } = props;
+  const { className, product, onActionSelected, ...rest } = props;
 
   const classes = useStyles();
 
@@ -56,7 +56,14 @@ const ProductCard = props => {
       {...rest}
       className={clsx(classes.root, className)}
     >
-      <CardHeader action={<ActionMenu />} title={product.title}/>
+      <CardHeader
+        action={
+          <ActionMenu
+            onActionSelected={(action) => onActionSelected(action, product.id)}
+          />
+        }
+        title={product.domain}
+      />
       <CardContent>
         <div className={classes.imageContainer}>
           <img
@@ -77,7 +84,7 @@ const ProductCard = props => {
           variant="body1"
           className={classes.productDescription}
         >
-          {product.description}
+          {product.description || "Please, provide a description for your product"}
         </Typography>
       </CardContent>
       <Divider />
@@ -95,7 +102,7 @@ const ProductCard = props => {
               display="inline"
               variant="body2"
             >
-              Updated 2hr ago
+              Updated { product.created_at } ago
             </Typography>
           </Grid>
           <Grid
@@ -107,7 +114,7 @@ const ProductCard = props => {
               display="inline"
               variant="body2"
             >
-              {product.totalDownloads} Downloads
+              {product.totalVisits} Visits
             </Typography>
           </Grid>
         </Grid>
@@ -118,7 +125,8 @@ const ProductCard = props => {
 
 ProductCard.propTypes = {
   className: PropTypes.string,
-  product: PropTypes.object.isRequired
+  product: PropTypes.object.isRequired,
+  onActionSelected: PropTypes.func.isRequired
 };
 
 export default ProductCard;

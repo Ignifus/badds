@@ -18,7 +18,7 @@ export const RESET = `${NAMESPACE}/RESET`;
 // Reducer
 const initialState = fromJS({
   loading: false,
-  app: null,
+  app: { name: '', domain: '', description: '', category: '' },
   list: [],
   error: false
 });
@@ -38,7 +38,9 @@ export function reducer(state = initialState, action) {
     case FETCH:
       return state.set('loading', false).set('list', fromJS(action.payload));
     case UPDATE:
-      return state.set('loading', false).set('app', iMap(action.payload));
+      return state.set('loading', false)
+        .set('success', true)
+        .set('app', iMap(action.payload));
     case REMOVE:
         return state.set('loading', false)
           .set('apps', state.get('apps').filter((app) => app.id !== action.payload.id));
@@ -99,18 +101,19 @@ const handleError = (e) => dispatch => {
   });
   setTimeout(() => dispatch(clearError()), 5000); // TODO fix, resetear on loading
 }
+
 const list = () => dispatch => {
   dispatch(loading());
 
-  return axios.get('/api/applications')
-    .then(apps => dispatch(appsReceived(apps)))
+  return axios.get('/ads/api/applications/')
+    .then(response => dispatch(appsReceived(response.data)))
 };
 
 const fetch = (id) => dispatch => {
   dispatch(loading());
 
-  return axios.get(`/api/applications/${id}`)
-    .then(app => dispatch(appReceived(app)));
+  return axios.get(`/ads/api/applications/${id}/`)
+    .then(response => dispatch(appReceived(response.data)));
 }
 
 const create = (app) => dispatch => {
@@ -121,17 +124,20 @@ const create = (app) => dispatch => {
     .catch((e) => dispatch(handleError(e)));
 }
 
-const update = (app) => dispatch => {
+const update = (id, app) => dispatch => {
   dispatch(loading());
 
-  return axios.post(`/api/applications`, app)
-    .then(() => dispatch(appUpdated(app)));
+  return axios.put(`/ads/api/applications/${id}/`, app, api.getRequestConfig())
+    .then(() => dispatch(appUpdated(app)))
+    .catch((e) => dispatch(handleError(e)));
 }
 
 const remove = (id) => dispatch => {
 
-  return axios.delete(`/api/applications/${id}`)
-    .then(() => dispatch(appRemoved(id)));
+  return axios.delete(`/ads/api/applications/${id}/`, api.getRequestConfig())
+    .then(() => dispatch(appRemoved(id)))
+    .then(() => dispatch(getList()))
+    .catch((e) => dispatch(handleError(e)));
 }
 
 export const actions = {
@@ -151,7 +157,11 @@ const isLoading = state => {
 };
 
 const getApp = state => {
-  return state[NAMESPACE].get('app').toJS();
+  return state[NAMESPACE].get('app', iMap()).toJS();
+};
+
+const getList = state => {
+  return state[NAMESPACE].get('list').toJS();
 };
 
 const hasError = state => {
@@ -162,4 +172,4 @@ const success = state => {
   return state[NAMESPACE].get('success');
 }
 
-export const selectors = { isLoading, getApp, hasError, success };
+export const selectors = { isLoading, getApp, getList, hasError, success };

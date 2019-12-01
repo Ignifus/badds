@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -11,7 +12,7 @@ const options = [
 
 const ITEM_HEIGHT = 48;
 
-export function ActionMenu() {
+export function ActionMenu(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -19,7 +20,9 @@ export function ActionMenu() {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleClose = (selectedAction) => {
+    const {onActionSelected} = props;
+    onActionSelected(selectedAction);
     setAnchorEl(null);
   };
 
@@ -47,11 +50,15 @@ export function ActionMenu() {
         }}
       >
         {options.map(option => (
-          <MenuItem key={option} selected={option === 'Pyxis'} onClick={handleClose}>
+          <MenuItem key={option} selected={option === ''} onClick={() => handleClose(option) }>
             {option}
           </MenuItem>
         ))}
       </Menu>
     </div>
   );
+}
+
+ActionMenu.propTypes = {
+  onActionSelected: PropTypes.func.isRequired
 }
