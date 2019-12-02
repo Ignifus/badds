@@ -9,6 +9,8 @@ import {
   Dashboard as DashboardView,
   ProductList as ProductListView,
   ProductForm as ProductFormView,
+  SpaceList as SpaceListView,
+  SpaceForm as SpaceFormView,
   UserList as UserListView,
   Typography as TypographyView,
   Icons as IconsView,
@@ -137,6 +139,24 @@ const PublishersRoutes = () => (
       exact
       layout={PublisherLayout}
       path="/ads/publishers/products/update/:id"
+    />
+    <RouteWithLayout
+      component={SpaceListView}
+      exact
+      layout={PublisherLayout}
+      path="/ads/publishers/spaces"
+    />
+    <RouteWithLayout
+      component={SpaceFormView}
+      exact
+      layout={PublisherLayout}
+      path="/ads/publishers/spaces/add"
+    />
+    <RouteWithLayout
+      component={SpaceFormView}
+      exact
+      layout={PublisherLayout}
+      path="/ads/publishers/spaces/update/:id"
     />
   </React.Fragment>
 );

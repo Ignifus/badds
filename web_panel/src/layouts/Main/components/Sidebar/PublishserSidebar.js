@@ -23,6 +23,11 @@ const pages = [
     icon: <AppsIcon />
   },
   {
+    title: 'Spaces',
+    href: '/ads/publishers/spaces',
+    icon: <ImageIcon />
+  },
+  {
     title: 'Contracts',
     href: '/ads/publishers/contracts',
     icon: <BusinessCenterIcon />

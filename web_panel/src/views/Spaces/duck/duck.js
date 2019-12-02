@@ -4,10 +4,10 @@ import { fromJS, Map as iMap } from 'immutable';
 import { api } from '../../../helpers';
 
 // config
-export const BASE_URL = '/ads/api/applications/';
+export const BASE_URL = '/ads/api/spaces/';
 
 // Types
-export const NAMESPACE = 'apps';
+export const NAMESPACE = 'spaces';
 export const LOADING = `${NAMESPACE}/LOADING`;
 export const FETCH = `${NAMESPACE}/FETCH`;
 export const CREATE = `${NAMESPACE}/ADD`;
@@ -21,7 +21,7 @@ export const RESET = `${NAMESPACE}/RESET`;
 // Reducer
 const initialState = fromJS({
   loading: false,
-  app: { name: '', domain: '', description: '', category: '' },
+  space: { name: '', x: '', y: '', application: '' },
   list: [],
   error: false
 });
@@ -35,18 +35,18 @@ export function reducer(state = initialState, action) {
     case CREATE:
       return state.set('loading', false)
         .set('success', true)
-        .set('app', iMap(action.payload));
+        .set('space', iMap(action.payload));
     case DETAIL:
-      return state.set('loading', false).set('app', iMap(action.payload));
+      return state.set('loading', false).set('space', iMap(action.payload));
     case FETCH:
       return state.set('loading', false).set('list', fromJS(action.payload));
     case UPDATE:
       return state.set('loading', false)
         .set('success', true)
-        .set('app', iMap(action.payload));
+        .set('space', iMap(action.payload));
     case REMOVE:
         return state.set('loading', false)
-          .set('list', state.get('list').filter((app) => app.id !== action.payload.id));
+          .set('list', state.get('list').filter((space) => space.id !== action.payload.id));
     case ERROR:
       return state.set('loading', false)
         .set('error', true);
@@ -62,26 +62,26 @@ export function reducer(state = initialState, action) {
 }
 
 // Action Creators
-const appCreated = (app) => ({
+const spaceCreated = (space) => ({
   type: CREATE
 })
 
-const appsReceived = (payload) => ({
+const spacesReceived = (payload) => ({
   type: FETCH,
   payload
 });
 
-const appReceived = (app) => ({
+const spaceReceived = (space) => ({
   type: DETAIL,
-  payload: app
+  payload: space
 })
 
-const appUpdated = (app) => ({
+const spaceUpdated = (space) => ({
   type: UPDATE,
-  payload: app
+  payload: space
 });
 
-const appRemoved = (id) => ({
+const spaceRemoved = (id) => ({
   type: REMOVE,
   payload: id
 });
@@ -109,36 +109,36 @@ const list = () => dispatch => {
   dispatch(loading());
 
   return axios.get(BASE_URL)
-    .then(response => dispatch(appsReceived(response.data)))
+    .then(response => dispatch(spacesReceived(response.data)))
 };
 
 const fetch = (id) => dispatch => {
   dispatch(loading());
 
   return axios.get(`${BASE_URL}${id}/`)
-    .then(response => dispatch(appReceived(response.data)));
+    .then(response => dispatch(spaceReceived(response.data)));
 }
 
-const create = (app) => dispatch => {
+const create = (space) => dispatch => {
   dispatch(loading());
 
-  return axios.post(BASE_URL, app, api.getRequestConfig())
-    .then(() => dispatch(appCreated(app)))
+  return axios.post(BASE_URL, space, api.getRequestConfig())
+    .then(() => dispatch(spaceCreated(space)))
     .catch((e) => dispatch(handleError(e)));
 }
 
-const update = (id, app) => dispatch => {
+const update = (id, space) => dispatch => {
   dispatch(loading());
 
-  return axios.put(`${BASE_URL}${id}/`, app, api.getRequestConfig())
-    .then(() => dispatch(appUpdated(app)))
+  return axios.put(`${BASE_URL}${id}/`, space, api.getRequestConfig())
+    .then(() => dispatch(spaceUpdated(space)))
     .catch((e) => dispatch(handleError(e)));
 }
 
 const remove = (id) => dispatch => {
 
   return axios.delete(`${BASE_URL}${id}/`, api.getRequestConfig())
-    .then(() => dispatch(appRemoved(id)))
+    .then(() => dispatch(spaceRemoved(id)))
     .then(() => dispatch(getList()))
     .catch((e) => dispatch(handleError(e)));
 }
@@ -159,8 +159,8 @@ const isLoading = state => {
   return state[NAMESPACE].get('loading');
 };
 
-const getApp = state => {
-  return state[NAMESPACE].get('app', iMap()).toJS();
+const getSpace = state => {
+  return state[NAMESPACE].get('space', iMap()).toJS();
 };
 
 const getList = state => {
@@ -175,4 +175,4 @@ const success = state => {
   return state[NAMESPACE].get('success');
 }
 
-export const selectors = { isLoading, getApp, getList, hasError, success };
+export const selectors = { isLoading, getSpace, getList, hasError, success };

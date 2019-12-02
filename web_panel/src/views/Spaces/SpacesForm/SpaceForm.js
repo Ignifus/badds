@@ -24,14 +24,14 @@ const styles = theme => ({
   snackbar: { backgroundColor: 'red' }
 });
 
-class ProductFormBase extends React.Component {
+class SpaceFormBase extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      application: '',
       name: '',
-      domain: '',
-      category: '',
-      description: '',
+      x: '',
+      y: '',
       errors: {}
     };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -48,9 +48,9 @@ class ProductFormBase extends React.Component {
     }
 
     if (this.props.match.params.id == null) {
-      this.props.createApp(this.state);
+      this.props.createSpace(this.state);
     } else {
-      this.props.updateApp(this.state.id, this.state)
+      this.props.updateSpace(this.state.id, this.state)
     }
   }
 
@@ -64,15 +64,16 @@ class ProductFormBase extends React.Component {
         presence: { allowEmpty: false },
         length: { minimum: 3 }
       },
-      domain: {
+      application: {
         presence: { allowEmpty: false },
       },
-      category: {
+      x: {
         presence: { allowEmpty: false },
+        numericality: { greaterThan: 10, lessThan: 1920 }
       },
-      description: {
+      y: {
         presence: { allowEmpty: false },
-        length: { minimum: 30, maximum: 150 }
+        length: { greaterThan: 10, lessThan: 1920 }
       }
     });
   }
@@ -82,12 +83,12 @@ class ProductFormBase extends React.Component {
     if (success) {
       setTimeout(() => {
           this.setState({
-          name: '',
-          domain: '',
-          category: '',
-          description: '',
-          errors: {}
-        });
+            application: '',
+            name: '',
+            x: '',
+            y: '',
+            errors: {}
+          });
         reset();
       }, 750)
     }
@@ -95,13 +96,13 @@ class ProductFormBase extends React.Component {
 
   componentDidMount() {
     if (this.props.match.params.id != null) {
-      this.props.fetchApp(this.props.match.params.id);
+      this.props.fetchSpace(this.props.match.params.id);
     }
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.app.name !== this.props.app.name) {
-      this.setState({ ...this.props.app });
+    if (prevProps.space.name !== this.props.space.name) {
+      this.setState({ ...this.props.space });
     }
   }
 
@@ -125,7 +126,7 @@ class ProductFormBase extends React.Component {
           hasError && <FailedSnackbar message="Tuvimos un problema al procesar su request" />
         }
         {
-          success && <SuccessSnackbar message="La app fue creada/actualizada exitosamente" />
+          success && <SuccessSnackbar message="El espacio fue creado/actualizado exitosamente" />
         }
         <Grid container spacing={2}>
           {progressBar}
@@ -133,7 +134,7 @@ class ProductFormBase extends React.Component {
             <FormControl fullWidth>
               <TextField label="Name"
                 name="name"
-                placeholder="Nombre de la app"
+                placeholder="Nombre del espacio"
                 value={this.state.name}
                 error={this.state.errors.name != null}
                 helperText={this.state.errors.name != null ? this.state.errors.name[0] : ''}
@@ -145,12 +146,13 @@ class ProductFormBase extends React.Component {
           <Grid item xs={4}>
             <FormControl fullWidth>
               <TextField
-                label="Domain"
-                name="domain"
-                placeholder="myapp.com"
-                value={this.state.domain}
-                error={this.state.errors.domain != null}
-                helperText={this.state.errors.domain != null ? this.state.errors.domain[0] : ''}
+                label="Ancho"
+                name="x"
+                type="number"
+                placeholder="ancho en pixeles"
+                value={this.state.x}
+                error={this.state.errors.x != null}
+                helperText={this.state.errors.x != null ? this.state.errors.x[0] : ''}
                 onChange={this.handleChange}
                 required
               />
@@ -158,36 +160,37 @@ class ProductFormBase extends React.Component {
           </Grid>
           <Grid item xs={4}>
             <FormControl fullWidth>
-              <InputLabel id="badds-app-category-select">Categoria</InputLabel>
-              <Select
-                labelId="badds-app-category-select"
-                value={this.state.category}
+              <TextField
+                label="Alto"
+                name="y"
+                type="number"
+                placeholder="alto en pixeles"
+                value={this.state.y}
+                error={this.state.errors.y != null}
+                helperText={this.state.errors.y != null ? this.state.errors.y[0] : ''}
                 onChange={this.handleChange}
-                error={this.state.errors.category != null}
-                name="category"
+                InputLabelProps={{ shrink: this.state.y !== '' }}
                 required
-              >
-                <MenuItem value="1">Web</MenuItem>
-                <MenuItem value="2">Android</MenuItem>
-              </Select>
-              <FormHelperText error>{this.state.errors.category != null ? this.state.errors.category[0] : ''}</FormHelperText>
+              />
             </FormControl>
           </Grid>
         </Grid>
         <Grid container>
           <Grid item xs={4}>
             <FormControl fullWidth>
-              <TextField
-                label="Descripcion"
-                name="description"
-                placeholder="Escriba descripcion de la aplicacion"
-                value={this.state.description}
-                error={this.state.errors.description != null}
-                helperText={this.state.errors.description != null ? this.state.errors.description[0] : ''}
+              <InputLabel id="badds-app-category-select">Categoria</InputLabel>
+              <Select
+                labelId="badds-app-category-select"
+                value={this.state.application}
                 onChange={this.handleChange}
-                InputLabelProps={{ shrink: this.state.description !== '' }}
+                error={this.state.errors.application != null}
+                name="category"
                 required
-              />
+              >
+                <MenuItem value="1">Web</MenuItem>
+                <MenuItem value="2">Android</MenuItem>
+              </Select>
+              <FormHelperText error>{this.state.errors.application != null ? this.state.errors.application[0] : ''}</FormHelperText>
             </FormControl>
           </Grid>
         </Grid>
@@ -208,17 +211,17 @@ const mapStateToProps = state => ({
   isLoading: selectors.isLoading(state),
   hasError: selectors.hasError(state),
   success: selectors.success(state),
-  app: selectors.getApp(state)
+  space: selectors.getSpace(state)
 });
 
 const mapActionsToProps = {
-  createApp: actions.create,
-  updateApp: actions.update,
-  fetchApp: actions.fetch,
+  createSpace: actions.create,
+  updateSpace: actions.update,
+  fetchSpace: actions.fetch,
   reset: actions.reset
 };
 
-const ProductForm = compose(
+const SpaceForm = compose(
   withProductLayout({
     title: 'Form',
     withPagination: false,
@@ -227,6 +230,6 @@ const ProductForm = compose(
   connect(mapStateToProps, mapActionsToProps),
   withStyles(styles),
   withRouter,
-)(ProductFormBase);
+)(SpaceFormBase);
 
-export { ProductForm };
+export { SpaceForm };
