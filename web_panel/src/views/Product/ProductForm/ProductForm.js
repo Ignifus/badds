@@ -11,6 +11,7 @@ import {
   InputLabel,
   FormControl,
   LinearProgress,
+  FormHelperText,
 } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import validate from 'validate.js';
@@ -39,14 +40,15 @@ class ProductFormBase extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
+    const validationErrors = this.validate();
+    if (validationErrors) {
+      return this.setState({ errors: validationErrors });
+    } else {
+      this.setState({ errors: [] });
+    }
 
     if (this.props.match.params.id == null) {
-      const validationErrors = this.validate();
-      if (!validationErrors) {
-        this.props.createApp(this.state);
-      } else {
-        this.setState({ errors: validationErrors });
-      }
+      this.props.createApp(this.state);
     } else {
       this.props.updateApp(this.state.id, this.state)
     }
@@ -59,8 +61,18 @@ class ProductFormBase extends React.Component {
   validate() {
     return validate(this.state, {
       name: {
-        presence: true,
+        presence: { allowEmpty: false },
         length: { minimum: 3 }
+      },
+      domain: {
+        presence: { allowEmpty: false },
+      },
+      category: {
+        presence: { allowEmpty: false },
+      },
+      description: {
+        presence: { allowEmpty: false },
+        length: { minimum: 30, maximum: 150 }
       }
     });
   }
@@ -101,8 +113,9 @@ class ProductFormBase extends React.Component {
         <LinearProgress />
       </Grid>)
     }
-    if (success) {
-      if (this.props.match.params.id === null) this.reset();
+
+    if (success && this.props.match.params.id == null) {
+      this.reset();
     }
 
     return (
@@ -122,8 +135,9 @@ class ProductFormBase extends React.Component {
                 placeholder="Nombre de la app"
                 value={this.state.name}
                 error={this.state.errors.name != null}
-                errorText={this.state.errors.name != null ? this.state.errors.name[0] : ''}
+                helperText={this.state.errors.name != null ? this.state.errors.name[0] : ''}
                 onChange={this.handleChange}
+                required
               />
             </FormControl>
           </Grid>
@@ -134,6 +148,8 @@ class ProductFormBase extends React.Component {
                 name="domain"
                 placeholder="myapp.com"
                 value={this.state.domain}
+                error={this.state.errors.domain != null}
+                helperText={this.state.errors.domain != null ? this.state.errors.domain[0] : ''}
                 onChange={this.handleChange}
                 required
               />
@@ -146,12 +162,14 @@ class ProductFormBase extends React.Component {
                 labelId="badds-app-category-select"
                 value={this.state.category}
                 onChange={this.handleChange}
+                error={this.state.errors.category != null}
                 name="category"
                 required
               >
                 <MenuItem value="1">Web</MenuItem>
                 <MenuItem value="2">Android</MenuItem>
               </Select>
+              <FormHelperText error>{this.state.errors.category != null ? this.state.errors.category[0] : ''}</FormHelperText>
             </FormControl>
           </Grid>
         </Grid>
@@ -163,8 +181,10 @@ class ProductFormBase extends React.Component {
                 name="description"
                 placeholder="Escriba descripcion de la aplicacion"
                 value={this.state.description}
+                error={this.state.errors.description != null}
+                helperText={this.state.errors.description != null ? this.state.errors.description[0] : ''}
                 onChange={this.handleChange}
-                InputLabelProps={{ shrink: this.state.name !== '' }}
+                InputLabelProps={{ shrink: this.state.description !== '' }}
                 required
               />
             </FormControl>

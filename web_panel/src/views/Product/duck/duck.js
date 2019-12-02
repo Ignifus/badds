@@ -3,6 +3,9 @@ import { fromJS, Map as iMap } from 'immutable';
 
 import { api } from '../../../helpers';
 
+// config
+export const BASE_URL = '/ads/api/applications/';
+
 // Types
 export const NAMESPACE = 'apps';
 export const LOADING = `${NAMESPACE}/LOADING`;
@@ -105,21 +108,21 @@ const handleError = (e) => dispatch => {
 const list = () => dispatch => {
   dispatch(loading());
 
-  return axios.get('/ads/api/applications/')
+  return axios.get(BASE_URL)
     .then(response => dispatch(appsReceived(response.data)))
 };
 
 const fetch = (id) => dispatch => {
   dispatch(loading());
 
-  return axios.get(`/ads/api/applications/${id}/`)
+  return axios.get(`${BASE_URL}${id}/`)
     .then(response => dispatch(appReceived(response.data)));
 }
 
 const create = (app) => dispatch => {
   dispatch(loading());
 
-  return axios.post(`/ads/api/applications/`, app, api.getRequestConfig())
+  return axios.post(BASE_URL, app, api.getRequestConfig())
     .then(() => dispatch(appCreated(app)))
     .catch((e) => dispatch(handleError(e)));
 }
@@ -127,14 +130,14 @@ const create = (app) => dispatch => {
 const update = (id, app) => dispatch => {
   dispatch(loading());
 
-  return axios.put(`/ads/api/applications/${id}/`, app, api.getRequestConfig())
+  return axios.put(`${BASE_URL}${id}/`, app, api.getRequestConfig())
     .then(() => dispatch(appUpdated(app)))
     .catch((e) => dispatch(handleError(e)));
 }
 
 const remove = (id) => dispatch => {
 
-  return axios.delete(`/ads/api/applications/${id}/`, api.getRequestConfig())
+  return axios.delete(`${BASE_URL}${id}/`, api.getRequestConfig())
     .then(() => dispatch(appRemoved(id)))
     .then(() => dispatch(getList()))
     .catch((e) => dispatch(handleError(e)));
