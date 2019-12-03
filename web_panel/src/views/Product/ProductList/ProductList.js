@@ -40,10 +40,10 @@ class ProductListBase extends PureComponent {
     return (
       <Grid container spacing={5}>
         {
-          hasError && <FailedSnackbar message="Tuvimos un problema al procesar su request" />
+          hasError && <FailedSnackbar message="Tuvimos un problema al procesar su peticion" />
         }
         {
-          success && <SuccessSnackbar message="La app fue borrada exitosamente" />
+          success && <SuccessSnackbar message="Operacion concluida con exito" />
         }
         {products.map(product => (
           <Grid

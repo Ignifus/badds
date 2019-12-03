@@ -1,1 +1,2 @@
-export { default } from './SpaceCard';
+export * from './SpaceCard';
+export * from './ActionMenu';

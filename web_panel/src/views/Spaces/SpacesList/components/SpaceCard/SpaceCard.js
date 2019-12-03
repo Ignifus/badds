@@ -129,4 +129,4 @@ SpaceCard.propTypes = {
   onActionSelected: PropTypes.func.isRequired
 };
 
-export default SpaceCard;
+export { SpaceCard };

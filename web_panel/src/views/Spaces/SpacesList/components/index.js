@@ -1,1 +1,1 @@
-export { default as ProductCard } from './SpaceCard';
+export * from './SpaceCard';

@@ -1,11 +1,11 @@
 import React,  { PureComponent } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { Grid, LinearProgress } from '@material-ui/core';
+import { Grid, LinearProgress, Table, TableHead, TableBody, TableRow, TableCell } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
-import { SpaceCard } from './components'
+import { ActionMenu } from './components'
 import { actions, selectors } from '../duck';
 import { FailedSnackbar, SuccessSnackbar } from '../../../components';
 import { ToolbarActions } from '../ToolbarActions';
@@ -36,26 +36,39 @@ class SpaceListBase extends PureComponent {
         <LinearProgress />
       </Grid>)
     }
-
+    console.log(spaces)
     return (
       <Grid container spacing={5}>
         {
-          hasError && <FailedSnackbar message="Tuvimos un problema al procesar su request" />
+          hasError && <FailedSnackbar message="Tuvimos un problema al procesar su peticion" />
         }
         {
-          success && <SuccessSnackbar message="El espacio se creo exitosamente" />
+          success && <SuccessSnackbar message="Operacion concluida con exito" />
         }
-        {spaces.map(space => (
-          <Grid
-            item
-            key={space.id}
-            lg={4}
-            md={6}
-            xs={12}
-          >
-            <SpaceCard space={space} onActionSelected={this.onActionSelected} />
-          </Grid>
-        ))}
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>Ancho</TableCell>
+              <TableCell>Alto</TableCell>
+              <TableCell>Aplicacion</TableCell>
+              <TableCell>Acciones</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {spaces.map(space => (
+              <TableRow key={space.id}>
+                <TableCell>{space.name}</TableCell>
+                <TableCell>{space.x_size}</TableCell>
+                <TableCell>{space.y_size}</TableCell>
+                <TableCell>{space.application}</TableCell>
+                <TableCell>
+                  <ActionMenu onActionSelected={ (action) => this.onActionSelected(action, space.id) } />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </Grid>
     );
   }

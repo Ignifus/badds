@@ -19,6 +19,7 @@ import validate from 'validate.js';
 import { withProductLayout } from '../../../layouts/Main';
 import { FailedSnackbar, SuccessSnackbar } from '../../../components';
 import { actions, selectors } from '../duck';
+import { ProductDuck } from '../../Product';
 
 const styles = theme => ({
   snackbar: { backgroundColor: 'red' }
@@ -30,8 +31,8 @@ class SpaceFormBase extends React.Component {
     this.state = {
       application: '',
       name: '',
-      x: '',
-      y: '',
+      x_size: '',
+      y_size: '',
       errors: {}
     };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -41,6 +42,7 @@ class SpaceFormBase extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     const validationErrors = this.validate();
+    console.log(validationErrors);
     if (validationErrors) {
       return this.setState({ errors: validationErrors });
     } else {
@@ -67,13 +69,13 @@ class SpaceFormBase extends React.Component {
       application: {
         presence: { allowEmpty: false },
       },
-      x: {
+      x_size: {
         presence: { allowEmpty: false },
         numericality: { greaterThan: 10, lessThan: 1920 }
       },
-      y: {
+      y_size: {
         presence: { allowEmpty: false },
-        length: { greaterThan: 10, lessThan: 1920 }
+        numericality: { greaterThan: 10, lessThan: 1920 }
       }
     });
   }
@@ -85,8 +87,8 @@ class SpaceFormBase extends React.Component {
           this.setState({
             application: '',
             name: '',
-            x: '',
-            y: '',
+            x_size: '',
+            y_size: '',
             errors: {}
           });
         reset();
@@ -98,6 +100,9 @@ class SpaceFormBase extends React.Component {
     if (this.props.match.params.id != null) {
       this.props.fetchSpace(this.props.match.params.id);
     }
+    if (this.props.apps.length === 0) {
+      this.props.fetchApps();
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -107,7 +112,7 @@ class SpaceFormBase extends React.Component {
   }
 
   render () {
-    const { isLoading, hasError, success } = this.props;
+    const { isLoading, hasError, success, apps } = this.props;
     let progressBar = null;
 
     if (isLoading & !hasError) {
@@ -123,10 +128,10 @@ class SpaceFormBase extends React.Component {
     return (
       <form onSubmit={this.handleSubmit} noValidate>
         {
-          hasError && <FailedSnackbar message="Tuvimos un problema al procesar su request" />
+          hasError && <FailedSnackbar message="Tuvimos un problema al procesar su peticion" />
         }
         {
-          success && <SuccessSnackbar message="El espacio fue creado/actualizado exitosamente" />
+          success && <SuccessSnackbar message="Operacion concluida con exito" />
         }
         <Grid container spacing={2}>
           {progressBar}
@@ -147,12 +152,12 @@ class SpaceFormBase extends React.Component {
             <FormControl fullWidth>
               <TextField
                 label="Ancho"
-                name="x"
+                name="x_size"
                 type="number"
                 placeholder="ancho en pixeles"
-                value={this.state.x}
-                error={this.state.errors.x != null}
-                helperText={this.state.errors.x != null ? this.state.errors.x[0] : ''}
+                value={this.state.x_size}
+                error={this.state.errors.x_size != null}
+                helperText={this.state.errors.x_size != null ? this.state.errors.x_size[0] : ''}
                 onChange={this.handleChange}
                 required
               />
@@ -162,14 +167,14 @@ class SpaceFormBase extends React.Component {
             <FormControl fullWidth>
               <TextField
                 label="Alto"
-                name="y"
+                name="y_size"
                 type="number"
                 placeholder="alto en pixeles"
-                value={this.state.y}
-                error={this.state.errors.y != null}
-                helperText={this.state.errors.y != null ? this.state.errors.y[0] : ''}
+                value={this.state.y_size}
+                error={this.state.errors.y_size != null}
+                helperText={this.state.errors.y_size != null ? this.state.errors.y_size[0] : ''}
                 onChange={this.handleChange}
-                InputLabelProps={{ shrink: this.state.y !== '' }}
+                InputLabelProps={{ shrink: this.state.y_size !== '' }}
                 required
               />
             </FormControl>
@@ -178,17 +183,16 @@ class SpaceFormBase extends React.Component {
         <Grid container>
           <Grid item xs={4}>
             <FormControl fullWidth>
-              <InputLabel id="badds-app-category-select">Categoria</InputLabel>
+              <InputLabel id="badds-app-application-select">Categoria</InputLabel>
               <Select
-                labelId="badds-app-category-select"
+                labelId="badds-app-application-select"
                 value={this.state.application}
                 onChange={this.handleChange}
                 error={this.state.errors.application != null}
-                name="category"
+                name="application"
                 required
               >
-                <MenuItem value="1">Web</MenuItem>
-                <MenuItem value="2">Android</MenuItem>
+                { apps.map(app => <MenuItem key={app.id} value={app.id}>{app.domain}</MenuItem>) }
               </Select>
               <FormHelperText error>{this.state.errors.application != null ? this.state.errors.application[0] : ''}</FormHelperText>
             </FormControl>
@@ -211,13 +215,15 @@ const mapStateToProps = state => ({
   isLoading: selectors.isLoading(state),
   hasError: selectors.hasError(state),
   success: selectors.success(state),
-  space: selectors.getSpace(state)
+  space: selectors.getSpace(state),
+  apps: ProductDuck.selectors.getList(state),
 });
 
 const mapActionsToProps = {
   createSpace: actions.create,
   updateSpace: actions.update,
   fetchSpace: actions.fetch,
+  fetchApps: ProductDuck.actions.list, // TODO: retry only 1 time
   reset: actions.reset
 };
 

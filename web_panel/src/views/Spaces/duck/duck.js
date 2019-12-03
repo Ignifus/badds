@@ -46,6 +46,7 @@ export function reducer(state = initialState, action) {
         .set('space', iMap(action.payload));
     case REMOVE:
         return state.set('loading', false)
+          .set('success', true)
           .set('list', state.get('list').filter((space) => space.id !== action.payload.id));
     case ERROR:
       return state.set('loading', false)
@@ -139,7 +140,6 @@ const remove = (id) => dispatch => {
 
   return axios.delete(`${BASE_URL}${id}/`, api.getRequestConfig())
     .then(() => dispatch(spaceRemoved(id)))
-    .then(() => dispatch(getList()))
     .catch((e) => dispatch(handleError(e)));
 }
 

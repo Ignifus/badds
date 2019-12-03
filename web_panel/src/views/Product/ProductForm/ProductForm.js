@@ -122,10 +122,10 @@ class ProductFormBase extends React.Component {
     return (
       <form onSubmit={this.handleSubmit} noValidate>
         {
-          hasError && <FailedSnackbar message="Tuvimos un problema al procesar su request" />
+          hasError && <FailedSnackbar message="Tuvimos un problema al procesar su peticion" />
         }
         {
-          success && <SuccessSnackbar message="La app fue creada/actualizada exitosamente" />
+          success && <SuccessSnackbar message="Operacion concluida con exito" />
         }
         <Grid container spacing={2}>
           {progressBar}

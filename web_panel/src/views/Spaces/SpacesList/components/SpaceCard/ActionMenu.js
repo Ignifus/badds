@@ -8,6 +8,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 const options = [
   'Update',
   'Delete',
+  'Add Restricion'
 ];
 
 const ITEM_HEIGHT = 48;
