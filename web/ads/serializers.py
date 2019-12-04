@@ -133,3 +133,11 @@ class BiddingSerializer(serializers.ModelSerializer):
         if 'request' in self.context:
             user = self.context['request'].user
             self.fields['advertisement'] = PrimaryKeyRelatedField(queryset=Advertisement.objects.filter(user=user))
+
+
+class ContractIpLogSerializer(serializers.ModelSerializer):
+    contract = ContractSerializer()
+
+    class Meta:
+        model = ContractIpLog
+        fields = '__all__'

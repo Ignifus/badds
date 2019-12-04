@@ -19,6 +19,11 @@ router.register(r'contracts', ContractViewSet, base_name='Contract')
 router.register(r'applicationcategories', ApplicationCategoryViewSet, base_name='ApplicationCategory')
 router.register(r'auctionstatus', AuctionStatusViewSet, base_name='AuctionStatus')
 
+router.register(r'all-spaces', AllSpacesViewSet, base_name='All Spaces')
+router.register(r'all-auctions', AllAuctionsViewSet, base_name='All Auctions')
+router.register(r'all-biddings', AllBiddingsViewSet, base_name='All Biddings')
+
+router.register(r'analytics', ContractIpLogViewSet, base_name='Analytics')
 
 app_name = 'ads'
 urlpatterns = [

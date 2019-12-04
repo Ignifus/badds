@@ -40,23 +40,22 @@ class AdvertisementViewSet(viewsets.ModelViewSet):
 
 
 class SpaceViewSet(viewsets.ModelViewSet):
+    serializer_class = SpaceSerializer
+
+    def get_queryset(self):
+        return Space.objects.filter(application__user=self.request.user)
+
+
+class AllSpacesViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Space.objects.all()
     serializer_class = SpaceSerializer
 
-    def perform_update(self, serializer):
-        if serializer.instance.application.user != self.request.user:
-            raise PermissionDenied()
-        serializer.save()
-
-    def perform_destroy(self, instance):
-        if instance.application.user != self.request.user:
-            raise PermissionDenied()
-        instance.delete()
-
 
 class BiddingViewSet(viewsets.ModelViewSet):
-    queryset = Bidding.objects.all()
     serializer_class = BiddingSerializer
+
+    def get_queryset(self):
+        return Bidding.objects.filter(user=self.request.user)
 
     def get_serializer_context(self):
         return {'request': self.request}
@@ -70,32 +69,32 @@ class BiddingViewSet(viewsets.ModelViewSet):
         self.request.user.profile.credits -= serializer.validated_data['ppp_usd'] * serializer.validated_data['auction'].prints
         self.request.user.save()
 
-    def perform_update(self, serializer):
-        if serializer.instance.user != self.request.user:
-            raise PermissionDenied()
-        serializer.save()
-
     def perform_destroy(self, instance):
-        if instance.user != self.request.user:
-            raise PermissionDenied()
         instance.delete()
 
         self.request.user.profile.credits += instance.ppp_usd * instance.auction.prints
         self.request.user.save()
 
 
+class AllBiddingsViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Bidding.objects.all()
+    serializer_class = BiddingSerializer
+
+
 class AuctionViewSet(viewsets.ModelViewSet):
-    queryset = Auction.objects.all()
     serializer_class = AuctionSerializer
+
+    def get_queryset(self):
+        return Auction.objects.filter(user=self.request.user)
 
     def get_serializer_context(self):
         return {'request': self.request}
 
     def perform_update(self, serializer):
-        raise PermissionDenied()
+        raise PermissionDenied("Update not allowed on Auction.")
 
     def perform_destroy(self, instance):
-        raise PermissionDenied()
+        raise PermissionDenied("Delete not allowed on Auction.")
 
     def perform_create(self, serializer):
         auctions = Auction.objects.filter(space=serializer.validated_data["space"], status=AuctionStatus.objects.filter(status='Active'))
@@ -106,6 +105,11 @@ class AuctionViewSet(viewsets.ModelViewSet):
         if len(contract) != 0:
             raise ValidationError(detail="There is an active contract with that space.")
         serializer.save()
+
+
+class AllAuctionsViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Auction.objects.all()
+    serializer_class = AuctionSerializer
 
 
 class SpaceRestrictionViewSet(viewsets.ModelViewSet):
@@ -203,3 +207,8 @@ class ApplicationCategoryViewSet(viewsets.ReadOnlyModelViewSet):
 class AuctionStatusViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = AuctionStatus.objects.all()
     serializer_class = AuctionStatusSerializer
+
+
+class ContractIpLogViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = ContractIpLog.objects.all()
+    serializer_class = ContractIpLogSerializer

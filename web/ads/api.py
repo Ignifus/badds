@@ -14,7 +14,7 @@ def get_resource(request):
     if client_ip is None:
         client_ip = get_client_ip(request)
 
-    ip = Ip.objects.filter(ip=client_ip)
+    ip = Ip.objects.filter(ip=client_ip).first()
     if ip not in client_ip:
         ip = Ip()
         ip.ip = client_ip
@@ -32,12 +32,14 @@ def get_resource(request):
     if contract.advertisement.resources.all().count() == 0:
         return JsonResponse({'error': "Advertisement has no resources assigned."}, status=400)
 
-    ip_log = ContractIpLog.objects.filter(contract=contract, ip=ip)
+    ip_log = ContractIpLog.objects.filter(contract=contract, ip=ip).first()
 
-    if len(ip_log) == 0:
+    if ip_log is None:
         ip_log = ContractIpLog()
         ip_log.contract = contract
         ip_log.ip = ip
+        ip_log.age = age
+        ip_log.gender = gender
         ip_log.save()
 
         contract.prints -= 1
@@ -48,7 +50,30 @@ def get_resource(request):
         user = contract.space.application.user
         user.profile.credits += contract.ppp_usd
         user.save()
+    else:
+        ip_log.age = age
+        ip_log.gender = gender
+        ip_log.save()
 
-    # TODO Check age, gender and country restrictions to filter the advertisement ID
+    resources = contract.advertisement.resources
 
-    return JsonResponse({'resource': contract.advertisement.resources.filter(advertisement_id=contract.advertisement_id).first().path})
+    for res in resources:
+        age_restrictions = res.restrictions.filter(restriction="AGE")
+        if ">18" in age_restrictions and age < 18:
+            continue
+
+        gender_restriction = res.restrictions.filter(restriction="GENDER")
+        if len(gender_restriction) > 0 and gender not in gender_restriction:
+            continue
+
+        country_whitelist = res.restrictions.filter(restricton="COUNTRY_WHITELIST")
+        if len(country_whitelist) > 0 and ip.country not in country_whitelist:
+            continue
+
+        country_blacklist = res.restrictions.filter(restricton="COUNTRY_BLACKLIST")
+        if ip.country in country_blacklist:
+            continue
+
+        return JsonResponse({'resource': res.path})
+
+    return JsonResponse({'resource': "https://res.cloudinary.com/geminis/image/upload/v1575435915/placeholder-images-image_large.png"})

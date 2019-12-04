@@ -152,4 +152,6 @@ class Ip(models.Model):
 class ContractIpLog(models.Model):
     contract = models.ForeignKey(Contract, related_name='ips', on_delete=models.PROTECT)
     ip = models.ForeignKey(Ip, on_delete=models.PROTECT)
+    age = models.IntegerField(null=True)
+    gender = models.TextField(null=True, max_length=1)
     time = models.DateTimeField(auto_now_add=True)

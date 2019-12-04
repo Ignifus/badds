@@ -6,6 +6,5 @@ Contains the Badds main web.
 ## TODO
 - Make example web
 - Improve android app
-- Implement get_ad filtering
+- Implement analytics endpoint, return wallet evolution using contractiplog
 - Add GPS, age, sex to mobile
-- Move funds from account to mercadopago
