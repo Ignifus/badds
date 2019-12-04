@@ -69,6 +69,7 @@ services:
 
     badds_panel:
         image: localhost:5000/gema/badds-panel
+        entrypoint: ./entrypoint-gema.sh
         deploy:
           mode: replicated
           replicas: 1
