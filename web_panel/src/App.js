@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Router } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import { Chart } from 'react-chartjs-2';
@@ -11,6 +12,7 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 //import './assets/scss/index.scss';
 import validators from './common/validators';
 import Routes from './Routes';
+import { AppDuck } from './duck';
 
 const browserHistory = createBrowserHistory();
 
@@ -23,7 +25,12 @@ validate.validators = {
   ...validators
 };
 
-export default class App extends Component {
+export class AppBase extends Component {
+
+  componentDidMount() {
+    this.props.fetchRestrictions();
+  }
+
   render() {
     return (
       <ThemeProvider theme={theme}>
@@ -34,3 +41,11 @@ export default class App extends Component {
     );
   }
 }
+
+const mapDispatchToProps = {
+  fetchRestrictions: AppDuck.actions.fetchRestrictions
+}
+
+const App = connect(null, mapDispatchToProps)(AppBase);
+
+export {App};

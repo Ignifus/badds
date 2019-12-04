@@ -11,6 +11,7 @@ import {
   ProductForm as ProductFormView,
   SpaceList as SpaceListView,
   SpaceForm as SpaceFormView,
+  SpacesRestrictions as SpacesRestrictionsView,
   UserList as UserListView,
   Typography as TypographyView,
   Icons as IconsView,
@@ -157,6 +158,12 @@ const PublishersRoutes = () => (
       exact
       layout={PublisherLayout}
       path="/ads/publishers/spaces/update/:id"
+    />
+    <RouteWithLayout
+      component={SpacesRestrictionsView}
+      exact
+      layout={PublisherLayout}
+      path="/ads/publishers/spaces/:id/restrictions"
     />
   </React.Fragment>
 );

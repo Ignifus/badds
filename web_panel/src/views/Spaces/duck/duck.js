@@ -17,6 +17,7 @@ export const DETAIL = `${NAMESPACE}/DETAIL`;
 export const ERROR = `${NAMESPACE}/ERROR`;
 export const CLEAR_ERROR = `${NAMESPACE}/CLEARERROR`;
 export const RESET = `${NAMESPACE}/RESET`;
+export const RESTRICTION_ADDED = `${NAMESPACE}/RESTRICTION_ADDED`;
 
 // Reducer
 const initialState = fromJS({
@@ -57,6 +58,10 @@ export function reducer(state = initialState, action) {
       return state.set('success', false)
         .set('error', false)
         .set('loading', false);
+    case RESTRICTION_ADDED:
+        return state.set('success', true)
+          .set('loading', false)
+          .set('error', false);
     default:
       return state;
   }
@@ -89,6 +94,10 @@ const spaceRemoved = (id) => ({
 
 const clearError = () => ({
   type: CLEAR_ERROR,
+});
+
+const restrictionAdded = () => ({
+  type: RESTRICTION_ADDED
 });
 
 // Public Actions
@@ -138,9 +147,17 @@ const update = (id, space) => dispatch => {
 
 const remove = (id) => dispatch => {
 
-  return axios.delete(`${BASE_URL}${id}/`, api.getRequestConfig())
+  return axios.delete(`/`, api.getRequestConfig())
     .then(() => dispatch(spaceRemoved(id)))
     .catch((e) => dispatch(handleError(e)));
+}
+
+const addRestriction = (spaceId) => dispatch => {
+  dispatch(loading());
+
+  return axios.post('/ads/api/spaces/')
+    .then(() => dispatch(restrictionAdded()))
+    .catch((e) => dispatch(handleError(e)))
 }
 
 export const actions = {
@@ -150,7 +167,8 @@ export const actions = {
   create,
   update,
   remove,
-  reset
+  reset,
+  addRestriction
 };
 
 // Selectors
@@ -169,10 +187,10 @@ const getList = state => {
 
 const hasError = state => {
   return state[NAMESPACE].get('error');
-}
+};
 
 const success = state => {
   return state[NAMESPACE].get('success');
-}
+};
 
 export const selectors = { isLoading, getSpace, getList, hasError, success };

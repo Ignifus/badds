@@ -1,5 +1,5 @@
-import { actions, selectors, reducer } from './duck';
+import { actions, NAMESPACE, selectors, reducer } from './duck';
 
-export const ProductDuck = { actions, selectors, reducer };
+export const ProductDuck = { actions, NAMESPACE, selectors, reducer };
 export * from './ProductList';
 export * from './ProductForm';

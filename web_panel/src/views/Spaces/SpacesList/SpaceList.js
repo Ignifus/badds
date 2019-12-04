@@ -20,11 +20,18 @@ class SpaceListBase extends PureComponent {
 
   onActionSelected(action, id) {
     const { history, remove } = this.props;
-    if (action === 'Update') {
-      history.push(`/ads/publishers/spaces/update/${id}`);
-    }
-    if (action === 'Delete') {
-      remove(id);
+    switch (action) {
+      case 'Update':
+        history.push(`/ads/publishers/spaces/update/${id}`);
+        break;
+      case 'Delete':
+        remove(id);
+        break;
+      case 'Add Restricion':
+        history.push(`/ads/publishers/spaces/${id}/restrictions`);
+        break;
+      default:
+        break;
     }
   }
 

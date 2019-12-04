@@ -6,8 +6,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 const options = [
-  'Update',
-  'Delete',
+  { id: 'Update', value: 'Actualizar' },
+  { id: 'Delete', value: 'Borrar' },
+  { id: 'Add Restricion', value: 'Agregar Restriccion' }
 ];
 
 const ITEM_HEIGHT = 48;
@@ -50,8 +51,8 @@ export function ActionMenu(props) {
         }}
       >
         {options.map(option => (
-          <MenuItem key={option} selected={option === ''} onClick={() => handleClose(option) }>
-            {option}
+          <MenuItem key={option.id} selected={option.id === ''} onClick={() => handleClose(option.id) }>
+            {option.value}
           </MenuItem>
         ))}
       </Menu>
