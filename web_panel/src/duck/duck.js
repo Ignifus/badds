@@ -10,13 +10,13 @@ const FETCH_RESTRICTIONS = `${NAMESPACE}/FETCH_RESTRICTIONS`;
 
 // reducer
 const initialState = fromJS({
-  restrictions: {}
+  restrictions: []
 });
 
 export function reducer(state = initialState, action) {
   switch(action.type) {
     case FETCH_RESTRICTIONS:
-      return state.set('restrictions', fromJS(action.payload));
+      return state.set('restrictions', fromJS(action.payload || {}));
     default:
       return state;
   }
@@ -32,7 +32,7 @@ const restrictionsReceived = (payload) => ({
 
 const fetchRestrictions = () => (dispatch) => {
   return axios.get(`${BASE_URL}restriction/`)
-    .then((response) => restrictionsReceived(response.data));
+    .then((response) => dispatch(restrictionsReceived(response.data)));
 }
 
 export const actions = { fetchRestrictions };
@@ -40,8 +40,7 @@ export const actions = { fetchRestrictions };
 // selectors
 
 export const getRestrictions = state => {
-  console.log(state);
-  return state[NAMESPACE].get('restrictions');
+  return state[NAMESPACE].get('restrictions').toJS();
 }
 
 export const selectors = { getRestrictions };

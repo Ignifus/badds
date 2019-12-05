@@ -1,5 +1,6 @@
 import validate from 'validate.js'
 
+// Validators
 validate.validators.presence.message = '^El campo es requerido';
 
 validate.validators.length.tooShort = (value, field, option) => {
