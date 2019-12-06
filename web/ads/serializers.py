@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from rest_framework.relations import PrimaryKeyRelatedField
+from rest_framework_bulk import BulkListSerializer, BulkSerializerMixin
 
 from ads.models import *
 
@@ -22,10 +23,11 @@ class RestrictionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ResourceRestrictionSerializer(serializers.ModelSerializer):
+class ResourceRestrictionSerializer(BulkSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = ResourceRestriction
         fields = '__all__'
+        list_serializer_class = BulkListSerializer
 
     def __init__(self, *args, **kwargs):
         super(ResourceRestrictionSerializer, self).__init__(*args, **kwargs)
@@ -81,10 +83,11 @@ class SpaceSerializer(serializers.ModelSerializer):
             self.fields['application'] = PrimaryKeyRelatedField(queryset=Application.objects.filter(user=user))
 
 
-class SpaceRestrictionSerializer(serializers.ModelSerializer):
+class SpaceRestrictionSerializer(BulkSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = SpaceRestriction
         fields = '__all__'
+        list_serializer_class = BulkListSerializer
 
     def __init__(self, *args, **kwargs):
         super(SpaceRestrictionSerializer, self).__init__(*args, **kwargs)
@@ -97,12 +100,6 @@ class ContractSerializer(serializers.ModelSerializer):
         model = Contract
         fields = '__all__'
         read_only_fields = ('active', )
-
-
-class AuctionStatusSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AuctionStatus
-        fields = '__all__'
 
 
 class AuctionSerializer(serializers.ModelSerializer):

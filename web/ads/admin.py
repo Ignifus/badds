@@ -14,5 +14,4 @@ admin.site.register(Bidding)
 admin.site.register(SpaceRestriction)
 admin.site.register(ResourceRestriction)
 
-admin.site.register(AuctionStatus)
 admin.site.register(ApplicationCategory)

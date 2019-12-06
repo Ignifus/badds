@@ -57,30 +57,10 @@ class SpaceRestriction(models.Model):
         return self.space.name + " " + self.restriction.restriction
 
 
-class AuctionStatus(models.Model):
-    AUCTION_STATUS = (
-        ('Active', 'Active'),
-        ('Extended', 'Extended'),
-        ('Closed', 'Closed'),
-        ('Removed', 'Removed')
-    )
-    status = models.CharField(
-        max_length=16,
-        choices=AUCTION_STATUS,
-        default='Active',
-    )
-
-    def __str__(self):
-        return self.status
-
-    class Meta:
-        verbose_name_plural = "Auction Status"
-
-
 class Auction(models.Model):
     space = models.ForeignKey(Space, related_name='auctions', on_delete=models.PROTECT)
     prints = models.IntegerField()
-    status = models.ForeignKey(AuctionStatus, blank=True, null=True, default=1, on_delete=models.PROTECT)
+    status = models.BooleanField(default=True)
     end_date = models.DateTimeField()
     contract_duration_days = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)

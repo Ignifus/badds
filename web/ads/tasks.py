@@ -6,7 +6,7 @@ import datetime
 from celery import shared_task
 from django.db.models import Q
 
-from ads.models import Contract, Auction, AuctionStatus
+from ads.models import Contract, Auction
 
 
 @shared_task
@@ -21,7 +21,7 @@ def check_contracts_end():
 
 @shared_task
 def check_auctions_end():
-    auctions = Auction.objects.filter(status=AuctionStatus.objects.get(status='Active'), end_date__lte=datetime.datetime.now())
+    auctions = Auction.objects.filter(status=True, end_date__lte=datetime.datetime.now())
     for auction in auctions:
         bidding = auction.biddings.order_by('-ppp_usd').first()
 
@@ -41,5 +41,5 @@ def check_auctions_end():
                 b.user.profile.credits += b.ppp_usd * auction.prints
                 b.user.save()
 
-        auction.status = AuctionStatus.objects.get(status='Closed')
+        auction.status = False
         auction.save()

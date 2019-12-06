@@ -7,6 +7,7 @@ from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_bulk import BulkModelViewSet
 
 from ads.image import upload
 from ads.serializers import *
@@ -97,7 +98,7 @@ class AuctionViewSet(viewsets.ModelViewSet):
         raise PermissionDenied("Delete not allowed on Auction.")
 
     def perform_create(self, serializer):
-        auctions = Auction.objects.filter(space=serializer.validated_data["space"], status=AuctionStatus.objects.filter(status='Active'))
+        auctions = Auction.objects.filter(space=serializer.validated_data["space"], status=True)
         if len(auctions) != 0:
             raise ValidationError(detail="There is an active auction with that space.")
 
@@ -112,18 +113,21 @@ class AllAuctionsViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = AuctionSerializer
 
 
-class SpaceRestrictionViewSet(viewsets.ModelViewSet):
+class SpaceRestrictionViewSet(BulkModelViewSet):
     serializer_class = SpaceRestrictionSerializer
 
     def get_serializer_context(self):
-        return {'request': self.request}
+        return {'request': self.request, "view": self}
 
     def get_queryset(self):
         return SpaceRestriction.objects.filter(space__application__user=self.request.user)
 
 
-class ResourceRestrictionViewSet(viewsets.ModelViewSet):
+class ResourceRestrictionViewSet(BulkModelViewSet):
     serializer_class = ResourceRestrictionSerializer
+
+    def get_serializer_context(self):
+        return {'request': self.request, "view": self}
 
     def get_queryset(self):
         return ResourceRestriction.objects.filter(resource__advertisement__user=self.request.user)
@@ -202,11 +206,6 @@ class RestrictionViewSet(viewsets.ReadOnlyModelViewSet):
 class ApplicationCategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = ApplicationCategory.objects.all()
     serializer_class = ApplicationCategorySerializer
-
-
-class AuctionStatusViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = AuctionStatus.objects.all()
-    serializer_class = AuctionStatusSerializer
 
 
 class ContractIpLogViewSet(viewsets.ReadOnlyModelViewSet):
