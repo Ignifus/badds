@@ -1,3 +1,6 @@
+import React from 'react';
+import { Select, MenuItem } from '@material-ui/core';
+
 export const countries = [
   {"name": "Afghanistan", "code": "AF"},
   {"name": "Åland Islands", "code": "AX"},
@@ -52,7 +55,7 @@ export const countries = [
   {"name": "Congo, The Democratic Republic of the", "code": "CD"},
   {"name": "Cook Islands", "code": "CK"},
   {"name": "Costa Rica", "code": "CR"},
-  {"name": "Cote D"Ivoire", "code": "CI"},
+  {"name": "Cote D'Ivoire", "code": "CI"},
   {"name": "Croatia", "code": "HR"},
   {"name": "Cuba", "code": "CU"},
   {"name": "Cyprus", "code": "CY"},
@@ -114,11 +117,11 @@ export const countries = [
   {"name": "Kazakhstan", "code": "KZ"},
   {"name": "Kenya", "code": "KE"},
   {"name": "Kiribati", "code": "KI"},
-  {"name": "Korea, Democratic People"S Republic of", "code": "KP"},
+  {"name": "Korea, Democratic People'S Republic of", "code": "KP"},
   {"name": "Korea, Republic of", "code": "KR"},
   {"name": "Kuwait", "code": "KW"},
   {"name": "Kyrgyzstan", "code": "KG"},
-  {"name": "Lao People"S Democratic Republic", "code": "LA"},
+  {"name": "Lao People'S Democratic Republic", "code": "LA"},
   {"name": "Latvia", "code": "LV"},
   {"name": "Lebanon", "code": "LB"},
   {"name": "Lesotho", "code": "LS"},
@@ -243,3 +246,13 @@ export const countries = [
   {"name": "Zambia", "code": "ZM"},
   {"name": "Zimbabwe", "code": "ZW"}
   ]
+
+export const CountrySelect = (props) => {
+  const { onCountrySelected, ...selectProps } = props;
+
+  return (<Select {...selectProps}
+    onChange={ (e) => onCountrySelected(e.target.value) }
+  >
+    { countries.map(country => <MenuItem key={country.code} value={country.code}>{country.name}</MenuItem>) }
+  </Select>)
+}

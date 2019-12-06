@@ -7,12 +7,18 @@ import {
   FormGroup,
   FormControlLabel,
   Grid,
+  InputLabel,
   TextField,
-  Typography } from '@material-ui/core';
+  Typography,
+  Divider,
+  FormControl,
+  Button
+} from '@material-ui/core';
 import { AppDuck } from '../../../duck';
 import { actions } from '../duck';
 import { withProductLayout } from '../../../layouts/Main';
 import { FailedSnackbar, SuccessSnackbar } from '../../../components';
+import { CountrySelect } from '../../../common/countries';
 
 const textRestriction = {
   AGE: 'Banda de edades separada por comas, por ejemplo, 20-45,60-65',
@@ -25,61 +31,111 @@ class SpacesRestrictionsBase extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      selectedRestrictions: []
+      countryWhiteList: [],
+      countryBlackList: [],
     }
   }
 
   handleSubmit() {}
 
-  renderAge() {
+  setWhiteListCountry(code) {
+    this.setState({
+      countryWhiteList: code
+    });
+  }
+
+  setBlackListCountry(code) {
+    this.setState({
+      countryBlackList: code
+    });
+  }
+
+  findRestrictions(name) {
     const { restrictions } = this.props;
-    const restriction = restrictions.find(restriction => restriction.restriction === 'AGE');
+    return restrictions.find(restriction => restriction.restriction === name)
+  }
+
+  renderAge() {
+    const restriction = this.findRestrictions('AGE');
 
     if (restriction == null) {
       return <span />
     }
 
     return (
-      <div>Banda Edades</div>
+      <Grid item xs={12}>
+        <Typography variant="h4">Banda Edades</Typography>
+        <Typography variant="body1">{textRestriction['GENDER']}</Typography>
+        <FormControl fullWidth>
+
+        </FormControl>
+      </Grid>
     )
   }
 
   renderCountryWhiteList() {
-    const { restrictions } = this.props;
-    const restriction = restrictions.find(restriction => restriction.restriction === 'COUNTRY_WHITELIST');
+    const restriction = this.findRestrictions('COUNTRY_WHITELIST');
 
     if (restriction == null) {
       return <span />
     }
 
     return (
-      <div>Paises Incluidos</div>
+      <Grid item xs={12}>
+        <Typography variant="h4">Paises Incluidos</Typography>
+        <Typography variant="body1">{textRestriction['COUNTRY_WHITELIST']}</Typography>
+        <FormControl fullWidth>
+          <InputLabel id="badds-space-restriction-wcselect">Categoria</InputLabel>
+          <CountrySelect
+            value={ this.state.countryWhiteList }
+            onCountrySelected={(countryCode) => this.setWhiteListCountry(countryCode) }
+            labelId="badds-space-restriction-wcselect"
+            multiple
+          />
+        </FormControl>
+      </Grid>
     )
   }
 
   renderCountryBlackList() {
-    const { restrictions } = this.props;
-    const restriction = restrictions.find(restriction => restriction.restriction === 'COUNTRY_BLACKLIST');
+    const restriction = this.findRestrictions('COUNTRY_BLACKLIST');
 
     if (restriction == null) {
       return <span />
     }
 
     return (
-      <div>Paises Excluidos</div>
+      <Grid item xs={12}>
+        <Typography variant="h4">Paises Excluidos</Typography>
+        <Typography variant="body1">{textRestriction['COUNTRY_BLACKLIST']}</Typography>
+        <FormControl fullWidth>
+          <InputLabel id="badds-space-restriction-bcselect">Categoria</InputLabel>
+          <CountrySelect
+            value={ this.state.countryBlackList }
+            onCountrySelected={(countryCode) => this.setBlackListCountry(countryCode) }
+            labelId="badds-space-restriction-bcselect"
+            multiple
+          />
+        </FormControl>
+      </Grid>
     )
   }
 
   renderGender() {
-    const { restrictions } = this.props;
-    const restriction = restrictions.find(restriction => restriction.restriction === 'GENDER');
+    const restriction = this.findRestrictions('GENDER');
 
     if (restriction == null) {
       return <span />
     }
 
     return (
-      <div>Genero del publico</div>
+      <Grid item xs={12}>
+        <Typography variant="h4">Genero Objetivo</Typography>
+        <Typography variant="body1">{textRestriction['GENDER']}</Typography>
+        <FormControl fullWidth>
+
+        </FormControl>
+      </Grid>
     )
   }
 
@@ -87,11 +143,16 @@ class SpacesRestrictionsBase extends Component {
   render() {
     return (<form>
       <Grid container spacing={2}>
+        { this.renderAge() }
+        <Divider />
+        { this.renderCountryWhiteList() }
+        <Divider />
+        { this.renderCountryBlackList() }
+        <Divider />
+        { this.renderGender() }
+        <Divider />
         <Grid item xs={12}>
-          { this.renderAge() }
-          { this.renderCountryWhiteList() }
-          { this.renderCountryBlackList() }
-          { this.renderGender() }
+          <Button type="submit">Guardar Restricciones</Button>
         </Grid>
       </Grid>
     </form>);
