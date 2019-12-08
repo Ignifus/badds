@@ -19,7 +19,7 @@ const pages = [
   },
   {
     title: 'Ads',
-    href: '/ads/advertisements',
+    href: '/ads/advertisers/ads',
     icon: <ImageIcon />
   },
   {

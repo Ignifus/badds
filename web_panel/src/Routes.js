@@ -12,6 +12,8 @@ import {
   SpaceList as SpaceListView,
   SpaceForm as SpaceFormView,
   SpacesRestrictions as SpacesRestrictionsView,
+  AdvertisementForm as AdvertisementFormView,
+  AdvertisementList as AdvertisementListView,
   UserList as UserListView,
   Typography as TypographyView,
   Icons as IconsView,
@@ -110,6 +112,36 @@ const AdvertiserRoutes = () => (
           exact
           layout={AdvertiserLayout}
           path="/ads/advertisers"
+    />
+    <RouteWithLayout
+          component={AdvertisementListView}
+          exact
+          layout={AdvertiserLayout}
+          path="/ads/advertisers/ads"
+    />
+    <RouteWithLayout
+          component={AdvertisementFormView}
+          exact
+          layout={AdvertiserLayout}
+          path="/ads/advertisers/ads/add"
+    />
+    <RouteWithLayout
+          component={AdvertisementFormView}
+          exact
+          layout={AdvertiserLayout}
+          path="/ads/advertisers/ads/update/:id"
+    />
+    <RouteWithLayout
+          component={DashboardView}
+          exact
+          layout={AdvertiserLayout}
+          path="/ads/advertisers/ads/:id/restrictions"
+    />
+    <RouteWithLayout
+          component={DashboardView}
+          exact
+          layout={AdvertiserLayout}
+          path="/ads/advertisers/ads/:id/resources"
     />
   </React.Fragment>
 );
