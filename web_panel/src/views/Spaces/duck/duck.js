@@ -152,10 +152,10 @@ const remove = (id) => dispatch => {
     .catch((e) => dispatch(handleError(e)));
 }
 
-const addRestriction = (spaceId) => dispatch => {
+const addRestriction = (payload) => dispatch => {
   dispatch(loading());
 
-  return axios.post('/ads/api/spaces/')
+  return axios.post('/ads/api/spacerestriction/', payload, api.getRequestConfig())
     .then(() => dispatch(restrictionAdded()))
     .catch((e) => dispatch(handleError(e)))
 }
