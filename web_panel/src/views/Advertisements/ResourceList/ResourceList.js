@@ -1,25 +1,17 @@
 import React,  { PureComponent } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import {
-  Grid,
-  LinearProgress,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell
-} from '@material-ui/core';
+import { Grid, LinearProgress, Table, TableHead, TableBody, TableRow, TableCell } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
 import { ActionMenu } from './components'
-import { actions, selectors } from '../duck/ads';
+import { actions, selectors } from '../duck/resources';
 import { FailedSnackbar, SuccessSnackbar } from '../../../components';
 import { ToolbarActions } from '../ToolbarActions';
 import { withProductLayout } from '../../../layouts/Main';
 
-class AdvertisementListBase extends PureComponent {
+class SpaceListBase extends PureComponent {
   componentDidMount() {
     const { list } = this.props;
     this.onActionSelected = this.onActionSelected.bind(this);
@@ -30,19 +22,13 @@ class AdvertisementListBase extends PureComponent {
     const { history, remove } = this.props;
     switch (action) {
       case 'Update':
-        history.push(`/ads/advertisers/ads/update/${id}`);
+        history.push(`/ads/advertisers/resource/${id}/update`);
         break;
       case 'Delete':
         remove(id);
         break;
       case 'Add Restricion':
-        history.push(`/ads/advertisers/ads/${id}/restrictions`);
-        break;
-      case 'List Resources':
-        history.push(`/ads/advertisers/ads/${id}/resources`);
-        break;
-      case 'Add Resources':
-        history.push(`/ads/advertisers/ads/${id}/resources/add`);
+        history.push(`/ads/advertisers/resources/${id}/restrictions`);
         break;
       default:
         break;
@@ -50,7 +36,7 @@ class AdvertisementListBase extends PureComponent {
   }
 
   render() {
-    const {isLoading, ads, hasError, success} = this.props;
+    const {isLoading, resources, hasError, success} = this.props;
 
     if (isLoading & !hasError) {
       return (<Grid item xs={12}>
@@ -69,18 +55,21 @@ class AdvertisementListBase extends PureComponent {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Nombre</TableCell>
-              <TableCell>Descripcion</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Ancho</TableCell>
+              <TableCell>Alto</TableCell>
+              <TableCell>Aplicacion</TableCell>
               <TableCell>Acciones</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {ads.map(ad => (
-              <TableRow key={ad.id}>
-                <TableCell>{ad.name}</TableCell>
-                <TableCell>{ad.description}</TableCell>
+            {resources.map(resource => (
+              <TableRow key={resource.id}>
+                <TableCell>{resource.name}</TableCell>
+                <TableCell>{resource.path}</TableCell>
+                <TableCell>{resource.url_link}</TableCell>
                 <TableCell>
-                  <ActionMenu onActionSelected={ (action) => this.onActionSelected(action, ad.id) } />
+                  <ActionMenu onActionSelected={ (action) => this.onActionSelected(action, resource.id) } />
                 </TableCell>
               </TableRow>
             ))}
@@ -91,16 +80,16 @@ class AdvertisementListBase extends PureComponent {
   }
 };
 
-AdvertisementListBase.propTypes = {
+SpaceListBase.propTypes = {
   isLoading: PropTypes.bool,
-  ads: PropTypes.array,
+  resources: PropTypes.array,
   list: PropTypes.func.isRequired,
   remove: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
   isLoading: selectors.isLoading(state),
-  ads: selectors.getList(state),
+  resources: selectors.getList(state),
   hasError: selectors.hasError(state),
   success: selectors.success(state)
 });
@@ -110,14 +99,14 @@ const mapDispatchToProps = {
   remove: actions.remove,
 }
 
-const AdvertisementList = compose(
+const SpaceList = compose(
   withProductLayout({
-    title: 'Apps',
+    title: 'Resources',
     withPagination: true,
     Buttons: ToolbarActions
   }),
   withRouter,
   connect(mapStateToProps, mapDispatchToProps),
-)(AdvertisementListBase);
+)(SpaceListBase);
 
-export {AdvertisementList};
+export {SpaceList};

@@ -8,8 +8,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 const options = [
   { id: 'Update', value: 'Actualizar' },
   { id: 'Delete', value: 'Borrar' },
-  { id: 'List Resources', value: 'Ver Recursos' },
-  { id: 'Add Resources', value: 'Agregar Recursos' }
+  { id: 'Add Restricion', value: 'Agregar Restriccion' }
 ];
 
 const ITEM_HEIGHT = 48;

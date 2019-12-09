@@ -1,5 +1,6 @@
-import { actions, NAMESPACE, selectors, reducer } from './duck';
-
-export const AdvertisementDuck = { actions, NAMESPACE, selectors, reducer };
 export * from './AdvertisementList';
 export * from './AdvertisementForm';
+export * from './ResourceForm';
+export * from './ResourceList';
+export * from './ResourceRestrictions';
+export * from './duck';

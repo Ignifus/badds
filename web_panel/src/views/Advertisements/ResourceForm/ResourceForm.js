@@ -6,26 +6,33 @@ import {
   Button,
   Grid,
   TextField,
+  Select,
+  MenuItem,
+  InputLabel,
   FormControl,
   LinearProgress,
+  FormHelperText,
 } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import validate from 'validate.js';
 
 import { withProductLayout } from '../../../layouts/Main';
 import { FailedSnackbar, SuccessSnackbar } from '../../../components';
-import { actions, selectors } from '../duck/ads';
+import { actions, selectors } from '../duck';
+import { ProductDuck } from '../../Product';
 
 const styles = theme => ({
   snackbar: { backgroundColor: 'red' }
 });
 
-class AdvertisementFormBase extends React.Component {
+class ResourceFormBase extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      application: '',
       name: '',
-      description: '',
+      x_size: '',
+      y_size: '',
       errors: {}
     };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -35,6 +42,7 @@ class AdvertisementFormBase extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     const validationErrors = this.validate();
+    console.log(validationErrors);
     if (validationErrors) {
       return this.setState({ errors: validationErrors });
     } else {
@@ -42,9 +50,9 @@ class AdvertisementFormBase extends React.Component {
     }
 
     if (this.props.match.params.id == null) {
-      this.props.createAd(this.state);
+      this.props.createSpace(this.state);
     } else {
-      this.props.updateAd(this.state.id, this.state)
+      this.props.updateSpace(this.state.id, this.state)
     }
   }
 
@@ -58,9 +66,16 @@ class AdvertisementFormBase extends React.Component {
         presence: { allowEmpty: false },
         length: { minimum: 3 }
       },
-      description: {
+      application: {
         presence: { allowEmpty: false },
-        length: { minimum: 30, maximum: 150 }
+      },
+      x_size: {
+        presence: { allowEmpty: false },
+        numericality: { greaterThan: 10, lessThan: 1920 }
+      },
+      y_size: {
+        presence: { allowEmpty: false },
+        numericality: { greaterThan: 10, lessThan: 1920 }
       }
     });
   }
@@ -70,10 +85,12 @@ class AdvertisementFormBase extends React.Component {
     if (success) {
       setTimeout(() => {
           this.setState({
-          name: '',
-          description: '',
-          errors: {}
-        });
+            application: '',
+            name: '',
+            x_size: '',
+            y_size: '',
+            errors: {}
+          });
         reset();
       }, 750)
     }
@@ -81,18 +98,21 @@ class AdvertisementFormBase extends React.Component {
 
   componentDidMount() {
     if (this.props.match.params.id != null) {
-      this.props.fetchAd(this.props.match.params.id);
+      this.props.fetchSpace(this.props.match.params.id);
+    }
+    if (this.props.apps.length === 0) {
+      this.props.fetchApps();
     }
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.app.name !== this.props.app.name) {
-      this.setState({ ...this.props.app });
+    if (prevProps.space.name !== this.props.space.name) {
+      this.setState({ ...this.props.space });
     }
   }
 
   render () {
-    const { isLoading, hasError, success } = this.props;
+    const { isLoading, hasError, success, apps } = this.props;
     let progressBar = null;
 
     if (isLoading & !hasError) {
@@ -119,7 +139,7 @@ class AdvertisementFormBase extends React.Component {
             <FormControl fullWidth>
               <TextField label="Name"
                 name="name"
-                placeholder="Nombre de la app"
+                placeholder="Nombre del espacio"
                 value={this.state.name}
                 error={this.state.errors.name != null}
                 helperText={this.state.errors.name != null ? this.state.errors.name[0] : ''}
@@ -128,21 +148,53 @@ class AdvertisementFormBase extends React.Component {
               />
             </FormControl>
           </Grid>
-        </Grid>
-        <Grid container>
-          <Grid item xs={8}>
+          <Grid item xs={4}>
             <FormControl fullWidth>
               <TextField
-                label="Descripcion"
-                name="description"
-                placeholder="Escriba descripcion de la aplicacion"
-                value={this.state.description}
-                error={this.state.errors.description != null}
-                helperText={this.state.errors.description != null ? this.state.errors.description[0] : ''}
+                label="Ancho"
+                name="x_size"
+                type="number"
+                placeholder="ancho en pixeles"
+                value={this.state.x_size}
+                error={this.state.errors.x_size != null}
+                helperText={this.state.errors.x_size != null ? this.state.errors.x_size[0] : ''}
                 onChange={this.handleChange}
-                InputLabelProps={{ shrink: this.state.description !== '' }}
                 required
               />
+            </FormControl>
+          </Grid>
+          <Grid item xs={4}>
+            <FormControl fullWidth>
+              <TextField
+                label="Alto"
+                name="y_size"
+                type="number"
+                placeholder="alto en pixeles"
+                value={this.state.y_size}
+                error={this.state.errors.y_size != null}
+                helperText={this.state.errors.y_size != null ? this.state.errors.y_size[0] : ''}
+                onChange={this.handleChange}
+                InputLabelProps={{ shrink: this.state.y_size !== '' }}
+                required
+              />
+            </FormControl>
+          </Grid>
+        </Grid>
+        <Grid container>
+          <Grid item xs={4}>
+            <FormControl fullWidth>
+              <InputLabel id="badds-app-application-select">Categoria</InputLabel>
+              <Select
+                labelId="badds-app-application-select"
+                value={this.state.application}
+                onChange={this.handleChange}
+                error={this.state.errors.application != null}
+                name="application"
+                required
+              >
+                { apps.map(app => <MenuItem key={app.id} value={app.id}>{app.domain}</MenuItem>) }
+              </Select>
+              <FormHelperText error>{this.state.errors.application != null ? this.state.errors.application[0] : ''}</FormHelperText>
             </FormControl>
           </Grid>
         </Grid>
@@ -163,17 +215,19 @@ const mapStateToProps = state => ({
   isLoading: selectors.isLoading(state),
   hasError: selectors.hasError(state),
   success: selectors.success(state),
-  app: selectors.getAd(state)
+  space: selectors.getSpace(state),
+  apps: ProductDuck.selectors.getList(state),
 });
 
 const mapActionsToProps = {
-  createAd: actions.create,
-  updateAd: actions.update,
-  fetchAd: actions.fetch,
+  createSpace: actions.create,
+  updateSpace: actions.update,
+  fetchSpace: actions.fetch,
+  fetchApps: ProductDuck.actions.list, // TODO: retry only 1 time
   reset: actions.reset
 };
 
-const AdvertisementForm = compose(
+const ResourceForm = compose(
   withProductLayout({
     title: 'Form',
     withPagination: false,
@@ -182,6 +236,6 @@ const AdvertisementForm = compose(
   connect(mapStateToProps, mapActionsToProps),
   withStyles(styles),
   withRouter,
-)(AdvertisementFormBase);
+)(ResourceFormBase);
 
-export { AdvertisementForm };
+export { ResourceForm };

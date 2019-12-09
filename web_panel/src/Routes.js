@@ -143,6 +143,12 @@ const AdvertiserRoutes = () => (
           layout={AdvertiserLayout}
           path="/ads/advertisers/ads/:id/resources"
     />
+    <RouteWithLayout
+          component={DashboardView}
+          exact
+          layout={AdvertiserLayout}
+          path="/ads/advertisers/ads/:id/resources/add"
+    />
   </React.Fragment>
 );
 
