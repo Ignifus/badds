@@ -26,16 +26,19 @@
 
     <Button
         android:id="@+id/getAd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="223dp"
+        android:layout_height="64dp"
+        android:backgroundTint="#E91E63"
+        android:foregroundTint="#E91E63"
         android:text="GET AD"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/imageView"
         app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintLeft_toLeftOf="@+id/imageView"
         app:layout_constraintRight_toRightOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/spaceId"
         tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintRight_creator="1"
-        app:layout_constraintTop_toBottomOf="@+id/spaceId" />
+        tools:layout_constraintRight_creator="1" />
 
     <EditText
         android:id="@+id/apiKey"
@@ -46,12 +49,12 @@
         android:hint="API Key"
         android:inputType="textPersonName"
         android:text="3739bc271e027f59b954e9e081ec7deeed504af9"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/spaceId"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_constraintLeft_creator="1"
-        tools:text="3739bc271e027f59b954e9e081ec7deeed504af9"
-        app:layout_constraintBottom_toTopOf="@+id/spaceId"
-        android:layout_marginStart="85dp" />
+        tools:text="3739bc271e027f59b954e9e081ec7deeed504af9" />
 
     <EditText
         android:id="@+id/spaceId"
@@ -61,10 +64,10 @@
         android:ems="10"
         android:hint="Space ID"
         android:inputType="textPersonName"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/getAd"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/apiKey"
-        tools:layout_constraintLeft_creator="1"
-        app:layout_constraintBottom_toTopOf="@+id/getAd"
-        android:layout_marginStart="85dp" />
+        tools:layout_constraintLeft_creator="1" />
 
 </android.support.constraint.ConstraintLayout>

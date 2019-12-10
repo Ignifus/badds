@@ -12,7 +12,7 @@ import com.google.gson.Gson;
 import java.net.URL;
 
 public class Badds {
-    private static final String URL = "http://badds.herokuapp.com/ads/ad/";
+    private static final String URL = "https://badds.geminis.dev/ads/ad/";
 
     private static final Gson gson = new Gson();
 
@@ -36,12 +36,12 @@ public class Badds {
                 try {
                     String response = new HttpRequest(URL)
                             .prepare(HttpRequest.Method.POST)
-                            .withData("apikey=" + apiKey + "&space=" + spaceId)
+                            .withData("apiKey=" + apiKey + "&space=" + spaceId)
                             .sendAndReadString();
 
                     br = gson.fromJson(response, BaddsResponse.class);
 
-                    if (br.error != null) {
+                    if (br == null || br.error != null) {
                         listener.onBaddsResponseError(br, null);
                         return null;
                     }
