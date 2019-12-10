@@ -43,6 +43,9 @@ class AdvertisementViewSet(viewsets.ModelViewSet):
 class SpaceViewSet(viewsets.ModelViewSet):
     serializer_class = SpaceSerializer
 
+    def get_serializer_context(self):
+        return {'request': self.request}
+
     def get_queryset(self):
         return Space.objects.filter(application__user=self.request.user)
 
@@ -50,6 +53,9 @@ class SpaceViewSet(viewsets.ModelViewSet):
 class AllSpacesViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Space.objects.all()
     serializer_class = SpaceSerializer
+
+    def get_serializer_context(self):
+        return {'request': self.request, "view": self}
 
 
 class BiddingViewSet(viewsets.ModelViewSet):
@@ -208,6 +214,15 @@ class ApplicationCategoryViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ApplicationCategorySerializer
 
 
-class ContractIpLogViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = ContractIpLog.objects.all()
+class ContractIpLogViewSetPublisher(viewsets.ReadOnlyModelViewSet):
     serializer_class = ContractIpLogSerializer
+
+    def get_queryset(self):
+        return ContractIpLog.objects.filter(contract__space__application__user=self.request.user)
+
+
+class ContractIpLogViewSetAdvertiser(viewsets.ReadOnlyModelViewSet):
+    serializer_class = ContractIpLogSerializer
+
+    def get_queryset(self):
+        return ContractIpLog.objects.filter(contract__advertisement__user=self.request.user)

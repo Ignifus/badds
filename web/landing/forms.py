@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordResetForm
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.forms import Form
 
 
@@ -25,6 +26,12 @@ class SignUpForm(UserCreationForm):
         strip=False,
         widget=forms.PasswordInput(attrs={'placeholder': 'Confirmacion'}),
     )
+
+    def clean(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise ValidationError("El email ya existe!")
+        return self.cleaned_data
 
     class Meta:
         model = User

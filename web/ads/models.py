@@ -50,7 +50,7 @@ class Space(models.Model):
 
 class SpaceRestriction(models.Model):
     space = models.ForeignKey(Space, related_name='spaces', on_delete=models.PROTECT)
-    restriction = models.ForeignKey(Restriction, related_name='space_restrictions', on_delete=models.PROTECT)
+    restriction = models.ForeignKey(Restriction, on_delete=models.PROTECT)
     value = models.TextField(max_length=16)
 
     def __str__(self):

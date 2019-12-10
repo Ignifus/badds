@@ -22,7 +22,8 @@ router.register(r'all-spaces', AllSpacesViewSet, base_name='All Spaces')
 router.register(r'all-auctions', AllAuctionsViewSet, base_name='All Auctions')
 router.register(r'all-biddings', AllBiddingsViewSet, base_name='All Biddings')
 
-router.register(r'analytics', ContractIpLogViewSet, base_name='Analytics')
+router.register(r'analytics-publisher', ContractIpLogViewSetPublisher, base_name='AnalyticsPublisher')
+router.register(r'analytics-advertiser', ContractIpLogViewSetAdvertiser, base_name='AnalyticsAdvertiser')
 
 app_name = 'ads'
 urlpatterns = [

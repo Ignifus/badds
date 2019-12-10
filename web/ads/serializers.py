@@ -21,6 +21,7 @@ class RestrictionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Restriction
         fields = '__all__'
+        depth = 1
 
 
 class ResourceRestrictionSerializer(BulkSerializerMixin, serializers.ModelSerializer):
@@ -40,6 +41,10 @@ class ResourceRestrictionSerializer(BulkSerializerMixin, serializers.ModelSerial
 class ResourceSerializer(serializers.ModelSerializer):
     image = serializers.FileField(source='path')
     path = serializers.ReadOnlyField()
+    restrictions = serializers.SerializerMethodField()
+
+    def get_restrictions(self, obj):
+        return ResourceRestriction.objects.select_related('restriction').filter(resource=obj).values('restriction__restriction', 'value')
 
     class Meta:
         model = Resource
@@ -69,7 +74,26 @@ class ApplicationSerializer(serializers.ModelSerializer):
         read_only_fields = ('user', 'active')
 
 
+class SpaceRestrictionSerializer(BulkSerializerMixin, serializers.ModelSerializer):
+    class Meta:
+        model = SpaceRestriction
+        fields = '__all__'
+        list_serializer_class = BulkListSerializer
+
+    def __init__(self, *args, **kwargs):
+        super(SpaceRestrictionSerializer, self).__init__(*args, **kwargs)
+
+        if 'request' in self.context:
+            user = self.context['request'].user
+            self.fields['space'] = PrimaryKeyRelatedField(queryset=Space.objects.filter(application__user=user))
+
+
 class SpaceSerializer(serializers.ModelSerializer):
+    restrictions = serializers.SerializerMethodField()
+
+    def get_restrictions(self, obj):
+        return SpaceRestriction.objects.select_related('restriction').filter(space=obj).values('restriction__restriction', 'value')
+
     class Meta:
         model = Space
         fields = '__all__'
@@ -81,18 +105,6 @@ class SpaceSerializer(serializers.ModelSerializer):
         if 'request' in self.context:
             user = self.context['request'].user
             self.fields['application'] = PrimaryKeyRelatedField(queryset=Application.objects.filter(user=user))
-
-
-class SpaceRestrictionSerializer(BulkSerializerMixin, serializers.ModelSerializer):
-    class Meta:
-        model = SpaceRestriction
-        fields = '__all__'
-        list_serializer_class = BulkListSerializer
-
-    def __init__(self, *args, **kwargs):
-        super(SpaceRestrictionSerializer, self).__init__(*args, **kwargs)
-        user = self.context['request'].user
-        self.fields['space'] = PrimaryKeyRelatedField(queryset=Space.objects.filter(application__user=user))
 
 
 class ContractSerializer(serializers.ModelSerializer):
