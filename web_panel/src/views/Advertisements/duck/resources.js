@@ -21,7 +21,7 @@ export const RESET = `${NAMESPACE}/RESET`;
 // Reducer
 const initialState = fromJS({
   loading: false,
-  ad: { name: '', description: '' },
+  resource: { name: '', description: '' },
   list: [],
   error: false
 });
@@ -35,16 +35,16 @@ export function reducer(state = initialState, action) {
     case CREATE:
       return state.set('loading', false)
         .set('success', true)
-        .set('ad', iMap(action.payload));
+        .set('resource', iMap(action.payload));
     case FETCH:
       return state.set('loading', false).set('list', fromJS(action.payload));
     case UPDATE:
       return state.set('loading', false)
         .set('success', true)
-        .set('ad', iMap(action.payload));
+        .set('resource', iMap(action.payload));
     case REMOVE:
         return state.set('loading', false)
-          .set('list', state.get('list').filter((ad) => ad.id !== action.payload.id));
+          .set('list', state.get('list').filter((resource) => resource.id !== action.payload.id));
     case ERROR:
       return state.set('loading', false)
         .set('error', true);
@@ -60,7 +60,7 @@ export function reducer(state = initialState, action) {
 }
 
 // Action Creators
-const resourceCreated = (ad) => ({
+const resourceCreated = (resource) => ({
   type: CREATE
 })
 
@@ -69,14 +69,14 @@ const resourcesReceived = (payload) => ({
   payload
 });
 
-const resourceReceived = (ad) => ({
+const resourceReceived = (resource) => ({
   type: DETAIL,
-  payload: ad
+  payload: resource
 })
 
-const resourceUpdated = (ad) => ({
+const resourceUpdated = (resource) => ({
   type: UPDATE,
-  payload: ad
+  payload: resource
 });
 
 const resourceRemoved = (id) => ({
@@ -117,19 +117,28 @@ const fetch = (id) => dispatch => {
     .then(response => dispatch(resourceReceived(response.data)));
 }
 
-const create = (ad) => dispatch => {
+const create = (resource) => dispatch => {
   dispatch(loading());
 
-  return axios.post(BASE_URL, ad, api.getRequestConfig())
-    .then(() => dispatch(resourceCreated(ad)))
+  return axios
+    .post(BASE_URL, resource, api.getRequestConfig({
+        'Content-Type': 'multipart/form-data'
+      })
+    )
+    .then(() => dispatch(resourceCreated(resource)))
     .catch((e) => dispatch(handleError(e)));
 }
 
-const update = (id, ad) => dispatch => {
+const update = (id, resource) => dispatch => {
   dispatch(loading());
 
-  return axios.put(`${BASE_URL}${id}/`, ad, api.getRequestConfig())
-    .then(() => dispatch(resourceUpdated(ad)))
+  return axios
+    .put(`${BASE_URL}${id}/`, resource, api.getRequestConfig(
+      {
+        'Content-Type': 'multipart/form-data'
+      })
+    )
+    .then(() => dispatch(resourceUpdated(resource)))
     .catch((e) => dispatch(handleError(e)));
 }
 
@@ -157,8 +166,8 @@ const isLoading = state => {
   return state[NAMESPACE].get('loading');
 };
 
-const getAd = state => {
-  return state[NAMESPACE].get('ad', iMap()).toJS();
+const getResource = state => {
+  return state[NAMESPACE].get('resource', iMap()).toJS();
 };
 
 const getList = state => {
@@ -173,4 +182,4 @@ const success = state => {
   return state[NAMESPACE].get('success');
 }
 
-export const selectors = { isLoading, getAd, getList, hasError, success };
+export const selectors = { isLoading, getResource, getList, hasError, success };

@@ -14,6 +14,9 @@ import {
   SpacesRestrictions as SpacesRestrictionsView,
   AdvertisementForm as AdvertisementFormView,
   AdvertisementList as AdvertisementListView,
+  ResourceList as ResourceListView,
+  ResourceForm as ResourceFormView,
+  ResourceRestrictions as ResourceRestrictionsView,
   UserList as UserListView,
   Typography as TypographyView,
   Icons as IconsView,
@@ -21,7 +24,7 @@ import {
   Settings as SettingsView,
   SignUp as SignUpView,
   SignIn as SignInView,
-  NotFound as NotFoundView
+  NotFound as NotFoundView,
 } from './views';
 
 const Routes = () => {
@@ -132,19 +135,19 @@ const AdvertiserRoutes = () => (
           path="/ads/advertisers/ads/update/:id"
     />
     <RouteWithLayout
-          component={DashboardView}
+          component={ResourceRestrictionsView}
           exact
           layout={AdvertiserLayout}
           path="/ads/advertisers/ads/:id/restrictions"
     />
     <RouteWithLayout
-          component={DashboardView}
+          component={ResourceListView}
           exact
           layout={AdvertiserLayout}
           path="/ads/advertisers/ads/:id/resources"
     />
     <RouteWithLayout
-          component={DashboardView}
+          component={ResourceFormView}
           exact
           layout={AdvertiserLayout}
           path="/ads/advertisers/ads/:id/resources/add"

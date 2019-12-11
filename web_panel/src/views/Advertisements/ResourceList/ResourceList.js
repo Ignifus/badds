@@ -8,10 +8,10 @@ import { withRouter } from 'react-router-dom';
 import { ActionMenu } from './components'
 import { actions, selectors } from '../duck/resources';
 import { FailedSnackbar, SuccessSnackbar } from '../../../components';
-import { ToolbarActions } from '../ToolbarActions';
+import { ResourceToolbarActions } from '../ToolbarActions';
 import { withProductLayout } from '../../../layouts/Main';
 
-class SpaceListBase extends PureComponent {
+class ResourceListBase extends PureComponent {
   componentDidMount() {
     const { list } = this.props;
     this.onActionSelected = this.onActionSelected.bind(this);
@@ -55,10 +55,9 @@ class SpaceListBase extends PureComponent {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Ancho</TableCell>
-              <TableCell>Alto</TableCell>
-              <TableCell>Aplicacion</TableCell>
+              <TableCell>Nombre</TableCell>
+              <TableCell>Path</TableCell>
+              <TableCell>URL</TableCell>
               <TableCell>Acciones</TableCell>
             </TableRow>
           </TableHead>
@@ -80,7 +79,7 @@ class SpaceListBase extends PureComponent {
   }
 };
 
-SpaceListBase.propTypes = {
+ResourceListBase.propTypes = {
   isLoading: PropTypes.bool,
   resources: PropTypes.array,
   list: PropTypes.func.isRequired,
@@ -99,14 +98,14 @@ const mapDispatchToProps = {
   remove: actions.remove,
 }
 
-const SpaceList = compose(
+const ResourceList = compose(
   withProductLayout({
     title: 'Resources',
     withPagination: true,
-    Buttons: ToolbarActions
+    Buttons: ResourceToolbarActions
   }),
   withRouter,
   connect(mapStateToProps, mapDispatchToProps),
-)(SpaceListBase);
+)(ResourceListBase);
 
-export {SpaceList};
+export {ResourceList};

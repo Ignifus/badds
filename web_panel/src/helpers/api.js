@@ -14,9 +14,9 @@ export function getCookie(name) {
   return cookieValue;
 }
 
-export function getRequestConfig() {
+export function getRequestConfig(headers) {
   var csrftoken = getCookie('csrftoken');
   return {
-    headers: { 'X-CSRFToken': csrftoken }
+    headers: { 'X-CSRFToken': csrftoken, ...headers }
   }
 }

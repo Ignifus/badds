@@ -18,8 +18,8 @@ import validate from 'validate.js';
 
 import { withProductLayout } from '../../../layouts/Main';
 import { FailedSnackbar, SuccessSnackbar } from '../../../components';
-import { actions, selectors } from '../../../duck/duck';
-import { ProductDuck } from '../../Product';
+import { ResourcesDuck } from '../duck/';
+import { Label } from '@material-ui/icons';
 
 const styles = theme => ({
   snackbar: { backgroundColor: 'red' }
@@ -29,10 +29,9 @@ class ResourceFormBase extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      application: '',
       name: '',
-      x_size: '',
-      y_size: '',
+      url_link: '',
+      image: '',
       errors: {}
     };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -42,17 +41,23 @@ class ResourceFormBase extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     const validationErrors = this.validate();
-    console.log(validationErrors);
     if (validationErrors) {
       return this.setState({ errors: validationErrors });
     } else {
       this.setState({ errors: [] });
     }
 
-    if (this.props.match.params.id == null) {
-      this.props.createSpace(this.state);
+    const formData = new FormData();
+    formData.set('name', this.state.name);
+    formData.set('url_link', this.state.name);
+    formData.set('advertisement', this.props.match.params.id);
+    //TODO: validate
+    formData.append('image', document.getElementById('resourceImage').files[0]);
+
+    if (this.props.match.params.resourceId == null) {
+      this.props.createResource(formData);
     } else {
-      this.props.updateSpace(this.state.id, this.state)
+      this.props.updateResource(this.state.id, formData)
     }
   }
 
@@ -66,17 +71,6 @@ class ResourceFormBase extends React.Component {
         presence: { allowEmpty: false },
         length: { minimum: 3 }
       },
-      application: {
-        presence: { allowEmpty: false },
-      },
-      x_size: {
-        presence: { allowEmpty: false },
-        numericality: { greaterThan: 10, lessThan: 1920 }
-      },
-      y_size: {
-        presence: { allowEmpty: false },
-        numericality: { greaterThan: 10, lessThan: 1920 }
-      }
     });
   }
 
@@ -85,10 +79,9 @@ class ResourceFormBase extends React.Component {
     if (success) {
       setTimeout(() => {
           this.setState({
-            application: '',
             name: '',
-            x_size: '',
-            y_size: '',
+            url_link: '',
+            image: '',
             errors: {}
           });
         reset();
@@ -97,22 +90,19 @@ class ResourceFormBase extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.match.params.id != null) {
-      this.props.fetchSpace(this.props.match.params.id);
-    }
-    if (this.props.apps.length === 0) {
-      this.props.fetchApps();
+    if (this.props.match.params.resourceId != null) {
+      this.props.fetchResource(this.props.match.params.id);
     }
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.space.name !== this.props.space.name) {
+    if (prevProps.resource.name !== this.props.resource.name) {
       this.setState({ ...this.props.space });
     }
   }
 
   render () {
-    const { isLoading, hasError, success, apps } = this.props;
+    const { isLoading, hasError, success } = this.props;
     let progressBar = null;
 
     if (isLoading & !hasError) {
@@ -126,7 +116,7 @@ class ResourceFormBase extends React.Component {
     }
 
     return (
-      <form onSubmit={this.handleSubmit} noValidate>
+      <form onSubmit={this.handleSubmit} id="resourceForm" encType="mulipart/form-data" noValidate>
         {
           hasError && <FailedSnackbar message="Tuvimos un problema al procesar su peticion" />
         }
@@ -148,33 +138,16 @@ class ResourceFormBase extends React.Component {
               />
             </FormControl>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={8}>
             <FormControl fullWidth>
               <TextField
-                label="Ancho"
-                name="x_size"
-                type="number"
-                placeholder="ancho en pixeles"
-                value={this.state.x_size}
-                error={this.state.errors.x_size != null}
-                helperText={this.state.errors.x_size != null ? this.state.errors.x_size[0] : ''}
+                label="URL"
+                name="url_link"
+                placeholder="url del recurso"
+                value={this.state.url_link}
+                error={this.state.errors.url_link != null}
+                helperText={this.state.errors.url_link != null ? this.state.errors.url_link[0] : ''}
                 onChange={this.handleChange}
-                required
-              />
-            </FormControl>
-          </Grid>
-          <Grid item xs={4}>
-            <FormControl fullWidth>
-              <TextField
-                label="Alto"
-                name="y_size"
-                type="number"
-                placeholder="alto en pixeles"
-                value={this.state.y_size}
-                error={this.state.errors.y_size != null}
-                helperText={this.state.errors.y_size != null ? this.state.errors.y_size[0] : ''}
-                onChange={this.handleChange}
-                InputLabelProps={{ shrink: this.state.y_size !== '' }}
                 required
               />
             </FormControl>
@@ -183,18 +156,19 @@ class ResourceFormBase extends React.Component {
         <Grid container>
           <Grid item xs={4}>
             <FormControl fullWidth>
-              <InputLabel id="badds-app-application-select">Categoria</InputLabel>
-              <Select
-                labelId="badds-app-application-select"
-                value={this.state.application}
-                onChange={this.handleChange}
-                error={this.state.errors.application != null}
-                name="application"
-                required
+              <Button
+                color="secondary"
+                variant="contained"
+                component="label"
               >
-                { apps.map(app => <MenuItem key={app.id} value={app.id}>{app.domain}</MenuItem>) }
-              </Select>
-              <FormHelperText error>{this.state.errors.application != null ? this.state.errors.application[0] : ''}</FormHelperText>
+                Cargar Imagen
+                <input
+                  type="file"
+                  name="image"
+                  id="resourceImage"
+                  style={{ display: "none" }}
+                />
+              </Button>
             </FormControl>
           </Grid>
         </Grid>
@@ -212,19 +186,17 @@ class ResourceFormBase extends React.Component {
 };
 
 const mapStateToProps = state => ({
-  isLoading: selectors.isLoading(state),
-  hasError: selectors.hasError(state),
-  success: selectors.success(state),
-  space: selectors.getSpace(state),
-  apps: ProductDuck.selectors.getList(state),
+  isLoading: ResourcesDuck.selectors.isLoading(state),
+  hasError: ResourcesDuck.selectors.hasError(state),
+  success: ResourcesDuck.selectors.success(state),
+  resource: ResourcesDuck.selectors.getResource(state),
 });
 
 const mapActionsToProps = {
-  createSpace: actions.create,
-  updateSpace: actions.update,
-  fetchSpace: actions.fetch,
-  fetchApps: ProductDuck.actions.list, // TODO: retry only 1 time
-  reset: actions.reset
+  createResource: ResourcesDuck.actions.create,
+  updateResource: ResourcesDuck.actions.update,
+  fetchResource: ResourcesDuck.actions.fetch,
+  reset: ResourcesDuck.actions.reset
 };
 
 const ResourceForm = compose(
