@@ -17,6 +17,7 @@ export const DETAIL = `${NAMESPACE}/DETAIL`;
 export const ERROR = `${NAMESPACE}/ERROR`;
 export const CLEAR_ERROR = `${NAMESPACE}/CLEARERROR`;
 export const RESET = `${NAMESPACE}/RESET`;
+export const RESTRICTION_ADDED = `${NAMESPACE}/RESTRICTION_ADDED`;
 
 // Reducer
 const initialState = fromJS({
@@ -54,6 +55,10 @@ export function reducer(state = initialState, action) {
       return state.set('success', false)
         .set('error', false)
         .set('loading', false);
+    case RESTRICTION_ADDED:
+      return state.set('success', true)
+        .set('loading', false)
+        .set('error', false);
     default:
       return state;
   }
@@ -86,6 +91,10 @@ const resourceRemoved = (id) => ({
 
 const clearError = () => ({
   type: CLEAR_ERROR,
+});
+
+const restrictionAdded = () => ({
+  type: RESTRICTION_ADDED
 });
 
 // Public Actions
@@ -150,6 +159,14 @@ const remove = (id) => dispatch => {
     .catch((e) => dispatch(handleError(e)));
 }
 
+const addRestriction = (payload) => dispatch => {
+  dispatch(loading());
+
+  return axios.post('/ads/api/resourcerestriction/', payload, api.getRequestConfig())
+    .then(() => dispatch(restrictionAdded()))
+    .catch((e) => dispatch(handleError(e)))
+}
+
 export const actions = {
   loading,
   fetch,
@@ -157,7 +174,8 @@ export const actions = {
   create,
   update,
   remove,
-  reset
+  reset,
+  addRestriction
 };
 
 // Selectors

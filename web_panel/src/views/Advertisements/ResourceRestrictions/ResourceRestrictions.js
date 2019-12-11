@@ -54,30 +54,30 @@ class ResourceRestrictionsBase extends Component {
     e.preventDefault()
     const { create } = this.props;
     const payload = [];
-    const space = this.props.match.params.id;
+    const resource = this.props.match.params.id;
 
     const AGE = this.findRestrictions('AGE');
     if (AGE !== null) {
       const value = `${this.state.minAge}:${this.state.maxAge}`;
-      payload.push({ space, restriction: AGE.id, value });
+      payload.push({ resource, restriction: AGE.id, value });
     }
 
     const GENDER = this.findRestrictions('GENDER');
     if (GENDER !== null) {
       const value = this.state.genders.join(',');
-      payload.push({ space, restriction: GENDER.id, value });
+      payload.push({ resource, restriction: GENDER.id, value });
     }
 
     const COUNTRY_WHITELIST = this.findRestrictions('COUNTRY_WHITELIST');
     if (COUNTRY_WHITELIST !== null) {
       const value = this.state.countryWhiteList.join(',');
-      payload.push({ space, restriction: COUNTRY_WHITELIST.id, value });
+      payload.push({ resource, restriction: COUNTRY_WHITELIST.id, value });
     }
 
     const COUNTRY_BLACKLIST = this.findRestrictions('COUNTRY_BLACKLIST');
     if (COUNTRY_BLACKLIST !== null) {
       const value = this.state.countryBlackList.join(',');
-      payload.push({ space, restriction: COUNTRY_BLACKLIST.id, value });
+      payload.push({ resource, restriction: COUNTRY_BLACKLIST.id, value });
     }
     create(payload);
   }

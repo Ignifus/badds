@@ -28,7 +28,7 @@ class ResourceListBase extends PureComponent {
         remove(id);
         break;
       case 'Add Restricion':
-        history.push(`/ads/advertisers/resources/${id}/restrictions`);
+        history.push(`/ads/advertisers/ads/resources/${id}/restrictions`);
         break;
       default:
         break;

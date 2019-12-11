@@ -138,7 +138,7 @@ const AdvertiserRoutes = () => (
           component={ResourceRestrictionsView}
           exact
           layout={AdvertiserLayout}
-          path="/ads/advertisers/ads/:id/restrictions"
+          path="/ads/advertisers/ads/resources/:id/restrictions"
     />
     <RouteWithLayout
           component={ResourceListView}
