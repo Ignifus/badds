@@ -11,14 +11,18 @@ def get_resource(request):
     age = request.GET.get("age", "")
     gender = request.GET.get("gender", "")
 
-    if client_ip is None:
+    if client_ip is "":
         client_ip = get_client_ip(request)
 
+    print(client_ip)
+
     ip = Ip.objects.filter(ip=client_ip).first()
-    if ip not in client_ip:
+    if ip is None or ip not in client_ip:
         ip = Ip()
         ip.ip = client_ip
         ip.country = get_client_country(client_ip)
+        if ip.country is None:
+            ip.country = ""
         ip.save()
 
     try:

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.badds.request.HttpRequest;
 import com.badds.response.BaddsResponse;
@@ -12,7 +13,7 @@ import com.google.gson.Gson;
 import java.net.URL;
 
 public class Badds {
-    private static final String URL = "https://badds.geminis.dev/ads/ad/";
+    private static final String URL = "https://badds.hq.localhost/ads/ad/";
 
     private static final Gson gson = new Gson();
 
@@ -26,15 +27,35 @@ public class Badds {
         this.apiKey = apiKey;
     }
 
+    private String appendQuery(String query, String key, String value) {
+        if (value == null || value.isEmpty())
+            return query;
+
+        query += String.format("&%s=%s", key, value);
+        return query;
+    }
+
     @SuppressLint("StaticFieldLeak")
-    public void getBadds(String spaceId) {
+    public void getBadds(String spaceId, String age, String gender) {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
                 BaddsResponse br = null;
 
+                if (URL.contains("localhost"))
+                    HttpRequest.disableCertificateValidation();
+
                 try {
-                    String response = new HttpRequest(URL + "?apiKey=" + apiKey + "&space=" + spaceId)
+                    String query = "";
+                    query = appendQuery(query, "space", spaceId);
+                    query = appendQuery(query, "age", age);
+                    query = appendQuery(query, "gender", gender);
+
+                    String url = String.format("%s?apiKey=%s%s", URL, apiKey, query);
+
+                    Log.i("badds", url);
+
+                    String response = new HttpRequest(url)
                             .prepare(HttpRequest.Method.GET)
                             .sendAndReadString();
 

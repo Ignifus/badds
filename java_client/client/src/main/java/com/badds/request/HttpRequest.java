@@ -15,6 +15,15 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.X509TrustManager;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.HostnameVerifier;
+import java.security.cert.CertificateException;
+
 /**
  * Since HttpClient,BasicNameValuePairs, etc...  are deprecated.
  * I've searched for a good alternative, and couldn't find any. Eventually ended up writing my own solution, so I decided to share to those who needs it.
@@ -35,20 +44,58 @@ import java.util.Map;
  *req.preparePost().withData(params).sendAndReadJSON();
  */
 public class HttpRequest {
-    //Supported HttpRequest methods
+
     public static enum Method{
         POST,PUT,DELETE,GET;
     }
     private URL url;
     private HttpURLConnection con;
     private OutputStream os;
-    //After instantiation, when opening connection - IOException can occur
-    public HttpRequest(URL url)throws IOException{
+
+    public HttpRequest(URL url) throws IOException {
         this.url=url;
         con = (HttpURLConnection)this.url.openConnection();
     }
-    //Can be instantiated with String representation of url, force caller to check for IOException which can be thrown
+
     public HttpRequest(String url)throws IOException{ this(new URL(url)); }
+
+    public static void disableCertificateValidation()
+    {
+        final TrustManager[] trustAllCerts = new TrustManager[] {
+                new X509TrustManager() {
+                    @Override
+                    public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                    }
+
+                    @Override
+                    public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                    }
+
+                    @Override
+                    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                        return new java.security.cert.X509Certificate[]{};
+                    }
+                }
+        };
+
+        final HostnameVerifier hv = new HostnameVerifier() {
+            @Override
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        };
+
+        try
+        {
+            final SSLContext sslContext = SSLContext.getInstance("SSL");
+            sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+
+            final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+
+            HttpsURLConnection.setDefaultSSLSocketFactory(sslSocketFactory);
+            HttpsURLConnection.setDefaultHostnameVerifier(hv);
+        } catch (Exception e) {}
+    }
 
     /**
      * Sending connection and opening an output stream to server by pre-defined instance variable url

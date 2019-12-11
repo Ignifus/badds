@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "136551411964",
+    "firebase_url": "https://badds-project.firebaseio.com",
+    "project_id": "badds-project",
+    "storage_bucket": "badds-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:136551411964:android:65663bf7f1d30a37cfe779",
+        "android_client_info": {
+          "package_name": "com.badds.baddsdemo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "136551411964-2gc1tkig7lhg1t6pvfvbboum73j9mvep.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAo_1_E0cg4hL759LwPRwkszR_WduQf-_Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "136551411964-2gc1tkig7lhg1t6pvfvbboum73j9mvep.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
