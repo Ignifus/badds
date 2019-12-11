@@ -5,11 +5,11 @@ from badds.utils import get_client_country, get_client_ip
 
 
 def get_resource(request):
-    apikey = request.GET.get("apiKey", None)
-    space_id = request.GET.get("space", None)
-    client_ip = request.GET.get("clientIp", None)
-    age = request.GET.get("age", None)
-    gender = request.GET.get("gender", None)
+    apikey = request.GET.get("apiKey", "")
+    space_id = request.GET.get("space", "")
+    client_ip = request.GET.get("clientIp", "")
+    age = request.GET.get("age", "")
+    gender = request.GET.get("gender", "")
 
     if client_ip is None:
         client_ip = get_client_ip(request)

@@ -18,7 +18,7 @@ import validate from 'validate.js';
 
 import { withProductLayout } from '../../../layouts/Main';
 import { FailedSnackbar, SuccessSnackbar } from '../../../components';
-import { actions, selectors } from '../duck';
+import { actions, selectors } from '../../../duck/duck';
 import { ProductDuck } from '../../Product';
 
 const styles = theme => ({

@@ -34,9 +34,8 @@ public class Badds {
                 BaddsResponse br = null;
 
                 try {
-                    String response = new HttpRequest(URL)
-                            .prepare(HttpRequest.Method.POST)
-                            .withData("apiKey=" + apiKey + "&space=" + spaceId)
+                    String response = new HttpRequest(URL + "?apiKey=" + apiKey + "&space=" + spaceId)
+                            .prepare(HttpRequest.Method.GET)
                             .sendAndReadString();
 
                     br = gson.fromJson(response, BaddsResponse.class);
