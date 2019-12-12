@@ -5,9 +5,7 @@ import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
 import AppsIcon from '@material-ui/icons/Apps';
 import ImageIcon from '@material-ui/icons/Image';
-import AccountBoxIcon from '@material-ui/icons/AccountBox';
-import SettingsIcon from '@material-ui/icons/Settings';
-import LockOpenIcon from '@material-ui/icons/LockOpen';
+import TimerIcon from '@material-ui/icons/Timer';
 
 import Sidebar from './Sidebar';
 
@@ -28,7 +26,12 @@ const pages = [
     icon: <ImageIcon />
   },
   {
-    title: 'Contracts',
+    title: 'Subastas',
+    href: '/ads/publishers/auctions',
+    icon: <TimerIcon />
+  },
+  {
+    title: 'Contratos',
     href: '/ads/publishers/contracts',
     icon: <BusinessCenterIcon />
   },

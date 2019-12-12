@@ -11,7 +11,7 @@ import { FailedSnackbar, SuccessSnackbar } from '../../../components';
 import { ToolbarActions } from '../ToolbarActions';
 import { withProductLayout } from '../../../layouts/Main';
 
-class SpaceListBase extends PureComponent {
+class AuctionsListBase extends PureComponent {
   componentDidMount() {
     const { list } = this.props;
     this.onActionSelected = this.onActionSelected.bind(this);
@@ -20,18 +20,14 @@ class SpaceListBase extends PureComponent {
 
   onActionSelected(action, id) {
     const { history, remove } = this.props;
+    const { spaceId } = this.props.match.params;
+
     switch (action) {
       case 'Update':
-        history.push(`/ads/publishers/spaces/update/${id}`);
+        history.push(`/ads/publishers/spaces/${spaceId}/auctions/${id}`);
         break;
       case 'Delete':
         remove(id);
-        break;
-      case 'Add Restricion':
-        history.push(`/ads/publishers/spaces/${id}/restrictions`);
-        break;
-      case 'Add Auction':
-        history.push(`/ads/publishers/spaces/${id}/auctions/add`);
         break;
       default:
         break;
@@ -39,14 +35,14 @@ class SpaceListBase extends PureComponent {
   }
 
   render() {
-    const {isLoading, spaces, hasError, success} = this.props;
+    const {isLoading, auctions, hasError, success} = this.props;
 
     if (isLoading & !hasError) {
       return (<Grid item xs={12}>
         <LinearProgress />
       </Grid>)
     }
-    console.log(spaces)
+
     return (
       <Grid container spacing={5}>
         {
@@ -58,22 +54,24 @@ class SpaceListBase extends PureComponent {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Ancho</TableCell>
-              <TableCell>Alto</TableCell>
-              <TableCell>Aplicacion</TableCell>
+              <TableCell>Space</TableCell>
+              <TableCell>Duracion</TableCell>
+              <TableCell>Finalizacion</TableCell>
+              <TableCell>Impresiones</TableCell>
+              <TableCell>Estado</TableCell>
               <TableCell>Acciones</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {spaces.map(space => (
-              <TableRow key={space.id}>
-                <TableCell>{space.name}</TableCell>
-                <TableCell>{space.x_size}</TableCell>
-                <TableCell>{space.y_size}</TableCell>
-                <TableCell>{space.application}</TableCell>
+            {auctions.map(auction => (
+              <TableRow key={auction.id}>
+                <TableCell>{auction.space}</TableCell>
+                <TableCell>{auction.contract_duration_days}</TableCell>
+                <TableCell>{auction.end_date}</TableCell>
+                <TableCell>{auction.prints}</TableCell>
+                <TableCell>{auction.status}</TableCell>
                 <TableCell>
-                  <ActionMenu onActionSelected={ (action) => this.onActionSelected(action, space.id) } />
+                  <ActionMenu onActionSelected={ (action) => this.onActionSelected(action, auction.id) } />
                 </TableCell>
               </TableRow>
             ))}
@@ -84,16 +82,16 @@ class SpaceListBase extends PureComponent {
   }
 };
 
-SpaceListBase.propTypes = {
+AuctionsListBase.propTypes = {
   isLoading: PropTypes.bool,
-  spaces: PropTypes.array,
+  auctions: PropTypes.array,
   list: PropTypes.func.isRequired,
   remove: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
   isLoading: selectors.isLoading(state),
-  spaces: selectors.getList(state),
+  auctions: selectors.getList(state),
   hasError: selectors.hasError(state),
   success: selectors.success(state)
 });
@@ -103,7 +101,7 @@ const mapDispatchToProps = {
   remove: actions.remove,
 }
 
-const SpaceList = compose(
+const AuctionsList = compose(
   withProductLayout({
     title: 'Apps',
     withPagination: true,
@@ -111,6 +109,6 @@ const SpaceList = compose(
   }),
   withRouter,
   connect(mapStateToProps, mapDispatchToProps),
-)(SpaceListBase);
+)(AuctionsListBase);
 
-export {SpaceList};
+export {AuctionsList};

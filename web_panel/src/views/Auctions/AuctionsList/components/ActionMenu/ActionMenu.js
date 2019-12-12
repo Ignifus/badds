@@ -8,8 +8,6 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 const options = [
   { id: 'Update', value: 'Actualizar' },
   { id: 'Delete', value: 'Borrar' },
-  { id: 'Add Restricion', value: 'Agregar Restriccion' },
-  { id: 'Add Auction', value: 'Subastar espacio' }
 ];
 
 const ITEM_HEIGHT = 48;

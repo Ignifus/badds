@@ -17,6 +17,8 @@ import {
   ResourceList as ResourceListView,
   ResourceForm as ResourceFormView,
   ResourceRestrictions as ResourceRestrictionsView,
+  AuctionsList as AuctionsListView,
+  AuctionsForm as AuctionsFormView,
   UserList as UserListView,
   Typography as TypographyView,
   Icons as IconsView,
@@ -205,6 +207,30 @@ const PublishersRoutes = () => (
       exact
       layout={PublisherLayout}
       path="/ads/publishers/spaces/:id/restrictions"
+    />
+    <RouteWithLayout
+      component={AuctionsListView}
+      exact
+      layout={PublisherLayout}
+      path="/ads/publishers/auctions"
+    />
+    <RouteWithLayout
+      component={AuctionsListView}
+      exact
+      layout={PublisherLayout}
+      path="/ads/publishers/spaces/:id/auctions"
+    />
+    <RouteWithLayout
+      component={AuctionsFormView}
+      exact
+      layout={PublisherLayout}
+      path="/ads/publishers/spaces/:spaceId/auctions/add"
+    />
+    <RouteWithLayout
+      component={AuctionsFormView}
+      exact
+      layout={PublisherLayout}
+      path="/ads/publishers/spaces/:spaceId/auctions/update/:id"
     />
   </React.Fragment>
 );

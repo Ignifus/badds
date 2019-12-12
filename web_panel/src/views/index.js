@@ -1,6 +1,7 @@
 export * from './Product';
 export * from './Spaces';
 export * from './Advertisements';
+export * from './Auctions';
 export { default as Account } from './Account';
 export { default as Dashboard } from './Dashboard';
 export { default as Icons } from './Icons';
