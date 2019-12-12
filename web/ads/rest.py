@@ -92,7 +92,7 @@ class AuctionViewSet(viewsets.ModelViewSet):
     serializer_class = AuctionSerializer
 
     def get_queryset(self):
-        return Auction.objects.filter(user=self.request.user)
+        return Auction.objects.filter(space__application__user=self.request.user)
 
     def get_serializer_context(self):
         return {'request': self.request}

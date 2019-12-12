@@ -36,7 +36,7 @@ public class Badds {
     }
 
     @SuppressLint("StaticFieldLeak")
-    public void getBadds(String spaceId, String age, String gender) {
+    public void getBadds(String spaceId, String gender, String age) {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {

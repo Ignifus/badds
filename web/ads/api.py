@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 
-from ads.models import Contract, Ip, ContractIpLog
+from ads.models import Contract, Ip, ContractIpLog, ResourceRestriction
 from badds.utils import get_client_country, get_client_ip
 
 
@@ -14,10 +14,8 @@ def get_resource(request):
     if client_ip is "":
         client_ip = get_client_ip(request)
 
-    print(client_ip)
-
     ip = Ip.objects.filter(ip=client_ip).first()
-    if ip is None or ip not in client_ip:
+    if ip is None or ip.ip not in client_ip:
         ip = Ip()
         ip.ip = client_ip
         ip.country = get_client_country(client_ip)
@@ -42,8 +40,8 @@ def get_resource(request):
         ip_log = ContractIpLog()
         ip_log.contract = contract
         ip_log.ip = ip
-        ip_log.age = age
-        ip_log.gender = gender
+        ip_log.age = int(age)
+        ip_log.gender = gender[0]
         ip_log.save()
 
         contract.prints -= 1
@@ -59,25 +57,71 @@ def get_resource(request):
         ip_log.gender = gender
         ip_log.save()
 
-    resources = contract.advertisement.resources
+    resources = contract.advertisement.resources.all()
+
+    solve = {
+        "AGE": solve_age,
+        "GENDER": solve_gender,
+        "COUNTRY_WHITELIST": solve_country_whitelist,
+        "COUNTRY_BLACKLIST": solve_country_blacklist
+    }
+
+    params = {
+        "age": age,
+        "gender": gender,
+        "country": ip.country
+    }
 
     for res in resources:
-        age_restrictions = res.restrictions.filter(restriction="AGE")
-        if ">18" in age_restrictions and age < 18:
-            continue
+        all_restrictions = ResourceRestriction.objects.select_related('restriction').filter(resource=res).values('restriction__restriction', 'value')
 
-        gender_restriction = res.restrictions.filter(restriction="GENDER")
-        if len(gender_restriction) > 0 and gender not in gender_restriction:
-            continue
+        filtered = False
 
-        country_whitelist = res.restrictions.filter(restricton="COUNTRY_WHITELIST")
-        if len(country_whitelist) > 0 and ip.country not in country_whitelist:
-            continue
+        for restriction in all_restrictions:
+            if not solve[restriction["restriction__restriction"]](restriction["value"], params):
+                filtered = True
 
-        country_blacklist = res.restrictions.filter(restricton="COUNTRY_BLACKLIST")
-        if ip.country in country_blacklist:
-            continue
-
-        return JsonResponse({'resource': res.path})
+        if not filtered:
+            return JsonResponse({'resource': res.path})
 
     return JsonResponse({'resource': "https://res.cloudinary.com/geminis/image/upload/v1575435915/placeholder-images-image_large.png"})
+
+
+def solve_age(restriction, params):
+    age = int(params["age"])
+
+    if ">18" == restriction and age < 18:
+        return False
+
+    if "<18" == restriction and age > 18:
+        return False
+
+    if "-" not in restriction:
+        return True
+
+    range_vals = restriction.split("-")
+    return int(range_vals[0]) <= age <= int(range_vals[1])
+
+
+def solve_gender(restriction, params):
+    gender = params["gender"]
+
+    if len(restriction) > 0 and gender[0] != restriction:
+        return False
+    return True
+
+
+def solve_country_whitelist(restriction, params):
+    country = params["country"]
+
+    if len(restriction) > 0 and country not in restriction:
+        return False
+    return True
+
+
+def solve_country_blacklist(restriction, params):
+    country = params["country"]
+
+    if len(restriction) > 0 and country in restriction:
+        return False
+    return True

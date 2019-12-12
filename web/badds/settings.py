@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+from datetime import timedelta
 
 from celery.schedules import crontab
 import mercadopago
@@ -141,11 +142,11 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_BEAT_SCHEDULE = {
     'contracts': {
         'task': 'ads.tasks.check_contracts_end',
-        'schedule': crontab()
+        'schedule': timedelta(seconds=5)
     },
     'auctions': {
         'task': 'ads.tasks.check_auctions_end',
-        'schedule': crontab()
+        'schedule': timedelta(seconds=5)
     }
 }
 

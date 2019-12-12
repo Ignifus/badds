@@ -27,23 +27,37 @@ public class MainActivity extends Activity implements IBaddsListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        apiKey = "asd";
-        spaceId = "1";
+        apiKey = "de9facb5e717fd7da1fc22c30b2b7eb91c97c964da8dbbcda3af8c6365aae062";
+        spaceId = "6";
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         image = findViewById(R.id.imageView);
 
         findViewById(R.id.getAd).setOnClickListener(v -> {
-            int genderId = ((RadioGroup) findViewById(R.id.gender)).getCheckedRadioButtonId();
-            String gender = ((RadioButton) findViewById(genderId)).getText().toString();
+            try {
+                int genderId = ((RadioGroup) findViewById(R.id.gender)).getCheckedRadioButtonId();
+                String gender = ((RadioButton) findViewById(genderId)).getText().toString();
 
-            int ageId = ((RadioGroup) findViewById(R.id.age)).getCheckedRadioButtonId();
-            String age = ((RadioButton) findViewById(ageId)).getText().toString();
+                int ageId = ((RadioGroup) findViewById(R.id.age)).getCheckedRadioButtonId();
+                String age = ((RadioButton) findViewById(ageId)).getText().toString();
 
-            badds = new Badds(this, this, apiKey);
-            badds.getBadds(spaceId, gender, age);
+                badds = new Badds(this, this, apiKey);
+                badds.getBadds(spaceId, gender, getAge(age));
+            } catch(NullPointerException e) { }
         });
+    }
+
+    private String getAge(String age) {
+        if (age.contains("<"))
+            return "13";
+        if (age.contains("+"))
+            return "51";
+
+        String[] a = age.split("-");
+        int total = Integer.valueOf(a[0]) + Integer.valueOf(a[1]);
+
+        return String.valueOf(Math.round(total / 2));
     }
 
     @Override

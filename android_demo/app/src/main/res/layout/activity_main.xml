@@ -11,10 +11,11 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="0dp"
-        android:layout_height="239dp"
+        android:layout_width="293dp"
+        android:layout_height="200dp"
         android:layout_marginLeft="60dp"
         android:layout_marginRight="60dp"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
