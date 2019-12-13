@@ -24,7 +24,7 @@ const pages = [
   },
   {
     title: 'Market Place',
-    href: '/adds/market',
+    href: '/ads/advertisers/market',
     icon: <ShoppingBasketIcon />
   },
   {

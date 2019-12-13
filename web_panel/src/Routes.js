@@ -19,6 +19,7 @@ import {
   ResourceRestrictions as ResourceRestrictionsView,
   AuctionsList as AuctionsListView,
   AuctionsForm as AuctionsFormView,
+  Market as MarketView,
   UserList as UserListView,
   Typography as TypographyView,
   Icons as IconsView,
@@ -153,6 +154,18 @@ const AdvertiserRoutes = () => (
           exact
           layout={AdvertiserLayout}
           path="/ads/advertisers/ads/:id/resources/add"
+    />
+    <RouteWithLayout
+          component={MarketView}
+          exact
+          layout={AdvertiserLayout}
+          path="/ads/advertisers/market"
+    />
+    <RouteWithLayout
+          component={MarketView}
+          exact
+          layout={AdvertiserLayout}
+          path="/ads/advertisers/biddings/:auctionId"
     />
   </React.Fragment>
 );
