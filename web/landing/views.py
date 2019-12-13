@@ -89,6 +89,7 @@ def account(request):
                 request.user.profile.pending_purchase_amount = None
                 request.user.profile.pending_purchase_link = None
                 request.user.save()
+
                 return render(request, 'landing/account.html', {'credits': request.user.profile.credits})
 
         return render(request, 'landing/account.html', {'credits': request.user.profile.credits,

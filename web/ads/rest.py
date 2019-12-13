@@ -2,7 +2,6 @@ import os
 from binascii import hexlify
 
 from django.db.models import Q
-from django.http import Http404
 from rest_framework import viewsets
 from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.renderers import JSONRenderer
@@ -11,7 +10,9 @@ from rest_framework.views import APIView
 from rest_framework_bulk import BulkModelViewSet
 
 from ads.image import upload
+from ads.restriction_solvers import solve_age
 from ads.serializers import *
+from landing.models import CreditsLog
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
@@ -86,7 +87,7 @@ class BiddingViewSet(viewsets.ModelViewSet):
 
 class AllBiddingsViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Bidding.objects.all()
-    serializer_class = BiddingSerializer
+    serializer_class = AllBiddingsSerializer
 
 
 class AuctionViewSet(viewsets.ModelViewSet):
@@ -117,7 +118,7 @@ class AuctionViewSet(viewsets.ModelViewSet):
 
 class AllAuctionsViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Auction.objects.all()
-    serializer_class = AuctionSerializer
+    serializer_class = AllAuctionsSerializer
 
 
 class SpaceRestrictionViewSet(BulkModelViewSet):
@@ -218,11 +219,43 @@ class ApplicationCategoryViewSet(viewsets.ReadOnlyModelViewSet):
 class ContractIpLogViewSetPublisher(viewsets.ReadOnlyModelViewSet):
     serializer_class = ContractIpLogSerializer
 
-    def get_serializer_context(self):
-        return {'request': self.request}
+    def get_object(self):
+        raise ValidationError
 
     def get_queryset(self):
-        return ContractIpLog.objects.filter(contract__space__application__user=self.request.user)
+        id_lookup = self.request.query_params.get('contract', None)
+        if id_lookup is None:
+            return ContractIpLog.objects.filter(contract__space__application__user=self.request.user)
+
+        return ContractIpLog.objects.filter(contract__space__application__user=self.request.user, contract__pk=id_lookup)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+
+        males, females = count_gender(serializer.data)
+        countries = count_countries(serializer.data)
+        age_distribution = count_distribution(serializer.data)
+
+        return Response({
+            "contract_history": serializer.data,
+            "credits": request.user.profile.credits,
+            "total_spaces": Space.objects.filter(application__user=request.user).count(),
+            "total_applications": Application.objects.filter(user=request.user).count(),
+            "active_contracts": Contract.objects.filter(active=True, space__application__user=request.user).count(),
+            "active_auctions": Auction.objects.filter(status=True, space__application__user=request.user).count(),
+            "males": males,
+            "females": females,
+            "countries": countries,
+            "age_distribution": age_distribution,
+            "credits_history": CreditsLog.objects.filter(user=request.user).values("credits", "time")
+        })
 
 
 class ContractIpLogViewSetAdvertiser(viewsets.ReadOnlyModelViewSet):
@@ -232,7 +265,10 @@ class ContractIpLogViewSetAdvertiser(viewsets.ReadOnlyModelViewSet):
         raise ValidationError
 
     def get_queryset(self):
-        id_lookup = self.request.query_params.get('contract', "0")
+        id_lookup = self.request.query_params.get('contract', None)
+        if id_lookup is None:
+            return ContractIpLog.objects.filter(contract__advertisement__user=self.request.user)
+
         return ContractIpLog.objects.filter(contract__advertisement__user=self.request.user, contract__pk=id_lookup)
 
     def list(self, request, *args, **kwargs):
@@ -244,8 +280,11 @@ class ContractIpLogViewSetAdvertiser(viewsets.ReadOnlyModelViewSet):
             return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(queryset, many=True)
+
         males, females = count_gender(serializer.data)
         countries = count_countries(serializer.data)
+        age_distribution = count_distribution(serializer.data)
+
         return Response({
             "contract_history": serializer.data,
             "credits": request.user.profile.credits,
@@ -254,7 +293,9 @@ class ContractIpLogViewSetAdvertiser(viewsets.ReadOnlyModelViewSet):
             "active_biddings": Bidding.objects.filter(auction__status=True, user=request.user).count(),
             "males": males,
             "females": females,
-            "countries": countries
+            "countries": countries,
+            "age_distribution": age_distribution,
+            "credits_history": CreditsLog.objects.filter(user=request.user).values("credits", "time")
         })
 
 
@@ -290,3 +331,24 @@ def count_countries(data):
                             countries[value2] = 1
 
     return countries
+
+
+def count_distribution(data):
+    ranges = [
+        "<18",
+        "18-29",
+        "30-49",
+        ">50"
+    ]
+    age_distribution = {}
+    for v in ranges:
+        age_distribution[v] = 0
+
+    for o in data:
+        for i, (key, value) in enumerate(o.items()):
+            if key == "age":
+                for v in ranges:
+                    if solve_age(v, {"age": value}):
+                        age_distribution[v] = age_distribution[v] + 1
+
+    return age_distribution

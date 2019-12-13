@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 
 from ads.models import Contract, Ip, ContractIpLog, ResourceRestriction
+from ads.restriction_solvers import *
 from badds.utils import get_client_country, get_client_ip
 
 
@@ -85,43 +86,3 @@ def get_resource(request):
             return JsonResponse({'resource': res.path})
 
     return JsonResponse({'resource': "https://res.cloudinary.com/geminis/image/upload/v1575435915/placeholder-images-image_large.png"})
-
-
-def solve_age(restriction, params):
-    age = int(params["age"])
-
-    if ">18" == restriction and age < 18:
-        return False
-
-    if "<18" == restriction and age > 18:
-        return False
-
-    if "-" not in restriction:
-        return True
-
-    range_vals = restriction.split("-")
-    return int(range_vals[0]) <= age <= int(range_vals[1])
-
-
-def solve_gender(restriction, params):
-    gender = params["gender"]
-
-    if len(restriction) > 0 and gender[0] != restriction:
-        return False
-    return True
-
-
-def solve_country_whitelist(restriction, params):
-    country = params["country"]
-
-    if len(restriction) > 0 and country not in restriction:
-        return False
-    return True
-
-
-def solve_country_blacklist(restriction, params):
-    country = params["country"]
-
-    if len(restriction) > 0 and country in restriction:
-        return False
-    return True

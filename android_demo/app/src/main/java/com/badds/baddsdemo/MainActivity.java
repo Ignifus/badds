@@ -51,7 +51,7 @@ public class MainActivity extends Activity implements IBaddsListener {
     private String getAge(String age) {
         if (age.contains("<"))
             return "13";
-        if (age.contains("+"))
+        if (age.contains(">"))
             return "51";
 
         String[] a = age.split("-");

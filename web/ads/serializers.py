@@ -76,6 +76,12 @@ class ApplicationSerializer(serializers.ModelSerializer):
         read_only_fields = ('user', 'active')
 
 
+class RestrictedApplicationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Application
+        fields = ('name', 'description', 'domain', 'category', )
+
+
 class SpaceRestrictionSerializer(BulkSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = SpaceRestriction
@@ -92,6 +98,7 @@ class SpaceRestrictionSerializer(BulkSerializerMixin, serializers.ModelSerialize
 
 class SpaceSerializer(serializers.ModelSerializer):
     restrictions = serializers.SerializerMethodField()
+    application = RestrictedApplicationSerializer()
 
     def get_restrictions(self, obj):
         return SpaceRestriction.objects.select_related('restriction').filter(space=obj).values('restriction__restriction', 'value')
@@ -118,11 +125,13 @@ class ContractSerializer(serializers.ModelSerializer):
 
 class AuctionSerializer(serializers.ModelSerializer):
     end_date = serializers.DateTimeField()
+    space = SpaceSerializer()
 
     class Meta:
         model = Auction
         fields = '__all__'
         read_only_fields = ('status',)
+        depth = 1
 
     def __init__(self, *args, **kwargs):
         super(AuctionSerializer, self).__init__(*args, **kwargs)
@@ -130,6 +139,14 @@ class AuctionSerializer(serializers.ModelSerializer):
         if 'request' in self.context:
             user = self.context['request'].user
             self.fields['space'] = PrimaryKeyRelatedField(queryset=Space.objects.filter(application__user=user))
+
+
+class AllAuctionsSerializer(serializers.ModelSerializer):
+    space = SpaceSerializer()
+
+    class Meta:
+        model = Auction
+        fields = '__all__'
 
 
 class BiddingSerializer(serializers.ModelSerializer):
@@ -144,6 +161,15 @@ class BiddingSerializer(serializers.ModelSerializer):
         if 'request' in self.context:
             user = self.context['request'].user
             self.fields['advertisement'] = PrimaryKeyRelatedField(queryset=Advertisement.objects.filter(user=user))
+
+
+class AllBiddingsSerializer(serializers.ModelSerializer):
+    advertisement = AdvertisementSerializer()
+    auction = AuctionSerializer()
+
+    class Meta:
+        model = Bidding
+        fields = '__all__'
 
 
 class IpSerializer(serializers.ModelSerializer):
