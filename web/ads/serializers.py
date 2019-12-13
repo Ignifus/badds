@@ -1,3 +1,5 @@
+import json
+
 from rest_framework import serializers
 from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework_bulk import BulkListSerializer, BulkSerializerMixin
@@ -144,8 +146,15 @@ class BiddingSerializer(serializers.ModelSerializer):
             self.fields['advertisement'] = PrimaryKeyRelatedField(queryset=Advertisement.objects.filter(user=user))
 
 
+class IpSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ip
+        fields = '__all__'
+
+
 class ContractIpLogSerializer(serializers.ModelSerializer):
     contract = ContractSerializer()
+    ip = IpSerializer()
 
     class Meta:
         model = ContractIpLog

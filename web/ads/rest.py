@@ -2,6 +2,7 @@ import os
 from binascii import hexlify
 
 from django.db.models import Q
+from django.http import Http404
 from rest_framework import viewsets
 from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.renderers import JSONRenderer
@@ -217,6 +218,9 @@ class ApplicationCategoryViewSet(viewsets.ReadOnlyModelViewSet):
 class ContractIpLogViewSetPublisher(viewsets.ReadOnlyModelViewSet):
     serializer_class = ContractIpLogSerializer
 
+    def get_serializer_context(self):
+        return {'request': self.request}
+
     def get_queryset(self):
         return ContractIpLog.objects.filter(contract__space__application__user=self.request.user)
 
@@ -224,5 +228,65 @@ class ContractIpLogViewSetPublisher(viewsets.ReadOnlyModelViewSet):
 class ContractIpLogViewSetAdvertiser(viewsets.ReadOnlyModelViewSet):
     serializer_class = ContractIpLogSerializer
 
+    def get_object(self):
+        raise ValidationError
+
     def get_queryset(self):
-        return ContractIpLog.objects.filter(contract__advertisement__user=self.request.user)
+        id_lookup = self.request.query_params.get('contract', "0")
+        return ContractIpLog.objects.filter(contract__advertisement__user=self.request.user, contract__pk=id_lookup)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        males, females = count_gender(serializer.data)
+        countries = count_countries(serializer.data)
+        return Response({
+            "contract_history": serializer.data,
+            "credits": request.user.profile.credits,
+            "total_ads": Advertisement.objects.filter(user=request.user).count(),
+            "active_contracts": Contract.objects.filter(active=True, advertisement__user=request.user).count(),
+            "active_biddings": Bidding.objects.filter(auction__status=True, user=request.user).count(),
+            "males": males,
+            "females": females,
+            "countries": countries
+        })
+
+
+def count_gender(data):
+    males = 0
+    females = 0
+
+    for o in data:
+        for i, (key, value) in enumerate(o.items()):
+            if key == "gender":
+                if value[0] == "M":
+                    males += 1
+                elif value[0] == "F":
+                    females += 1
+
+    return males, females
+
+
+def count_countries(data):
+    countries = {}
+
+    for o in data:
+        for i, (key, value) in enumerate(o.items()):
+            if key == "ip":
+                for i2, (key2, value2) in enumerate(value.items()):
+                    if key2 == "country":
+                        if value2 == "" or value2 is None:
+                            continue
+
+                        if value2 in countries:
+                            countries[value2] = countries[value2] + 1
+                        else:
+                            countries[value2] = 1
+
+    return countries
