@@ -161,6 +161,7 @@ class BiddingSerializer(serializers.ModelSerializer):
         if 'request' in self.context:
             user = self.context['request'].user
             self.fields['advertisement'] = PrimaryKeyRelatedField(queryset=Advertisement.objects.filter(user=user))
+            self.fields['auction'] = PrimaryKeyRelatedField(queryset=Auction.objects.filter(status=True))
 
 
 class AllBiddingsSerializer(serializers.ModelSerializer):

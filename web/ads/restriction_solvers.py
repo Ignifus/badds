@@ -17,6 +17,9 @@ def solve_age(restriction, params):
 def solve_gender(restriction, params):
     gender = params["gender"]
 
+    if gender == "U":
+        return True
+
     if len(restriction) > 0 and gender[0] != restriction:
         return False
     return True

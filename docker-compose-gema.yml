@@ -29,6 +29,32 @@ services:
           - ./web/badds:/usr/src/web/badds
           - ./web/ads:/usr/src/web/ads
 
+    baddsdemo:
+      image: localhost:5000/gema/baddsdemo
+      labels:
+        gema.service: baddsdemo
+        gema.auth: 0
+        gema.port: 8080
+        gema.subdomain: baddsdemo
+      env_file:
+        - ./.env
+      deploy:
+        mode: replicated
+        replicas: 1
+        restart_policy:
+          condition: on-failure
+          delay: 5s
+          max_attempts: 3
+          window: 120s
+        placement:
+          constraints: [node.labels.category == main]
+      networks:
+        - gema
+      volumes:
+        - ./web_demo/templates:/usr/src/web/templates
+        - ./web_demo/landing:/usr/src/web/landing
+        - ./web_demo/baddsdemo:/usr/src/web/badds
+    
     celery:
       image: localhost:5000/gema/badds
       entrypoint: /bin/bash
@@ -85,7 +111,6 @@ services:
         volumes:
           - ./web_panel/build:/usr/src/panel/build
           - ./web_panel/node_modules:/usr/src/panel/node_modules
-          - ./web_panel/package-lock.json:/usr/src/panel/package-lock.json
           - ./web_panel/src:/usr/src/panel/src:rw
           - ./web_panel/public:/usr/src/panel/src/public:rw
 

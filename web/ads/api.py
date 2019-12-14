@@ -9,11 +9,14 @@ def get_resource(request):
     apikey = request.GET.get("apiKey", "")
     space_id = request.GET.get("space", "")
     client_ip = request.GET.get("clientIp", "")
-    age = request.GET.get("age", "")
-    gender = request.GET.get("gender", "")
+    age = request.GET.get("age", "0")
+    gender = request.GET.get("gender", "U")
 
     if client_ip is "":
         client_ip = get_client_ip(request)
+
+    if client_ip is None:
+        client_ip = "10.0.0.0"
 
     ip = Ip.objects.filter(ip=client_ip).first()
     if ip is None or ip.ip not in client_ip:
@@ -54,13 +57,13 @@ def get_resource(request):
         user.profile.credits += contract.ppp_usd
         user.save()
     else:
-        ip_log.age = age
-        ip_log.gender = gender
+        ip_log.age = int(age)
+        ip_log.gender = gender[0]
         ip_log.save()
 
     resources = contract.advertisement.resources.all()
 
-    solve = {
+    validate = {
         "AGE": solve_age,
         "GENDER": solve_gender,
         "COUNTRY_WHITELIST": solve_country_whitelist,
@@ -79,7 +82,7 @@ def get_resource(request):
         filtered = False
 
         for restriction in all_restrictions:
-            if not solve[restriction["restriction__restriction"]](restriction["value"], params):
+            if not validate[restriction["restriction__restriction"]](restriction["value"], params):
                 filtered = True
 
         if not filtered:

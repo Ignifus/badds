@@ -157,17 +157,11 @@ class ResourceViewSet(viewsets.ModelViewSet):
         return Resource.objects.filter(advertisement__user=self.request.user)
 
 
-class ContractViewSet(viewsets.ModelViewSet):
+class ContractViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ContractSerializer
 
-    def perform_update(self, serializer):
-        raise PermissionDenied()
-
-    def perform_destroy(self, instance):
-        raise PermissionDenied()
-
     def get_queryset(self):
-        return Contract.objects.filter(Q(space__application__user=self.request.user), Q(advertisement__user=self.request.user))
+        return Contract.objects.filter(Q(space__application__user=self.request.user) | Q(advertisement__user=self.request.user))
 
 
 class ApplicationCountView(APIView):

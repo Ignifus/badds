@@ -9,7 +9,7 @@ services:
         volumes:
           - db_data:/var/lib/postgresql/data
           
-    web:
+    badds:
         build: web/
         restart: always
         env_file:
@@ -24,6 +24,18 @@ services:
           - ./web/landing:/usr/src/web/landing
           - ./web/badds:/usr/src/web/badds
           - ./web/ads:/usr/src/web/ads
+    
+    baddsdemo:
+      build: web_demo/
+      restart: always
+      env_file:
+        - ./.env
+      ports:
+        - "8081:8080"
+      volumes:
+        - ./web_demo/templates:/usr/src/web/templates
+        - ./web_demo/landing:/usr/src/web/landing
+        - ./web_demo/baddsdemo:/usr/src/web/badds
     
     celery:
       build: web/
@@ -47,7 +59,6 @@ services:
         volumes:
           - ./web_panel/build:/usr/src/panel/build
           - ./web_panel/node_modules:/usr/src/panel/node_modules
-          - ./web_panel/package-lock.json:/usr/src/panel/package-lock.json
           - ./web_panel/src:/usr/src/panel/src:rw
           - ./web_panel/public:/usr/src/panel/src/public:rw
 
