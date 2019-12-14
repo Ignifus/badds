@@ -7,32 +7,31 @@ import {
   Grid,
   TextField,
   Select,
-  MenuItem,
   InputLabel,
   FormControl,
   LinearProgress,
   FormHelperText,
+  MenuItem,
 } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import validate from 'validate.js';
 
 import { withProductLayout } from '../../../layouts/Main';
 import { FailedSnackbar, SuccessSnackbar } from '../../../components';
-import { AppDuck } from '../../../duck';
+import { AdvertisementDuck } from '../../Advertisements';
 import { actions, selectors } from '../duck';
+import { AuctionDuck } from 'views/Auctions';
 
 const styles = theme => ({
   snackbar: { backgroundColor: 'red' }
 });
 
-class ProductFormBase extends React.Component {
+class BiddingFormBase extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
-      domain: '',
-      category: '',
-      description: '',
+      ppp_usd: '',
+      advertisement: '',
       errors: {}
     };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -49,9 +48,9 @@ class ProductFormBase extends React.Component {
     }
 
     if (this.props.match.params.id == null) {
-      this.props.createApp(this.state);
+      this.props.createBidding(this.state);
     } else {
-      this.props.updateApp(this.state.id, this.state)
+      this.props.updateBidding(this.state.id, this.state)
     }
   }
 
@@ -61,20 +60,12 @@ class ProductFormBase extends React.Component {
 
   validate() {
     return validate(this.state, {
-      name: {
-        presence: { allowEmpty: false },
-        length: { minimum: 3 }
-      },
-      domain: {
+      ppp_usd: {
         presence: { allowEmpty: false },
       },
-      category: {
+      advertisement: {
         presence: { allowEmpty: false },
       },
-      description: {
-        presence: { allowEmpty: false },
-        length: { minimum: 30, maximum: 150 }
-      }
     });
   }
 
@@ -83,10 +74,8 @@ class ProductFormBase extends React.Component {
     if (success) {
       setTimeout(() => {
           this.setState({
-          name: '',
-          domain: '',
-          category: '',
-          description: '',
+          ppp_usd: 0,
+          advertisement: '',
           errors: {}
         });
         reset();
@@ -96,18 +85,23 @@ class ProductFormBase extends React.Component {
 
   componentDidMount() {
     if (this.props.match.params.id != null) {
-      this.props.fetchApp(this.props.match.params.id);
+      this.props.fetchBidding(this.props.match.params.id);
     }
+
+    if (this.props.auction == null) {
+      this.props.fetchAuctions();
+    }
+    this.props.fetchAds();
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.app.name !== this.props.app.name) {
-      this.setState({ ...this.props.app });
+    if (prevProps.bidding.id !== this.props.bidding.id) {
+      this.setState({ ...this.props.bidding });
     }
   }
 
   render () {
-    const { isLoading, hasError, success, appCategories } = this.props;
+    const { isLoading, hasError, success, ads, auction } = this.props;
     let progressBar = null;
 
     if (isLoading & !hasError) {
@@ -119,7 +113,7 @@ class ProductFormBase extends React.Component {
     if (success && this.props.match.params.id == null) {
       this.reset();
     }
-
+    // TODO agregar datos de la compra
     return (
       <form onSubmit={this.handleSubmit} noValidate>
         {
@@ -132,12 +126,13 @@ class ProductFormBase extends React.Component {
           {progressBar}
           <Grid item xs={4}>
             <FormControl fullWidth>
-              <TextField label="Name"
-                name="name"
-                placeholder="Nombre de la app"
-                value={this.state.name}
-                error={this.state.errors.name != null}
-                helperText={this.state.errors.name != null ? this.state.errors.name[0] : ''}
+              <TextField label="PPP USD"
+                name="ppp_usd"
+                type="number"
+                placeholder="Pago por Impresion"
+                value={this.state.ppp_usd}
+                error={this.state.errors.ppp_usd != null}
+                helperText={this.state.errors.ppp_usd != null ? this.state.errors.ppp_usd[0] : ''}
                 onChange={this.handleChange}
                 required
               />
@@ -145,51 +140,20 @@ class ProductFormBase extends React.Component {
           </Grid>
           <Grid item xs={4}>
             <FormControl fullWidth>
-              <TextField
-                label="Domain"
-                name="domain"
-                placeholder="myapp.com"
-                value={this.state.domain}
-                error={this.state.errors.domain != null}
-                helperText={this.state.errors.domain != null ? this.state.errors.domain[0] : ''}
-                onChange={this.handleChange}
-                required
-              />
-            </FormControl>
-          </Grid>
-          <Grid item xs={4}>
-            <FormControl fullWidth>
-              <InputLabel id="badds-app-category-select">Categoria</InputLabel>
+              <InputLabel id="badds-app-category-select">Aviso</InputLabel>
               <Select
                 labelId="badds-app-category-select"
-                value={this.state.category}
+                value={this.state.advertisement}
                 onChange={this.handleChange}
-                error={this.state.errors.category != null}
-                name="category"
+                error={this.state.errors.advertisement != null}
+                name="advertisement"
                 required
               >
                 {
-                  appCategories.map(cat => <MenuItem key={cat.id} value={cat.id}>{cat.category}</MenuItem>)
+                  ads.map(ad => <MenuItem key={ad.id} value={ad.id}>{ad.name}</MenuItem>)
                 }
               </Select>
-              <FormHelperText error>{this.state.errors.category != null ? this.state.errors.category[0] : ''}</FormHelperText>
-            </FormControl>
-          </Grid>
-        </Grid>
-        <Grid container>
-          <Grid item xs={4}>
-            <FormControl fullWidth>
-              <TextField
-                label="Descripcion"
-                name="description"
-                placeholder="Escriba descripcion de la aplicacion"
-                value={this.state.description}
-                error={this.state.errors.description != null}
-                helperText={this.state.errors.description != null ? this.state.errors.description[0] : ''}
-                onChange={this.handleChange}
-                InputLabelProps={{ shrink: this.state.description !== '' }}
-                required
-              />
+              <FormHelperText error>{this.state.errors.advertisement != null ? this.state.errors.advertisement[0] : ''}</FormHelperText>
             </FormControl>
           </Grid>
         </Grid>
@@ -206,30 +170,33 @@ class ProductFormBase extends React.Component {
   }
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, props) => ({
   isLoading: selectors.isLoading(state),
   hasError: selectors.hasError(state),
   success: selectors.success(state),
-  app: selectors.getApp(state),
-  appCategories: AppDuck.selectors.getAppCategories(state)
+  bidding: selectors.getBidding(state),
+  ads: AdvertisementDuck.selectors.getList(state),
+  auction: AuctionDuck.selectors.getAuctionById(state, props),
 });
 
 const mapActionsToProps = {
-  createApp: actions.create,
-  updateApp: actions.update,
-  fetchApp: actions.fetch,
-  reset: actions.reset
+  createBidding: actions.create,
+  updateBidding: actions.update,
+  fetchBidding: actions.fetch,
+  reset: actions.reset,
+  fetchAds: AdvertisementDuck.actions.list,
+  fetchAuctions: AuctionDuck.actions.listAll
 };
 
-const ProductForm = compose(
+const BiddingForm = compose(
   withProductLayout({
     title: 'Form',
     withPagination: false,
     Buttons: () => <span />
   }),
+  withRouter,
   connect(mapStateToProps, mapActionsToProps),
   withStyles(styles),
-  withRouter,
-)(ProductFormBase);
+)(BiddingFormBase);
 
-export { ProductForm };
+export { BiddingForm };

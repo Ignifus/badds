@@ -20,6 +20,7 @@ import {
   AuctionsList as AuctionsListView,
   AuctionsForm as AuctionsFormView,
   Market as MarketView,
+  BiddingForm as BiddingFormView,
   UserList as UserListView,
   Typography as TypographyView,
   Icons as IconsView,
@@ -162,7 +163,7 @@ const AdvertiserRoutes = () => (
           path="/ads/advertisers/market"
     />
     <RouteWithLayout
-          component={MarketView}
+          component={BiddingFormView}
           exact
           layout={AdvertiserLayout}
           path="/ads/advertisers/biddings/:auctionId"

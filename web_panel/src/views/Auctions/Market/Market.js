@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { compose } from 'redux';
 import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
@@ -13,6 +14,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid';
 
 import { withProductLayout } from '../../../layouts/Main';
+import { actions, selectors } from '../duck';
 
 const styles = theme => ({
   media: {
@@ -25,30 +27,40 @@ const styles = theme => ({
 });
 
 class MarketBase extends Component {
+  static defaultProps = {
+    auctions: []
+  };
+
+  componentDidMount() {
+    this.props.listAll();
+  }
+
   render() {
-    const { classes } = this.props;
+    const { classes, auctions } = this.props;
 
     return (<Grid container spacing={2}>
     {
-    [1,2,3,4,5,6,7,8,9,10,11,12].map(auction => (
-      <Grid item xs={3}>
+    auctions.map(auction => (
+      <Grid item xs={3} key={auction.id}>
         <Card>
           <CardActionArea>
             <CardHeader
               className={classes.media}
               component={() => (
                 <Avatar variant="square" className={classes.dimensions}>
-                  <Typography variant="h2">200 x 450</Typography>
+                  <Typography variant="h2">
+                    {auction.space.x_size} x {auction.space.y_size}
+                  </Typography>
                 </Avatar>)
               }
               title="Contemplative Reptile"
             />
             <CardContent>
               <Typography gutterBottom variant="h5" component="h2">
-                lizard.com
+                {auction.space.application.domain}
               </Typography>
               <Typography variant="body2" color="textSecondary" component="p">
-                1000 prints at 25USD
+                {auction.prints} prints
               </Typography>
             </CardContent>
           </CardActionArea>
@@ -58,7 +70,7 @@ class MarketBase extends Component {
               color="primary"
               variant="contained"
               component={Link}
-              to={`/ads/advertisers/biddings/${auction}`}
+              to={`/ads/advertisers/biddings/${auction.id}`}
               fullWidth
             >
               Comprar
@@ -71,6 +83,15 @@ class MarketBase extends Component {
   }
 }
 
+const mapStateToProps = (state) => ({
+  auctions: selectors.getList(state)
+});
+
+const mapDispatchToProps = {
+  listAll: actions.listAll
+};
+
+
 const Market = compose(
   withProductLayout({
     title: 'Apps',
@@ -78,6 +99,7 @@ const Market = compose(
     Buttons: () => <span />
   }),
   withStyles(styles),
+  connect(mapStateToProps, mapDispatchToProps)
 )(MarketBase);
 
 export { Market };

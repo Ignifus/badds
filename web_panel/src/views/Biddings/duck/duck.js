@@ -1,17 +1,15 @@
 import axios from 'axios';
 import { fromJS, Map as iMap } from 'immutable';
-import { createSelector } from 'reselect';
 
 import { api } from '../../../helpers';
 
 // config
-export const BASE_URL = '/ads/api/auctions/';
+export const BASE_URL = '/ads/api/biddings/';
 
 // Types
-export const NAMESPACE = 'auctions';
+export const NAMESPACE = 'biddings';
 export const LOADING = `${NAMESPACE}/LOADING`;
 export const FETCH = `${NAMESPACE}/FETCH`;
-export const FETCH_ALL = `${NAMESPACE}/FETCH_ALL`;
 export const CREATE = `${NAMESPACE}/ADD`;
 export const UPDATE = `${NAMESPACE}/UPDATE`;
 export const REMOVE = `${NAMESPACE}/REMOVE`;
@@ -23,14 +21,7 @@ export const RESET = `${NAMESPACE}/RESET`;
 // Reducer
 const initialState = fromJS({
   loading: false,
-  auction: {
-    space: '',
-    end_date: '',
-    prints: '',
-    status: '',
-    contract_duration_days: '',
-    created_at: ''
-  },
+  bidding: { name: '', domain: '', description: '', category: '' },
   list: [],
   error: false
 });
@@ -44,21 +35,18 @@ export function reducer(state = initialState, action) {
     case CREATE:
       return state.set('loading', false)
         .set('success', true)
-        .set('auction', iMap(action.payload));
+        .set('bidding', iMap(action.payload));
     case DETAIL:
-      return state.set('loading', false).set('auction', iMap(action.payload));
+      return state.set('loading', false).set('bidding', iMap(action.payload));
     case FETCH:
       return state.set('loading', false).set('list', fromJS(action.payload));
-    case FETCH_ALL:
-        return state.set('loading', false).set('list', fromJS(action.payload));
     case UPDATE:
       return state.set('loading', false)
         .set('success', true)
-        .set('auction', iMap(action.payload));
+        .set('bidding', iMap(action.payload));
     case REMOVE:
         return state.set('loading', false)
-          .set('success', true)
-          .set('list', state.get('list').filter((auction) => auction.id !== action.payload.id));
+          .set('list', state.get('list').filter((bidding) => bidding.id !== action.payload.id));
     case ERROR:
       return state.set('loading', false)
         .set('error', true);
@@ -74,31 +62,26 @@ export function reducer(state = initialState, action) {
 }
 
 // Action Creators
-const auctionCreated = (auction) => ({
+const biddingCreated = (bidding) => ({
   type: CREATE
 })
 
-const auctionsReceived = (payload) => ({
+const biddingsReceived = (payload) => ({
   type: FETCH,
   payload
 });
 
-const allAuctionsReceived = (payload) => ({
-  type: FETCH_ALL,
-  payload
-});
-
-const auctionReceived = (auction) => ({
+const biddingReceived = (bidding) => ({
   type: DETAIL,
-  payload: auction
+  payload: bidding
 })
 
-const auctionUpdated = (auction) => ({
+const biddingUpdated = (bidding) => ({
   type: UPDATE,
-  payload: auction
+  payload: bidding
 });
 
-const auctionRemoved = (id) => ({
+const biddingRemoved = (id) => ({
   type: REMOVE,
   payload: id
 });
@@ -126,56 +109,48 @@ const list = () => dispatch => {
   dispatch(loading());
 
   return axios.get(BASE_URL)
-    .then(response => dispatch(auctionsReceived(response.data)))
+    .then(response => dispatch(biddingsReceived(response.data)))
 };
 
 const fetch = (id) => dispatch => {
   dispatch(loading());
 
   return axios.get(`${BASE_URL}${id}/`)
-    .then(response => dispatch(auctionReceived(response.data)));
+    .then(response => dispatch(biddingReceived(response.data)));
 }
 
-const create = (auction) => dispatch => {
+const create = (bidding) => dispatch => {
   dispatch(loading());
 
-  return axios.post(BASE_URL, auction, api.getRequestConfig())
-    .then(() => dispatch(auctionCreated(auction)))
+  return axios.post(BASE_URL, bidding, api.getRequestConfig())
+    .then(() => dispatch(biddingCreated(bidding)))
     .catch((e) => dispatch(handleError(e)));
 }
 
-const update = (id, auction) => dispatch => {
+const update = (id, bidding) => dispatch => {
   dispatch(loading());
 
-  return axios.put(`${BASE_URL}${id}/`, auction, api.getRequestConfig())
-    .then(() => dispatch(auctionUpdated(auction)))
+  return axios.put(`${BASE_URL}${id}/`, bidding, api.getRequestConfig())
+    .then(() => dispatch(biddingUpdated(bidding)))
     .catch((e) => dispatch(handleError(e)));
 }
 
 const remove = (id) => dispatch => {
 
   return axios.delete(`${BASE_URL}${id}/`, api.getRequestConfig())
-    .then(() => dispatch(auctionRemoved(id)))
+    .then(() => dispatch(biddingRemoved(id)))
+    .then(() => dispatch(getList()))
     .catch((e) => dispatch(handleError(e)));
-}
-
-const listAll = () => dispatch => {
-  dispatch(loading());
-
-  return axios.get(`/ads/api/all-auctions/`)
-    .then((response) => dispatch(allAuctionsReceived(response.data)))
-    .catch((e) => handleError(e));
 }
 
 export const actions = {
   loading,
   fetch,
   list,
-  listAll,
   create,
   update,
   remove,
-  reset,
+  reset
 };
 
 // Selectors
@@ -184,8 +159,8 @@ const isLoading = state => {
   return state[NAMESPACE].get('loading');
 };
 
-const getAuction = state => {
-  return state[NAMESPACE].get('auction', iMap()).toJS();
+const getBidding = state => {
+  return state[NAMESPACE].get('bidding', iMap()).toJS();
 };
 
 const getList = state => {
@@ -194,15 +169,10 @@ const getList = state => {
 
 const hasError = state => {
   return state[NAMESPACE].get('error');
-};
+}
 
 const success = state => {
   return state[NAMESPACE].get('success');
-};
-
-const getAuctionById = (state, props) => {
-  return state[NAMESPACE].get('list').toJS()
-    .filter(auction => auction.id == props.match.params.auctionId)[0];
 }
 
-export const selectors = { isLoading, getAuction, getList, hasError, success, getAuctionById };
+export const selectors = { isLoading, getBidding, getList, hasError, success };
