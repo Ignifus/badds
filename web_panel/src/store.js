@@ -7,7 +7,8 @@ import {
   SpaceDuck,
   AdvertisementDuck,
   ResourcesDuck,
-  BiddingsDuck
+  BiddingsDuck,
+  AnalyticsDuck
 } from './views';
 
 const rootReducer = combineReducers({
@@ -17,7 +18,8 @@ const rootReducer = combineReducers({
   [AdvertisementDuck.NAMESPACE]: AdvertisementDuck.reducer,
   [ResourcesDuck.NAMESPACE]: ResourcesDuck.reducer,
   [AuctionDuck.NAMESPACE]: AuctionDuck.reducer,
-  [BiddingsDuck.NAMESPACE]: BiddingsDuck.reducer
+  [BiddingsDuck.NAMESPACE]: BiddingsDuck.reducer,
+  [AnalyticsDuck.NAMESPACE]: AnalyticsDuck.reducer,
 });
 
 export const store = createStore(rootReducer, applyMiddleware(thunk));

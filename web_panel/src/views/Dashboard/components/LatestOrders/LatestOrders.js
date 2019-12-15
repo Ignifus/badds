@@ -4,6 +4,7 @@ import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
+import { Link } from 'react-router-dom';
 import {
   Card,
   CardActions,
@@ -68,11 +69,13 @@ const LatestOrders = props => {
             color="primary"
             size="small"
             variant="outlined"
+            component={Link}
+            to="/ads/advertisers/market"
           >
-            New entry
+            Market Place
           </Button>
         }
-        title="Latest Orders"
+        title={props.title}
       />
       <Divider />
       <CardContent className={classes.content}>
@@ -81,8 +84,8 @@ const LatestOrders = props => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Order Ref</TableCell>
-                  <TableCell>Customer</TableCell>
+                  <TableCell>Contract</TableCell>
+                  <TableCell>Prints</TableCell>
                   <TableCell sortDirection="desc">
                     <Tooltip
                       enterDelay={300}
@@ -92,32 +95,34 @@ const LatestOrders = props => {
                         active
                         direction="desc"
                       >
-                        Date
+                        Finalizacion
                       </TableSortLabel>
                     </Tooltip>
                   </TableCell>
+                  <TableCell>PPP USD</TableCell>
                   <TableCell>Status</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {orders.map(order => (
+                {props.history.map(order => (
                   <TableRow
                     hover
                     key={order.id}
                   >
-                    <TableCell>{order.ref}</TableCell>
-                    <TableCell>{order.customer.name}</TableCell>
+                    <TableCell>{order.contract.id}</TableCell>
+                    <TableCell>{order.contract.prints}</TableCell>
                     <TableCell>
-                      {moment(order.createdAt).format('DD/MM/YYYY')}
+                      {moment(order.contract.end_date).format('DD/MM/YYYY')}
                     </TableCell>
+                    <TableCell>{order.contract.ppp_usd}</TableCell>
                     <TableCell>
                       <div className={classes.statusContainer}>
                         <StatusBullet
                           className={classes.status}
-                          color={statusColors[order.status]}
+                          color={statusColors[order.contract.active]}
                           size="sm"
                         />
-                        {order.status}
+                        {order.contract.active ? "Activo" : "Finalizado"}
                       </div>
                     </TableCell>
                   </TableRow>
@@ -133,8 +138,10 @@ const LatestOrders = props => {
           color="primary"
           size="small"
           variant="text"
+          component={Link}
+          to="/ads/advertisers/contracts"
         >
-          View all <ArrowRightIcon />
+          Ver Todos <ArrowRightIcon />
         </Button>
       </CardActions>
     </Card>

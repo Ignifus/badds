@@ -13,7 +13,6 @@ import {
 } from '@material-ui/core';
 import LaptopMacIcon from '@material-ui/icons/LaptopMac';
 import PhoneIphoneIcon from '@material-ui/icons/PhoneIphone';
-import RefreshIcon from '@material-ui/icons/Refresh';
 import TabletMacIcon from '@material-ui/icons/TabletMac';
 
 const useStyles = makeStyles(theme => ({
@@ -47,7 +46,7 @@ const UsersByDevice = props => {
   const data = {
     datasets: [
       {
-        data: [63, 15, 22],
+        data: props.data.data,
         backgroundColor: [
           theme.palette.primary.main,
           theme.palette.error.main,
@@ -58,7 +57,7 @@ const UsersByDevice = props => {
         hoverBorderColor: theme.palette.white
       }
     ],
-    labels: ['Desktop', 'Tablet', 'Mobile']
+    labels: props.data.labels
   };
 
   const options = {
@@ -83,26 +82,7 @@ const UsersByDevice = props => {
     }
   };
 
-  const devices = [
-    {
-      title: 'Desktop',
-      value: '63',
-      icon: <LaptopMacIcon />,
-      color: theme.palette.primary.main
-    },
-    {
-      title: 'Tablet',
-      value: '15',
-      icon: <TabletMacIcon />,
-      color: theme.palette.error.main
-    },
-    {
-      title: 'Mobile',
-      value: '23',
-      icon: <PhoneIphoneIcon />,
-      color: theme.palette.warning.main
-    }
-  ];
+
 
   return (
     <Card
@@ -110,12 +90,7 @@ const UsersByDevice = props => {
       className={clsx(classes.root, className)}
     >
       <CardHeader
-        action={
-          <IconButton size="small">
-            <RefreshIcon />
-          </IconButton>
-        }
-        title="Users By Device"
+        title={props.title}
       />
       <Divider />
       <CardContent>
@@ -126,7 +101,7 @@ const UsersByDevice = props => {
           />
         </div>
         <div className={classes.stats}>
-          {devices.map(device => (
+          {props.data.percentages.map(device => (
             <div
               className={classes.device}
               key={device.title}

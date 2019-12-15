@@ -68,7 +68,7 @@ const fetchAdvertiser = () => dispatch => {
 const fetchPublisher = () => dispatch => {
   dispatch(loading());
 
-  return axios.get('/ads/api/analytics-advertiser/')
+  return axios.get('/ads/api/analytics-publisher/')
     .then(response => dispatch(publishersAnalyticsReceived(response.data)))
 };
 

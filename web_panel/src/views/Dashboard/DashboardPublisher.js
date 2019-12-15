@@ -25,8 +25,8 @@ const DashboardBase = (props) => {
   const classes = useStyles();
 
   useEffect(() => {
-    props.fetchAdvertiser();
-  }, [props]);
+    props.fetchPublisher();
+  }, [props.fetchPublisher]);
 
   return (
     <div className={classes.root}>
@@ -115,9 +115,9 @@ const mapStateToProps = state => ({
   analytics: selectors.getPublishersAnalytics(state)
 });
 
-const mapDispatchToProps = state => ({
-  getAnalytics: actions.fetchPublisher
-})
+const mapDispatchToProps = {
+  fetchPublisher: actions.fetchPublisher
+};
 
 const DashboardPublisher = connect(mapStateToProps, mapDispatchToProps)(DashboardBase);
 
