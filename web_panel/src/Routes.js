@@ -21,7 +21,9 @@ import {
   AuctionsList as AuctionsListView,
   AuctionsForm as AuctionsFormView,
   Market as MarketView,
+  BiddingsList as BiddingsListView,
   BiddingForm as BiddingFormView,
+  ContractsList as ContractsListView,
   UserList as UserListView,
   Typography as TypographyView,
   Icons as IconsView,
@@ -169,6 +171,18 @@ const AdvertiserRoutes = () => (
           layout={AdvertiserLayout}
           path="/ads/advertisers/biddings/:auctionId"
     />
+    <RouteWithLayout
+          component={BiddingsListView}
+          exact
+          layout={AdvertiserLayout}
+          path="/ads/advertisers/biddings"
+    />
+    <RouteWithLayout
+          component={ContractsListView}
+          exact
+          layout={AdvertiserLayout}
+          path="/ads/advertisers/contracts"
+    />
   </React.Fragment>
 );
 
@@ -246,6 +260,12 @@ const PublishersRoutes = () => (
       exact
       layout={PublisherLayout}
       path="/ads/publishers/spaces/:spaceId/auctions/update/:id"
+    />
+    <RouteWithLayout
+      component={ContractsListView}
+      exact
+      layout={AdvertiserLayout}
+      path="/ads/publishers/contracts"
     />
   </React.Fragment>
 );

@@ -1,9 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
-import { Avatar, Typography } from '@material-ui/core';
+import { Avatar, Typography, CircularProgress } from '@material-ui/core';
+import { AppDuck } from 'duck';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -26,23 +28,28 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Profile = props => {
+const ProfileBase = props => {
   const { className, ...rest } = props;
 
   const classes = useStyles();
 
-  const user = {
-    name: 'Patricio Napoli',
-    avatar: null,
-    bio: 'Brain Director'
-  };
+  const user = props.profile[0];
+
+  if (user == null) return (
+    <div
+      {...rest}
+      className={clsx(classes.root, className)}
+    >
+      <CircularProgress style={{width: '100px', height: '100px'}} />
+    </div>
+  );
 
   let avatar = (<Avatar
       alt="Person"
       className={classes.orangeAvatar}
       component={RouterLink}
       to="/settings"
-    >{user.name.split(" ").map(name => name[0]).join("")}</Avatar>);
+    >{user.first_name[0]} {user.last_name[0]}</Avatar>);
 
   if (user.avatar != null) {
     avatar = (<Avatar
@@ -64,15 +71,21 @@ const Profile = props => {
         className={classes.name}
         variant="h4"
       >
-        {user.name}
+        {user.first_name} {user.last_name}
       </Typography>
-      <Typography variant="body2">{user.bio}</Typography>
+      <Typography variant="body2">{user.email}</Typography>
     </div>
   );
 };
 
-Profile.propTypes = {
+ProfileBase.propTypes = {
   className: PropTypes.string
 };
+
+const mapStateToProps = state => ({
+  profile: AppDuck.selectors.getUsers(state)
+});
+
+const Profile = connect(mapStateToProps)(ProfileBase);
 
 export default Profile;

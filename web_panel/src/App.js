@@ -30,6 +30,7 @@ export class AppBase extends Component {
   componentDidMount() {
     this.props.fetchRestrictions();
     this.props.fetchAppCategories();
+    this.props.fetchUsers();
   }
 
   render() {
@@ -45,7 +46,8 @@ export class AppBase extends Component {
 
 const mapDispatchToProps = {
   fetchRestrictions: AppDuck.actions.fetchRestrictions,
-  fetchAppCategories: AppDuck.actions.fetchAppCategories
+  fetchAppCategories: AppDuck.actions.fetchAppCategories,
+  fetchUsers: AppDuck.actions.fetchUsers
 }
 
 const App = connect(null, mapDispatchToProps)(AppBase);

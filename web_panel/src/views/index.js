@@ -4,6 +4,7 @@ export * from './Advertisements';
 export * from './Auctions';
 export * from './Biddings';
 export * from './Dashboard';
+export * from './Contracts';
 export { default as Account } from './Account';
 export { default as Icons } from './Icons';
 export { default as NotFound } from './NotFound';

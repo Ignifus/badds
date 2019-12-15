@@ -5,6 +5,7 @@ import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
 import TextFieldsIcon from '@material-ui/icons/TextFields';
 import ImageIcon from '@material-ui/icons/Image';
+import Timer10Icon from '@material-ui/icons/Timer10';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import SettingsIcon from '@material-ui/icons/Settings';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
@@ -28,8 +29,13 @@ const pages = [
     icon: <ShoppingBasketIcon />
   },
   {
+    title: 'Biddings',
+    href: '/ads/advertisers/biddings',
+    icon: <Timer10Icon />
+  },
+  {
     title: 'contracts',
-    href: '/adds/contracts',
+    href: '/ads/advertisers/contracts',
     icon: <BusinessCenterIcon />
   },
   // {

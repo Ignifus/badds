@@ -12,7 +12,7 @@ import { ToolbarActions } from '../ToolbarActions';
 import { withProductLayout } from '../../../layouts/Main';
 import moment from 'moment';
 
-class BiddingsListBase extends PureComponent {
+class ContractsListBase extends PureComponent {
   componentDidMount() {
     const { list } = this.props;
     this.onActionSelected = this.onActionSelected.bind(this);
@@ -40,7 +40,7 @@ class BiddingsListBase extends PureComponent {
   }
 
   render() {
-    const {isLoading, biddings, hasError, success} = this.props;
+    const {isLoading, contracts, hasError, success} = this.props;
 
     if (isLoading & !hasError) {
       return (<Grid item xs={12}>
@@ -60,23 +60,29 @@ class BiddingsListBase extends PureComponent {
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
+              <TableCell>Prints</TableCell>
               <TableCell>PPP USD</TableCell>
               <TableCell>Creacion</TableCell>
-              <TableCell>Subasta</TableCell>
+              <TableCell>Finalizacion</TableCell>
+              <TableCell>Espacio</TableCell>
               <TableCell>Aviso</TableCell>
+              <TableCell>Status</TableCell>
               <TableCell>Acciones</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {biddings.map(bidding => (
-              <TableRow key={bidding.id}>
-                <TableCell>{bidding.id}</TableCell>
-                <TableCell>{bidding.ppp_usd}</TableCell>
-                <TableCell>{moment(bidding.created_at).format('DD/MM/YYYY')}</TableCell>
-                <TableCell>{bidding.auction}</TableCell>
-                <TableCell>{bidding.advertisement}</TableCell>
+            {contracts.map(contract => (
+              <TableRow key={contract.id}>
+                <TableCell>{contract.id}</TableCell>
+                <TableCell>{contract.prints}</TableCell>
+                <TableCell>{contract.ppp_usd}</TableCell>
+                <TableCell>{moment(contract.created_at).format('DD/MM/YYYY')}</TableCell>
+                <TableCell>{moment(contract.end_date).format('DD/MM/YYYY')}</TableCell>
+                <TableCell>{contract.space}</TableCell>
+                <TableCell>{contract.advertisement}</TableCell>
+                <TableCell>{contract.active ? "Activo": "Finalizado"}</TableCell>
                 <TableCell>
-                  <ActionMenu onActionSelected={ (action) => this.onActionSelected(action, bidding.id) } />
+                  <ActionMenu onActionSelected={ (action) => this.onActionSelected(action, contract.id) } />
                 </TableCell>
               </TableRow>
             ))}
@@ -87,16 +93,16 @@ class BiddingsListBase extends PureComponent {
   }
 };
 
-BiddingsListBase.propTypes = {
+ContractsListBase.propTypes = {
   isLoading: PropTypes.bool,
-  biddings: PropTypes.array,
+  contracts: PropTypes.array,
   list: PropTypes.func.isRequired,
   remove: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
   isLoading: selectors.isLoading(state),
-  biddings: selectors.getList(state),
+  contracts: selectors.getList(state),
   hasError: selectors.hasError(state),
   success: selectors.success(state)
 });
@@ -106,7 +112,7 @@ const mapDispatchToProps = {
   remove: actions.remove,
 }
 
-const BiddingsList = compose(
+const ContractsList = compose(
   withProductLayout({
     title: 'Apps',
     withPagination: true,
@@ -114,6 +120,6 @@ const BiddingsList = compose(
   }),
   withRouter,
   connect(mapStateToProps, mapDispatchToProps),
-)(BiddingsListBase);
+)(ContractsListBase);
 
-export {BiddingsList};
+export {ContractsList};
