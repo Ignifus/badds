@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/styles';
 import { Grid } from '@material-ui/core';
+import { actions, selectors } from './duck';
 
 import {
   Budget,
@@ -19,8 +21,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Dashboard = () => {
+const DashboardBase = (props) => {
   const classes = useStyles();
+
+  useEffect(() => {
+    props.fetchAdvertiser();
+  }, [props]);
 
   return (
     <div className={classes.root}>
@@ -105,4 +111,14 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+const mapStateToProps = state => ({
+  analytics: selectors.getPublishersAnalytics(state)
+});
+
+const mapDispatchToProps = state => ({
+  getAnalytics: actions.fetchPublisher
+})
+
+const DashboardPublisher = connect(mapStateToProps, mapDispatchToProps)(DashboardBase);
+
+export { DashboardPublisher };

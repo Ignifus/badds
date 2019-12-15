@@ -6,7 +6,8 @@ import { AdvertiserLayout, PublisherLayout, Minimal as MinimalLayout } from './l
 
 import {
   Area as SelectArea,
-  Dashboard as DashboardView,
+  DashboardAdvertiser as DashboardAdvertiserView,
+  DashboardPublisher as DashboardPublisherView,
   ProductList as ProductListView,
   ProductForm as ProductFormView,
   SpaceList as SpaceListView,
@@ -115,7 +116,7 @@ const Routes = () => {
 const AdvertiserRoutes = () => (
   <React.Fragment>
     <RouteWithLayout
-          component={DashboardView}
+          component={DashboardAdvertiserView}
           exact
           layout={AdvertiserLayout}
           path="/ads/advertisers"
@@ -175,7 +176,7 @@ const AdvertiserRoutes = () => (
 const PublishersRoutes = () => (
   <React.Fragment>
     <RouteWithLayout
-      component={DashboardView}
+      component={DashboardPublisherView}
       exact
       layout={PublisherLayout}
       path="/ads/publishers"
