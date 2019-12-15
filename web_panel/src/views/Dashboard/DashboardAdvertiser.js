@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { makeStyles, useTheme } from '@material-ui/styles';
 import { Grid, LinearProgress } from '@material-ui/core';
 import { actions, selectors } from './duck';
+import WcIcon from '@material-ui/icons/Wc';
 
 import {
   Budget,
@@ -12,7 +13,6 @@ import {
   UsersByDevice,
   LatestOrders,
 } from './components';
-import WcIcon from '@material-ui/icons/Wc';
 
 const useStyles = makeStyles(theme => ({
   root: {
