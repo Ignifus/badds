@@ -86,7 +86,7 @@ class BiddingViewSet(viewsets.ModelViewSet):
 
 
 class AllBiddingsViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Bidding.objects.all()
+    queryset = Bidding.objects.filter(auction__status=True)
     serializer_class = AllBiddingsSerializer
 
 
@@ -117,7 +117,7 @@ class AuctionViewSet(viewsets.ModelViewSet):
 
 
 class AllAuctionsViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Auction.objects.all()
+    queryset = Auction.objects.filter(status=True)
     serializer_class = AllAuctionsSerializer
 
 
