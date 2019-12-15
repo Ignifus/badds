@@ -37,7 +37,6 @@ const ProfileBase = props => {
 
   if (user == null) return (
     <div
-      {...rest}
       className={clsx(classes.root, className)}
     >
       <CircularProgress style={{width: '100px', height: '100px'}} />
@@ -63,7 +62,6 @@ const ProfileBase = props => {
 
   return (
     <div
-      {...rest}
       className={clsx(classes.root, className)}
     >
       {avatar}

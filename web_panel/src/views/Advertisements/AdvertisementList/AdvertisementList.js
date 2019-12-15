@@ -112,7 +112,7 @@ const mapDispatchToProps = {
 
 const AdvertisementList = compose(
   withProductLayout({
-    title: 'Apps',
+    title: 'Avisos',
     withPagination: true,
     Buttons: ToolbarActions
   }),

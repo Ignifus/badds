@@ -173,7 +173,7 @@ class AuctionsFormBase extends React.Component {
                 <KeyboardDatePicker
                   margin="normal"
                   id="date-picker-dialog"
-                  label="Date picker dialog"
+                  label="Fecha de finalizacion"
                   format="DD/MM/YYYY"
                   value={this.state.end_date}
                   onChange={this.handleDateChange}
@@ -192,6 +192,7 @@ class AuctionsFormBase extends React.Component {
             <Button
               type="submit"
               color="primary"
+              variant="contained"
               style={{marginTop: '30px'}}>Submit</Button>
           </Grid>
         </Grid>
@@ -218,9 +219,9 @@ const mapActionsToProps = {
 
 const AuctionsForm = compose(
   withProductLayout({
-    title: 'Form',
+    title: 'Subastas',
     withPagination: false,
-    Buttons: () => <span />
+    Buttons: null
   }),
   connect(mapStateToProps, mapActionsToProps),
   withStyles(styles),

@@ -9,11 +9,13 @@ import {
   Typography,
   Grid,
   Divider,
-  CardHeader
+  CardHeader,
+  Avatar
 } from '@material-ui/core';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import {ActionMenu} from './ActionMenu';
+import moment from 'moment';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -43,6 +45,13 @@ const useStyles = makeStyles(theme => ({
   statsIcon: {
     color: theme.palette.icon,
     marginRight: theme.spacing(1)
+  },
+  avatar: {
+    width: '100%',
+    height: '80px',
+    color: 'yellow',
+    fontWeight: 'bold',
+    backgroundColor: '#222'
   }
 }));
 
@@ -65,13 +74,9 @@ const ProductCard = props => {
         title={product.domain}
       />
       <CardContent>
-        <div className={classes.imageContainer}>
-          <img
-            alt="Product"
-            className={classes.image}
-            src={product.imageUrl}
-          />
-        </div>
+        <Avatar variant="square" className={classes.avatar}>
+          {product.name}
+        </Avatar>
         <Typography
           align="center"
           gutterBottom
@@ -102,7 +107,7 @@ const ProductCard = props => {
               display="inline"
               variant="body2"
             >
-              Updated { product.created_at } ago
+              Creado hace { moment().diff(product.created_at, 'days') } dias
             </Typography>
           </Grid>
           <Grid
@@ -110,12 +115,6 @@ const ProductCard = props => {
             item
           >
             <GetAppIcon className={classes.statsIcon} />
-            <Typography
-              display="inline"
-              variant="body2"
-            >
-              {product.totalVisits} Visits
-            </Typography>
           </Grid>
         </Grid>
       </CardActions>

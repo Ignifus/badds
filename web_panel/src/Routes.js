@@ -160,6 +160,12 @@ const AdvertiserRoutes = () => (
           path="/ads/advertisers/ads/:id/resources/add"
     />
     <RouteWithLayout
+          component={ResourceFormView}
+          exact
+          layout={AdvertiserLayout}
+          path="/ads/advertisers/resource/:id/update"
+    />
+    <RouteWithLayout
           component={MarketView}
           exact
           layout={AdvertiserLayout}
@@ -264,7 +270,7 @@ const PublishersRoutes = () => (
     <RouteWithLayout
       component={ContractsListView}
       exact
-      layout={AdvertiserLayout}
+      layout={PublisherLayout}
       path="/ads/publishers/contracts"
     />
   </React.Fragment>

@@ -175,7 +175,7 @@ const mapActionsToProps = {
 
 const AdvertisementForm = compose(
   withProductLayout({
-    title: 'Form',
+    title: 'Avisos',
     withPagination: false,
     Buttons: () => <span />
   }),

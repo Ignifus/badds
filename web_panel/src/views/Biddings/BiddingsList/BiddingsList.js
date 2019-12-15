@@ -108,9 +108,9 @@ const mapDispatchToProps = {
 
 const BiddingsList = compose(
   withProductLayout({
-    title: 'Apps',
+    title: 'Mis Subastas',
     withPagination: true,
-    Buttons: ToolbarActions
+    Buttons: null
   }),
   withRouter,
   connect(mapStateToProps, mapDispatchToProps),

@@ -3,7 +3,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Grid, LinearProgress, Table, TableHead, TableBody, TableRow, TableCell } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 
 import { ActionMenu } from './components'
 import { actions, selectors } from '../duck/resources';
@@ -65,7 +65,7 @@ class ResourceListBase extends PureComponent {
             {resources.map(resource => (
               <TableRow key={resource.id}>
                 <TableCell>{resource.name}</TableCell>
-                <TableCell>{resource.path}</TableCell>
+                <TableCell><a href={resource.path} target="__blank">Ver Recurso</a></TableCell>
                 <TableCell>{resource.url_link}</TableCell>
                 <TableCell>
                   <ActionMenu onActionSelected={ (action) => this.onActionSelected(action, resource.id) } />

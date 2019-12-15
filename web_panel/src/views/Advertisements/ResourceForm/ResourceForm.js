@@ -153,12 +153,11 @@ class ResourceFormBase extends React.Component {
             </FormControl>
           </Grid>
         </Grid>
-        <Grid container>
+        <Grid container style={{marginTop: '15px'}}>
           <Grid item xs={4}>
             <FormControl fullWidth>
               <Button
                 color="secondary"
-                variant="contained"
                 component="label"
               >
                 Cargar Imagen
@@ -177,6 +176,7 @@ class ResourceFormBase extends React.Component {
             <Button
               type="submit"
               color="primary"
+              variant="contained"
               style={{marginTop: '30px'}}>Submit</Button>
           </Grid>
         </Grid>
@@ -201,9 +201,9 @@ const mapActionsToProps = {
 
 const ResourceForm = compose(
   withProductLayout({
-    title: 'Form',
+    title: 'Recursos (imagenes)',
     withPagination: false,
-    Buttons: () => <span />
+    Buttons: null
   }),
   connect(mapStateToProps, mapActionsToProps),
   withStyles(styles),

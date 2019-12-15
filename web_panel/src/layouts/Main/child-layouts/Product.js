@@ -41,7 +41,7 @@ class ProductLayoutBase extends React.Component {
 
     return (
       <div className={classes.root}>
-        <ProductsToolbar showSearch={false} Buttons={Buttons} />
+        { Buttons && <ProductsToolbar showSearch={false} Buttons={Buttons} /> }
         <div className={classes.content}>
           <Grid
             container
@@ -66,7 +66,7 @@ ProductLayoutBase.propTypes = {
   MainArea: PropTypes.elementType.isRequired,
   withPagination: PropTypes.bool,
   title: PropTypes.string,
-  Buttons: PropTypes.elementType.isRequired
+  Buttons: PropTypes.elementType
 }
 
 const ProductLayout = withStyles(styles)(ProductLayoutBase)

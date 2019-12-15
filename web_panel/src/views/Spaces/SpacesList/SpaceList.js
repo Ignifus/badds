@@ -105,7 +105,7 @@ const mapDispatchToProps = {
 
 const SpaceList = compose(
   withProductLayout({
-    title: 'Apps',
+    title: 'Espacios',
     withPagination: true,
     Buttons: ToolbarActions
   }),

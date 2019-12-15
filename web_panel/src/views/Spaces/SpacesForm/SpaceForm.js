@@ -183,7 +183,7 @@ class SpaceFormBase extends React.Component {
         <Grid container>
           <Grid item xs={4}>
             <FormControl fullWidth>
-              <InputLabel id="badds-app-application-select">Categoria</InputLabel>
+              <InputLabel id="badds-app-application-select">Applicacion</InputLabel>
               <Select
                 labelId="badds-app-application-select"
                 value={this.state.application}
@@ -203,6 +203,7 @@ class SpaceFormBase extends React.Component {
             <Button
               type="submit"
               color="primary"
+              variant="contained"
               style={{marginTop: '30px'}}>Submit</Button>
           </Grid>
         </Grid>

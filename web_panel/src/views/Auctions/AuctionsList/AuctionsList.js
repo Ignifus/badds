@@ -103,7 +103,7 @@ const mapDispatchToProps = {
 
 const AuctionsList = compose(
   withProductLayout({
-    title: 'Apps',
+    title: 'Mis Subastas',
     withPagination: true,
     Buttons: ToolbarActions
   }),

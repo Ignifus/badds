@@ -114,9 +114,9 @@ const mapDispatchToProps = {
 
 const ContractsList = compose(
   withProductLayout({
-    title: 'Apps',
+    title: 'Mis Contratos',
     withPagination: true,
-    Buttons: ToolbarActions
+    Buttons: null
   }),
   withRouter,
   connect(mapStateToProps, mapDispatchToProps),

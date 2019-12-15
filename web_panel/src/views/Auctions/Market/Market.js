@@ -73,7 +73,7 @@ class MarketBase extends Component {
               to={`/ads/advertisers/biddings/${auction.id}`}
               fullWidth
             >
-              Comprar
+              Ofertar
             </Button>
           </CardActions>
         </Card>
@@ -94,9 +94,9 @@ const mapDispatchToProps = {
 
 const Market = compose(
   withProductLayout({
-    title: 'Apps',
+    title: 'Espacios en Oferta',
     withPagination: true,
-    Buttons: () => <span />
+    Buttons: null
   }),
   withStyles(styles),
   connect(mapStateToProps, mapDispatchToProps)

@@ -143,7 +143,7 @@ class BiddingFormBase extends React.Component {
         <Grid item xs={12}>
           <form onSubmit={this.handleSubmit} noValidate>
             {
-              hasError && <FailedSnackbar message="Tuvimos un problema al procesar su peticion" />
+              hasError && <FailedSnackbar message={hasError} />
             }
             {
               success && <SuccessSnackbar message="Operacion concluida con exito" />
@@ -190,7 +190,7 @@ class BiddingFormBase extends React.Component {
                   type="submit"
                   color="primary"
                   variant="contained"
-                  style={{marginTop: '30px'}}>Confirmar Compra</Button>
+                  style={{marginTop: '30px'}}>Confirmar Oferta</Button>
               </Grid>
             </Grid>
           </form>
@@ -268,9 +268,9 @@ const mapActionsToProps = {
 
 const BiddingForm = compose(
   withProductLayout({
-    title: 'Form',
+    title: 'Ofertar Aviso',
     withPagination: false,
-    Buttons: () => <span />
+    Buttons: null
   }),
   withRouter,
   connect(mapStateToProps, mapActionsToProps),

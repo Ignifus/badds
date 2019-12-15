@@ -49,7 +49,7 @@ export function reducer(state = initialState, action) {
           .set('list', state.get('list').filter((bidding) => bidding.id !== action.payload.id));
     case ERROR:
       return state.set('loading', false)
-        .set('error', true);
+        .set('error', action.payload);
     case CLEAR_ERROR:
       return state.set('error', false);
     case RESET:
@@ -100,7 +100,7 @@ const reset = () => ({
 const handleError = (e) => dispatch => {
   dispatch({
     type: ERROR,
-    payload: 'something happened'
+    payload: e.response.data[0]
   });
   setTimeout(() => dispatch(clearError()), 5000); // TODO fix, resetear on loading
 }
