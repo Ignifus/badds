@@ -3,13 +3,13 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Grid, LinearProgress, Table, TableHead, TableBody, TableRow, TableCell } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
 import { ActionMenu } from './components'
 import { actions, selectors } from '../duck';
 import { FailedSnackbar, SuccessSnackbar } from '../../../components';
-import { ToolbarActions } from '../ToolbarActions';
 import { withProductLayout } from '../../../layouts/Main';
+import { getAuctionURL, getAdvertisementURL } from '../../../helpers';
 import moment from 'moment';
 
 class BiddingsListBase extends PureComponent {
@@ -73,8 +73,8 @@ class BiddingsListBase extends PureComponent {
                 <TableCell>{bidding.id}</TableCell>
                 <TableCell>{bidding.ppp_usd}</TableCell>
                 <TableCell>{moment(bidding.created_at).format('DD/MM/YYYY')}</TableCell>
-                <TableCell>{bidding.auction}</TableCell>
-                <TableCell>{bidding.advertisement}</TableCell>
+                <TableCell><Link to={getAuctionURL(this.props.location.pathname, bidding.auction)}>Expandir</Link></TableCell>
+                <TableCell><Link to={getAdvertisementURL(this.props.location.pathname, bidding.advertisement)}>Expandir</Link></TableCell>
                 <TableCell>
                   <ActionMenu onActionSelected={ (action) => this.onActionSelected(action, bidding.id) } />
                 </TableCell>

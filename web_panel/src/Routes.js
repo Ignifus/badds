@@ -10,16 +10,20 @@ import {
   DashboardPublisher as DashboardPublisherView,
   ProductList as ProductListView,
   ProductForm as ProductFormView,
+  ProductDetail as ProductDetailView,
   SpaceList as SpaceListView,
   SpaceForm as SpaceFormView,
   SpacesRestrictions as SpacesRestrictionsView,
+  SpaceDetail as SpaceDetailView,
   AdvertisementForm as AdvertisementFormView,
   AdvertisementList as AdvertisementListView,
+  AdvertisementDetail as AdvertisementDetailView,
   ResourceList as ResourceListView,
   ResourceForm as ResourceFormView,
   ResourceRestrictions as ResourceRestrictionsView,
   AuctionsList as AuctionsListView,
   AuctionsForm as AuctionsFormView,
+  AuctionDetail as AuctionDetailView,
   Market as MarketView,
   BiddingsList as BiddingsListView,
   BiddingForm as BiddingFormView,
@@ -189,6 +193,24 @@ const AdvertiserRoutes = () => (
           layout={AdvertiserLayout}
           path="/ads/advertisers/contracts"
     />
+    <RouteWithLayout
+          component={SpaceDetailView}
+          exact
+          layout={AdvertiserLayout}
+          path="/ads/advertisers/spaces/:id"
+    />
+    <RouteWithLayout
+          component={AdvertisementDetailView}
+          exact
+          layout={AdvertiserLayout}
+          path="/ads/advertisers/advertisements/:id"
+    />
+    <RouteWithLayout
+          component={AuctionDetailView}
+          exact
+          layout={AdvertiserLayout}
+          path="/ads/advertisers/auctions/:id"
+    />
   </React.Fragment>
 );
 
@@ -206,6 +228,12 @@ const PublishersRoutes = () => (
       exact
       layout={PublisherLayout}
       path="/ads/publishers/products"
+    />
+    <RouteWithLayout
+      component={ProductDetailView}
+      exact
+      layout={PublisherLayout}
+      path="/ads/publishers/products/:id"
     />
     <RouteWithLayout
       component={ProductFormView}
@@ -272,6 +300,18 @@ const PublishersRoutes = () => (
       exact
       layout={PublisherLayout}
       path="/ads/publishers/contracts"
+    />
+    <RouteWithLayout
+          component={SpaceDetailView}
+          exact
+          layout={PublisherLayout}
+          path="/ads/publishers/spaces/:id"
+    />
+    <RouteWithLayout
+          component={AdvertisementDetailView}
+          exact
+          layout={PublisherLayout}
+          path="/ads/publishers/advertisements/:id"
     />
   </React.Fragment>
 );

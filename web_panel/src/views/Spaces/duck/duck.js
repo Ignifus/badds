@@ -22,7 +22,7 @@ export const RESTRICTION_ADDED = `${NAMESPACE}/RESTRICTION_ADDED`;
 // Reducer
 const initialState = fromJS({
   loading: false,
-  space: { name: '', x: '', y: '', application: '' },
+  space: { name: '', x_size: '', y_size: '', application: '', restrictions: [] },
   list: [],
   error: false
 });

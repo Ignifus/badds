@@ -3,13 +3,14 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Grid, LinearProgress, Table, TableHead, TableBody, TableRow, TableCell } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
 import { ActionMenu } from './components'
 import { actions, selectors } from '../duck';
 import { FailedSnackbar, SuccessSnackbar } from '../../../components';
 import { ToolbarActions } from '../ToolbarActions';
 import { withProductLayout } from '../../../layouts/Main';
+import { getSpaceURL } from '../../../helpers';
 
 class AuctionsListBase extends PureComponent {
   componentDidMount() {
@@ -65,7 +66,7 @@ class AuctionsListBase extends PureComponent {
           <TableBody>
             {auctions.map(auction => (
               <TableRow key={auction.id}>
-                <TableCell>{auction.space}</TableCell>
+                <TableCell><Link to={getSpaceURL(this.props.location.pathname, auction.space)}>Expandir</Link></TableCell>
                 <TableCell>{auction.contract_duration_days}</TableCell>
                 <TableCell>{auction.end_date}</TableCell>
                 <TableCell>{auction.prints}</TableCell>

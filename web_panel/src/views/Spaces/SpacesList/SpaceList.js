@@ -3,13 +3,14 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Grid, LinearProgress, Table, TableHead, TableBody, TableRow, TableCell } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
 import { ActionMenu } from './components'
 import { actions, selectors } from '../duck';
 import { FailedSnackbar, SuccessSnackbar } from '../../../components';
 import { ToolbarActions } from '../ToolbarActions';
 import { withProductLayout } from '../../../layouts/Main';
+import { getApplicationURL } from '../../../helpers';
 
 class SpaceListBase extends PureComponent {
   componentDidMount() {
@@ -71,7 +72,7 @@ class SpaceListBase extends PureComponent {
                 <TableCell>{space.name}</TableCell>
                 <TableCell>{space.x_size}</TableCell>
                 <TableCell>{space.y_size}</TableCell>
-                <TableCell>{space.application}</TableCell>
+                <TableCell><Link to={getApplicationURL(this.props.location.pathname, space.application)}>Expandir</Link></TableCell>
                 <TableCell>
                   <ActionMenu onActionSelected={ (action) => this.onActionSelected(action, space.id) } />
                 </TableCell>

@@ -3,13 +3,13 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Grid, LinearProgress, Table, TableHead, TableBody, TableRow, TableCell } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 
 import { ActionMenu } from './components'
 import { actions, selectors } from '../duck';
 import { FailedSnackbar, SuccessSnackbar } from '../../../components';
-import { ToolbarActions } from '../ToolbarActions';
 import { withProductLayout } from '../../../layouts/Main';
+import { getSpaceURL, getAdvertisementURL } from '../../../helpers';
 import moment from 'moment';
 
 class ContractsListBase extends PureComponent {
@@ -78,8 +78,8 @@ class ContractsListBase extends PureComponent {
                 <TableCell>{contract.ppp_usd}</TableCell>
                 <TableCell>{moment(contract.created_at).format('DD/MM/YYYY')}</TableCell>
                 <TableCell>{moment(contract.end_date).format('DD/MM/YYYY')}</TableCell>
-                <TableCell>{contract.space}</TableCell>
-                <TableCell>{contract.advertisement}</TableCell>
+                <TableCell><Link to={getSpaceURL(this.props.location.pathname, contract.space)}>Expandir</Link></TableCell>
+                <TableCell><Link to={getAdvertisementURL(this.props.location.pathname, contract.advertisement)}>Expandir</Link></TableCell>
                 <TableCell>{contract.active ? "Activo": "Finalizado"}</TableCell>
                 <TableCell>
                   <ActionMenu onActionSelected={ (action) => this.onActionSelected(action, contract.id) } />
