@@ -11,6 +11,7 @@ import {
   AnalyticsDuck,
   ContractDuck,
 } from './views';
+import { MainDuck } from 'layouts';
 
 const rootReducer = combineReducers({
   [ProductDuck.NAMESPACE]: ProductDuck.reducer,
@@ -21,7 +22,8 @@ const rootReducer = combineReducers({
   [AuctionDuck.NAMESPACE]: AuctionDuck.reducer,
   [BiddingsDuck.NAMESPACE]: BiddingsDuck.reducer,
   [AnalyticsDuck.NAMESPACE]: AnalyticsDuck.reducer,
-  [ContractDuck.NAMESPACE]: ContractDuck.reducer
+  [ContractDuck.NAMESPACE]: ContractDuck.reducer,
+  [MainDuck.NAMESPACE]: MainDuck.reducer
 });
 
 export const store = createStore(rootReducer, applyMiddleware(thunk));
