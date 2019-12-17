@@ -203,13 +203,13 @@ const AdvertiserRoutes = () => (
           component={AdvertisementDetailView}
           exact
           layout={AdvertiserLayout}
-          path="/ads/advertisers/advertisements/:id"
+          path="/ads/advertisers/advertisements/view/:id"
     />
     <RouteWithLayout
           component={AuctionDetailView}
           exact
           layout={AdvertiserLayout}
-          path="/ads/advertisers/auctions/:id"
+          path="/ads/advertisers/auctions/view/:id"
     />
   </React.Fragment>
 );
@@ -233,7 +233,7 @@ const PublishersRoutes = () => (
       component={ProductDetailView}
       exact
       layout={PublisherLayout}
-      path="/ads/publishers/products/:id"
+      path="/ads/publishers/products/view/:id"
     />
     <RouteWithLayout
       component={ProductFormView}
@@ -305,13 +305,13 @@ const PublishersRoutes = () => (
           component={SpaceDetailView}
           exact
           layout={PublisherLayout}
-          path="/ads/publishers/spaces/:id"
+          path="/ads/publishers/spaces/view/:id"
     />
     <RouteWithLayout
           component={AdvertisementDetailView}
           exact
           layout={PublisherLayout}
-          path="/ads/publishers/advertisements/:id"
+          path="/ads/publishers/advertisements/view/:id"
     />
   </React.Fragment>
 );

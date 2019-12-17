@@ -1,7 +1,9 @@
 import axios from 'axios';
 import { fromJS, Map as iMap } from 'immutable';
+import { createSelector } from 'reselect';
 
 import { api } from '../../../helpers';
+import { MainDuck } from 'layouts';
 
 // config
 export const BASE_URL = '/ads/api/biddings/';
@@ -109,7 +111,10 @@ const list = () => dispatch => {
   dispatch(loading());
 
   return axios.get(BASE_URL)
-    .then(response => dispatch(biddingsReceived(response.data)))
+    .then(response => {
+      dispatch(biddingsReceived(response.data));
+      dispatch(MainDuck.actions.listLoaded(response.data.length));
+    })
 };
 
 const fetch = (id) => dispatch => {
@@ -163,9 +168,17 @@ const getBidding = state => {
   return state[NAMESPACE].get('bidding', iMap()).toJS();
 };
 
-const getList = state => {
+const getBiddings = state => {
   return state[NAMESPACE].get('list').toJS();
 };
+
+const getList = createSelector(
+  [getBiddings, MainDuck.selectors.getPaginationData],
+  (biddings, paginationData) => {
+    const {pageSize, page} = paginationData;
+    return biddings.slice(page * pageSize, (page + 1) * pageSize);
+  }
+)
 
 const hasError = state => {
   return state[NAMESPACE].get('error');

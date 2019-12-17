@@ -33,6 +33,7 @@ class ProductFormBase extends React.Component {
       domain: '',
       category: '',
       description: '',
+      logo: '',
       errors: {}
     };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -48,10 +49,19 @@ class ProductFormBase extends React.Component {
       this.setState({ errors: [] });
     }
 
+    const formData = new FormData();
+    formData.set('name', this.state.name);
+    formData.set('domain', this.state.domain);
+    formData.set('category', this.state.category);
+    formData.set('description', this.state.description);
+    //TODO: validate
+    const file = document.getElementById('resourceLogo').files[0];
+    formData.append('image', file);
+
     if (this.props.match.params.id == null) {
-      this.props.createApp(this.state);
+      this.props.createApp(formData);
     } else {
-      this.props.updateApp(this.state.id, this.state)
+      this.props.updateApp(this.state.id, formData)
     }
   }
 
@@ -82,11 +92,12 @@ class ProductFormBase extends React.Component {
     const { success, reset } = this.props;
     if (success) {
       setTimeout(() => {
-          this.setState({
+        this.setState({
           name: '',
           domain: '',
           category: '',
           description: '',
+          logo: '',
           errors: {}
         });
         reset();
@@ -95,7 +106,7 @@ class ProductFormBase extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.match.params.id != null) {
+    if (this.props.match.params.id != null) {alert()
       this.props.fetchApp(this.props.match.params.id);
     }
   }
@@ -121,7 +132,7 @@ class ProductFormBase extends React.Component {
     }
 
     return (
-      <form onSubmit={this.handleSubmit} noValidate>
+      <form onSubmit={this.handleSubmit} encType="mulipart/form-data" noValidate>
         {
           hasError && <FailedSnackbar message="Tuvimos un problema al procesar su peticion" />
         }
@@ -177,7 +188,7 @@ class ProductFormBase extends React.Component {
           </Grid>
         </Grid>
         <Grid container>
-          <Grid item xs={4}>
+          <Grid item xs={12}>
             <FormControl fullWidth>
               <TextField
                 label="Descripcion"
@@ -192,12 +203,30 @@ class ProductFormBase extends React.Component {
               />
             </FormControl>
           </Grid>
+          <Grid item xs={4}>
+            <FormControl fullWidth>
+              <Button
+                color="secondary"
+                component="label"
+                style={{marginTop: '30px'}}
+              >
+                Cargar Imagen
+                <input
+                  type="file"
+                  name="logo"
+                  id="resourceLogo"
+                  style={{ display: "none" }}
+                />
+              </Button>
+            </FormControl>
+          </Grid>
         </Grid>
         <Grid container>
           <Grid item>
             <Button
               type="submit"
               color="primary"
+              variant="contained"
               style={{marginTop: '30px'}}>Submit</Button>
           </Grid>
         </Grid>

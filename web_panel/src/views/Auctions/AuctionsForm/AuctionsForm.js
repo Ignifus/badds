@@ -9,14 +9,15 @@ import {
   TextField,
   FormControl,
   LinearProgress,
-  FormHelperText,
 } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import validate from 'validate.js';
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
+  KeyboardTimePicker
 } from '@material-ui/pickers';
+import moment from 'moment';
 
 import { withProductLayout } from '../../../layouts/Main';
 import { FailedSnackbar, SuccessSnackbar } from '../../../components';
@@ -33,11 +34,13 @@ class AuctionsFormBase extends React.Component {
       end_date: null,
       prints: '',
       contract_duration_days: '',
+      time: null,
       errors: {}
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleDateChange = this.handleDateChange.bind(this);
+    this.handleTimeChange = this.handleTimeChange.bind(this);
   }
 
   handleSubmit(e) {
@@ -50,11 +53,18 @@ class AuctionsFormBase extends React.Component {
     }
 
     const space = this.props.match.params.spaceId;
+    const date = moment(this.state.end_date).format('YYYY-MM-DD');
+    const time = moment(this.state.time).format('hh:mm:ss')
+    const payload = {
+      end_date: `${date}T${time}Z`,
+      prints: this.state.prints,
+      contract_duration_days: this.state.contract_duration_days,
+    }
 
     if (this.props.match.params.id == null) {
-      this.props.createAuction({ space, ...this.state });
+      this.props.createAuction({ space, ...payload });
     } else {
-      this.props.updateAuction(this.state.id, { space, ...this.state });
+      this.props.updateAuction(this.state.id, { space, ...payload });
     }
   }
 
@@ -64,6 +74,10 @@ class AuctionsFormBase extends React.Component {
 
   handleDateChange(date) {
     this.setState({ end_date: date });
+  }
+
+  handleTimeChange(time) {
+    this.setState({ time });
   }
 
   validate() {
@@ -89,6 +103,7 @@ class AuctionsFormBase extends React.Component {
       setTimeout(() => {
           this.setState({
             end_date: null,
+            time: null,
             prints: '',
             contract_duration_days: '',
             errors: {}
@@ -185,6 +200,23 @@ class AuctionsFormBase extends React.Component {
                 />
               </MuiPickersUtilsProvider>
             </FormControl>
+          </Grid>
+        </Grid>
+        <Grid container>
+          <Grid item xs={4}>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <KeyboardTimePicker
+                margin="normal"
+                id="time-picker"
+                label="Time picker"
+                value={this.state.time}
+                onChange={this.handleTimeChange}
+                error={this.state.errors.time != null}
+                KeyboardButtonProps={{
+                  'aria-label': 'change time',
+                }}
+              />
+            </MuiPickersUtilsProvider>
           </Grid>
         </Grid>
         <Grid container>

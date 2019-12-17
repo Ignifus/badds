@@ -23,7 +23,7 @@ export const RESET = `${NAMESPACE}/RESET`;
 // Reducer
 const initialState = fromJS({
   loading: false,
-  app: { name: '', domain: '', description: '', category: '' },
+  app: { name: '', domain: '', description: '', category: '', image: '' },
   list: [],
   error: false
 });
@@ -127,7 +127,10 @@ const fetch = (id) => dispatch => {
 const create = (app) => dispatch => {
   dispatch(loading());
 
-  return axios.post(BASE_URL, app, api.getRequestConfig())
+  return axios.post(BASE_URL, app, api.getRequestConfig({
+        'Content-Type': 'multipart/form-data'
+      })
+    )
     .then(() => dispatch(appCreated(app)))
     .catch((e) => dispatch(handleError(e)));
 }
@@ -135,7 +138,10 @@ const create = (app) => dispatch => {
 const update = (id, app) => dispatch => {
   dispatch(loading());
 
-  return axios.put(`${BASE_URL}${id}/`, app, api.getRequestConfig())
+  return axios.put(`${BASE_URL}${id}/`, app, api.getRequestConfig({
+        'Content-Type': 'multipart/form-data'
+      })
+    )
     .then(() => dispatch(appUpdated(app)))
     .catch((e) => dispatch(handleError(e)));
 }

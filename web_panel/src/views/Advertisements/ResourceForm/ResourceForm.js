@@ -6,12 +6,8 @@ import {
   Button,
   Grid,
   TextField,
-  Select,
-  MenuItem,
-  InputLabel,
   FormControl,
   LinearProgress,
-  FormHelperText,
 } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import validate from 'validate.js';
@@ -19,7 +15,6 @@ import validate from 'validate.js';
 import { withProductLayout } from '../../../layouts/Main';
 import { FailedSnackbar, SuccessSnackbar } from '../../../components';
 import { ResourcesDuck } from '../duck/';
-import { Label } from '@material-ui/icons';
 
 const styles = theme => ({
   snackbar: { backgroundColor: 'red' }
@@ -32,6 +27,7 @@ class ResourceFormBase extends React.Component {
       name: '',
       url_link: '',
       image: '',
+      text: '',
       errors: {}
     };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -50,6 +46,7 @@ class ResourceFormBase extends React.Component {
     const formData = new FormData();
     formData.set('name', this.state.name);
     formData.set('url_link', this.state.name);
+    formData.set('text', this.state.text);
     formData.set('advertisement', this.props.match.params.id);
     //TODO: validate
     formData.append('image', document.getElementById('resourceImage').files[0]);
@@ -71,6 +68,14 @@ class ResourceFormBase extends React.Component {
         presence: { allowEmpty: false },
         length: { minimum: 3 }
       },
+      url_link: {
+        presence: { allowEmpty: false },
+        length: { minimum: 3 }
+      },
+      text: {
+        presence: { allowEmpty: false },
+        length: { minimum: 3 }
+      },
     });
   }
 
@@ -82,6 +87,7 @@ class ResourceFormBase extends React.Component {
             name: '',
             url_link: '',
             image: '',
+            text: '',
             errors: {}
           });
         reset();
@@ -111,7 +117,7 @@ class ResourceFormBase extends React.Component {
       </Grid>)
     }
 
-    if (success && this.props.match.params.id == null) {
+    if (success) {
       this.reset();
     }
 
@@ -138,15 +144,29 @@ class ResourceFormBase extends React.Component {
               />
             </FormControl>
           </Grid>
-          <Grid item xs={8}>
+          <Grid item xs={4}>
             <FormControl fullWidth>
               <TextField
-                label="URL"
+                label="URL Interna"
                 name="url_link"
                 placeholder="url del recurso"
                 value={this.state.url_link}
                 error={this.state.errors.url_link != null}
                 helperText={this.state.errors.url_link != null ? this.state.errors.url_link[0] : ''}
+                onChange={this.handleChange}
+                required
+              />
+            </FormControl>
+          </Grid>
+          <Grid item xs={4}>
+            <FormControl fullWidth>
+              <TextField
+                label="Texto Alternativo"
+                name="text"
+                placeholder="texto para carga erronea"
+                value={this.state.text}
+                error={this.state.errors.text != null}
+                helperText={this.state.errors.text != null ? this.state.errors.text[0] : ''}
                 onChange={this.handleChange}
                 required
               />

@@ -8,7 +8,7 @@ export const ToolbarActions = props => (
       color="primary"
       variant="contained"
       component={Link}
-      to="/ads/publishers/spaces/add"
+      to="/ads/publishers/auctions/add"
     >
       Crear Subasta
     </Button>

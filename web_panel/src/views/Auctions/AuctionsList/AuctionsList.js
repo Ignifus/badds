@@ -106,7 +106,7 @@ const AuctionsList = compose(
   withProductLayout({
     title: 'Mis Subastas',
     withPagination: true,
-    Buttons: ToolbarActions
+    Buttons: null
   }),
   withRouter,
   connect(mapStateToProps, mapDispatchToProps),
