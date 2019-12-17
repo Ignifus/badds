@@ -74,7 +74,7 @@ const ProductCard = props => {
         title={product.domain}
       />
       <CardContent>
-        <Avatar variant="square" className={classes.avatar}>
+        <Avatar src={product.logo} variant="square" className={classes.avatar}>
           {product.name}
         </Avatar>
         <Typography

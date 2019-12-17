@@ -74,7 +74,7 @@ class AuctionsFormBase extends React.Component {
       },
       contract_duration_days: {
         presence: { allowEmpty: false },
-        numericality: { greaterThan: 1, lessThan: 365 }
+        numericality: { greaterThan: 0, lessThan: 365 }
       },
       // end_date: {
       //   presence: { allowEmpty: false },

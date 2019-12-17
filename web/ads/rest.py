@@ -26,10 +26,13 @@ class ApplicationViewSet(viewsets.ModelViewSet):
     serializer_class = ApplicationSerializer
 
     def get_queryset(self):
-        return Application.objects.filter(user=self.request.user)
+        return Application.objects.filter(user=self.request.user, active=True)
+
+    def perform_update(self, serializer):
+        serializer.save(logo=upload(self.request.data['image']))
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user, key=hexlify(os.urandom(32)).decode())
+        serializer.save(user=self.request.user, logo=upload(self.request.data['logo']), key=hexlify(os.urandom(32)).decode())
 
 
 class AdvertisementViewSet(viewsets.ModelViewSet):
@@ -49,11 +52,11 @@ class SpaceViewSet(viewsets.ModelViewSet):
         return {'request': self.request}
 
     def get_queryset(self):
-        return Space.objects.filter(application__user=self.request.user)
+        return Space.objects.filter(application__user=self.request.user, active=True)
 
 
 class AllSpacesViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Space.objects.all()
+    queryset = Space.objects.filter(active=True)
     serializer_class = SpaceSerializer
 
     def get_serializer_context(self):
@@ -64,7 +67,7 @@ class BiddingViewSet(viewsets.ModelViewSet):
     serializer_class = BiddingSerializer
 
     def get_queryset(self):
-        return Bidding.objects.filter(user=self.request.user)
+        return Bidding.objects.filter(user=self.request.user, auction__status=True)
 
     def get_serializer_context(self):
         return {'request': self.request}
@@ -94,7 +97,7 @@ class AuctionViewSet(viewsets.ModelViewSet):
     serializer_class = AuctionSerializer
 
     def get_queryset(self):
-        return Auction.objects.filter(space__application__user=self.request.user)
+        return Auction.objects.filter(space__application__user=self.request.user, status=True)
 
     def get_serializer_context(self):
         return {'request': self.request}

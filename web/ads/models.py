@@ -18,6 +18,7 @@ class Application(models.Model):
     name = models.TextField(max_length=256)
     description = models.TextField(max_length=256)
     domain = models.TextField(max_length=256, unique=True)
+    logo = models.TextField(max_length=128)
     key = models.TextField(max_length=256)
     category = models.ForeignKey(ApplicationCategory, on_delete=models.PROTECT)
     active = models.BooleanField(default=True)
@@ -49,8 +50,8 @@ class Space(models.Model):
 
 
 class SpaceRestriction(models.Model):
-    space = models.ForeignKey(Space, related_name='spaces', on_delete=models.PROTECT)
-    restriction = models.ForeignKey(Restriction, on_delete=models.PROTECT)
+    space = models.ForeignKey(Space, related_name='spaces', on_delete=models.CASCADE)
+    restriction = models.ForeignKey(Restriction, on_delete=models.CASCADE)
     value = models.TextField(max_length=16)
 
     def __str__(self):
@@ -95,6 +96,7 @@ class Resource(models.Model):
     name = models.TextField(max_length=128)
     path = models.TextField(max_length=128)
     url_link = models.TextField(max_length=128)
+    text = models.TextField(max_length=512)
     restrictions = models.ManyToManyField(Restriction, through='ResourceRestriction')
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -103,8 +105,8 @@ class Resource(models.Model):
 
 
 class ResourceRestriction(models.Model):
-    resource = models.ForeignKey(Resource, related_name='resources', on_delete=models.PROTECT)
-    restriction = models.ForeignKey(Restriction, related_name='resource_restrictions', on_delete=models.PROTECT)
+    resource = models.ForeignKey(Resource, related_name='resources', on_delete=models.CASCADE)
+    restriction = models.ForeignKey(Restriction, related_name='resource_restrictions', on_delete=models.CASCADE)
     value = models.TextField(max_length=16)
 
     def __str__(self):

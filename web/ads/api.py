@@ -86,6 +86,6 @@ def get_resource(request):
                 filtered = True
 
         if not filtered:
-            return JsonResponse({'resource': res.path})
+            return JsonResponse({'resource': res.path, "link": res.url_link, "text": res.text})
 
     return JsonResponse({'resource': "https://res.cloudinary.com/geminis/image/upload/v1575435915/placeholder-images-image_large.png"})

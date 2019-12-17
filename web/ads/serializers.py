@@ -1,5 +1,3 @@
-import json
-
 from rest_framework import serializers
 from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework_bulk import BulkListSerializer, BulkSerializerMixin
@@ -8,6 +6,11 @@ from ads.models import *
 
 
 class UserSerializer(serializers.ModelSerializer):
+    credits = serializers.SerializerMethodField()
+
+    def get_credits(self, obj):
+        return obj.profile.credits
+
     class Meta:
         model = User
         exclude = ('password', 'is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')
@@ -68,6 +71,8 @@ class AdvertisementSerializer(serializers.ModelSerializer):
 
 
 class ApplicationSerializer(serializers.ModelSerializer):
+    image = serializers.FileField(source='logo')
+    logo = serializers.ReadOnlyField()
     key = serializers.ReadOnlyField()
 
     class Meta:

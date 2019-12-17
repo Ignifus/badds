@@ -108,8 +108,8 @@ def pay(request):
 
     desired_credits = int(c)
 
-    if desired_credits < 10:
-        return render(request, 'landing/account.html', {'error': "Inserte un valor mayor o igual a 10 creditos."})
+    if desired_credits < 10 or desired_credits > 100000:
+        return render(request, 'landing/account.html', {'error': "Inserte un valor entre 10 y 100.000 creditos."})
 
     id = "BADDS_" + ''.join([random.choice(string.ascii_letters + string.digits) for n in range(8)])
 

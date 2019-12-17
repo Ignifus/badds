@@ -46,33 +46,5 @@
       "restriction": "GENDER",
       "description": "Gender to look for, leave empty for both genders. i.e. F or M"
     }
-  },
-  {
-    "model": "ads.auctionstatus",
-    "pk": 1,
-    "fields": {
-      "status": "Active"
-    }
-  },
-  {
-    "model": "ads.auctionstatus",
-    "pk": 2,
-    "fields": {
-      "status": "Extended"
-    }
-  },
-  {
-    "model": "ads.auctionstatus",
-    "pk": 3,
-    "fields": {
-      "status": "Closed"
-    }
-  },
-  {
-    "model": "ads.auctionstatus",
-    "pk": 5,
-    "fields": {
-      "status": "Removed"
-    }
   }
 ]

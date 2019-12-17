@@ -16,4 +16,4 @@ def check_captcha(request):
     success = res.json()["success"]
     score = res.json()["score"]
 
-    return success and score > 0.3
+    return success and score >= 0.1

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/styles';
 import { Typography } from '@material-ui/core';
 
@@ -16,11 +15,11 @@ const useStyles = makeStyles({
 const Logo = props => {
   const classes = useStyles();
 
-  return (<RouterLink to="/">
+  return (<a href="/">
     <Typography className={classes.orangeAvatar} variant="h3" {...props}>
       Badds
     </Typography>
-  </RouterLink>);
+  </a>);
 };
 
 export { Logo };
