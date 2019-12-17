@@ -32,7 +32,7 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         serializer.save(logo=upload(self.request.data['image']))
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user, logo=upload(self.request.data['logo']), key=hexlify(os.urandom(32)).decode())
+        serializer.save(user=self.request.user, logo=upload(self.request.data['image']), key=hexlify(os.urandom(32)).decode())
 
 
 class AdvertisementViewSet(viewsets.ModelViewSet):
