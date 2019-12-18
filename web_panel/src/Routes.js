@@ -28,6 +28,7 @@ import {
   BiddingsList as BiddingsListView,
   BiddingForm as BiddingFormView,
   ContractsList as ContractsListView,
+  Faq as FaqView,
   UserList as UserListView,
   Typography as TypographyView,
   Icons as IconsView,
@@ -51,6 +52,12 @@ const Routes = () => {
         exact
         layout={MinimalLayout}
         path="/ads"
+      />
+      <RouteWithLayout
+        component={FaqView}
+        exact
+        layout={MinimalLayout}
+        path="/ads/faq"
       />
       <Route path="/ads/publishers" component={PublishersRoutes} />
       <Route path="/ads/advertisers" component={AdvertiserRoutes} />

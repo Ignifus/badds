@@ -151,6 +151,7 @@ class AdvertisementFormBase extends React.Component {
             <Button
               type="submit"
               color="primary"
+              variant="contained"
               style={{marginTop: '30px'}}>Submit</Button>
           </Grid>
         </Grid>

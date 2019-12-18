@@ -8,12 +8,13 @@ import {
   TextField,
   FormControl,
   LinearProgress,
+  FormHelperText
 } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import validate from 'validate.js';
 
 import { withProductLayout } from '../../../layouts/Main';
-import { FailedSnackbar, SuccessSnackbar } from '../../../components';
+import { FailedSnackbar, SuccessSnackbar, Help } from '../../../components';
 import { ResourcesDuck } from '../duck/';
 
 const styles = theme => ({
@@ -32,11 +33,17 @@ class ResourceFormBase extends React.Component {
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.imageChange = this.imageChange.bind(this);
   }
 
   handleSubmit(e) {
     e.preventDefault();
+    const file = document.getElementById('resourceImage').files[0];
     const validationErrors = this.validate();
+    if (file == null) {
+      validationErrors.image = ["Debe cargar una imagen"];
+    }
+    console.log(validationErrors)
     if (validationErrors) {
       return this.setState({ errors: validationErrors });
     } else {
@@ -49,7 +56,7 @@ class ResourceFormBase extends React.Component {
     formData.set('text', this.state.text);
     formData.set('advertisement', this.props.match.params.id);
     //TODO: validate
-    formData.append('image', document.getElementById('resourceImage').files[0]);
+    formData.append('image', );
 
     if (this.props.match.params.resourceId == null) {
       this.props.createResource(formData);
@@ -60,6 +67,13 @@ class ResourceFormBase extends React.Component {
 
   handleChange(e) {
     this.setState({[e.target.name]: e.target.value});
+  }
+
+  imageChange(e) {
+    const file = e.target.files[0];
+    if (file != null) {
+      this.setState({ image: file.name, errors: { ...this.state.errors, image: undefined } })
+    }
   }
 
   validate() {
@@ -90,6 +104,7 @@ class ResourceFormBase extends React.Component {
             text: '',
             errors: {}
           });
+          document.getElementById('resourceLogo').value = '';
         reset();
       }, 750)
     }
@@ -149,11 +164,14 @@ class ResourceFormBase extends React.Component {
               <TextField
                 label="URL Interna"
                 name="url_link"
-                placeholder="url del recurso"
+                placeholder="ie /mi_aviso.jpg"
                 value={this.state.url_link}
                 error={this.state.errors.url_link != null}
                 helperText={this.state.errors.url_link != null ? this.state.errors.url_link[0] : ''}
                 onChange={this.handleChange}
+                InputProps={{
+                  endAdornment: <Help title="La url del aviso, escriba el path." />
+                }}
                 required
               />
             </FormControl>
@@ -168,6 +186,9 @@ class ResourceFormBase extends React.Component {
                 error={this.state.errors.text != null}
                 helperText={this.state.errors.text != null ? this.state.errors.text[0] : ''}
                 onChange={this.handleChange}
+                InputProps={{
+                  endAdornment: <Help title="Si existe un error en la carga de la imagen, este texto alternativo se vera en su lugar" />
+                }}
                 required
               />
             </FormControl>
@@ -175,7 +196,7 @@ class ResourceFormBase extends React.Component {
         </Grid>
         <Grid container style={{marginTop: '15px'}}>
           <Grid item xs={4}>
-            <FormControl fullWidth>
+            <FormControl>
               <Button
                 color="secondary"
                 component="label"
@@ -186,8 +207,11 @@ class ResourceFormBase extends React.Component {
                   name="image"
                   id="resourceImage"
                   style={{ display: "none" }}
+                  onChange={this.imageChange}
                 />
               </Button>
+              { this.state.image != null && <FormHelperText>{this.state.image}</FormHelperText> }
+              { this.state.errors.image != null && <FormHelperText error>{ this.state.errors.image[0] }</FormHelperText> }
             </FormControl>
           </Grid>
         </Grid>

@@ -73,15 +73,14 @@ const Area = props => {
       </Grid>
       {
         areas.map(area => (
-          <Grid item>
+          <Grid item key={area.letter}>
             <Card className={classes.card}>
               <CardActionArea component={Link} to={area.link}>
                 <CardMedia
-                  component={AreaAvatar}
                   height="140"
-                  letter={area.letter}
-                  avatarClassName={area.className}
-                />
+                >
+                  <AreaAvatar avatarClassName={area.className} letter={area.letter}/>
+                </CardMedia>
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="h3">{area.title}</Typography>
                   <Typography variant="body2" color="textSecondary" component="p">{area.description}</Typography>

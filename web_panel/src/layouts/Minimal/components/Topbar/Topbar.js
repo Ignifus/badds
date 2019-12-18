@@ -1,16 +1,18 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { AppBar, Toolbar } from '@material-ui/core';
 
-import { Logo } from '../../../../components';
+import { Logo, Logout, Home, Faq } from '../../../../components';
 
 const useStyles = makeStyles(() => ({
   root: {
     boxShadow: 'none'
-  }
+  },
+  flexGrow: {
+    flexGrow: 1
+  },
 }));
 
 const Topbar = props => {
@@ -27,6 +29,10 @@ const Topbar = props => {
     >
       <Toolbar>
         <Logo />
+        <div className={classes.flexGrow} />
+        <Faq />
+        <Home />
+        <Logout />
       </Toolbar>
     </AppBar>
   );

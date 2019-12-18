@@ -4,10 +4,8 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { AppBar, Toolbar, Badge, Hidden, IconButton } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
-import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
-import InputIcon from '@material-ui/icons/Input';
 
-import { Logo } from '../../../../components';
+import { Logo, Logout, Home, Faq } from '../../../../components';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -26,8 +24,6 @@ const Topbar = props => {
 
   const classes = useStyles();
 
-  const [notifications] = useState([]);
-
   return (
     <AppBar
       {...rest}
@@ -36,23 +32,6 @@ const Topbar = props => {
       <Toolbar>
         <Logo />
         <div className={classes.flexGrow} />
-        <Hidden mdDown>
-          <IconButton color="inherit">
-            <Badge
-              badgeContent={notifications.length}
-              color="primary"
-              variant="dot"
-            >
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-          <IconButton
-            className={classes.signOutButton}
-            color="inherit"
-          >
-            <InputIcon />
-          </IconButton>
-        </Hidden>
         <Hidden lgUp>
           <IconButton
             color="inherit"
@@ -61,6 +40,9 @@ const Topbar = props => {
             <MenuIcon />
           </IconButton>
         </Hidden>
+        <Faq />
+        <Home />
+        <Logout />
       </Toolbar>
     </AppBar>
   );

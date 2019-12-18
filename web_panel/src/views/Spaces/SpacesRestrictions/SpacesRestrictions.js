@@ -18,7 +18,7 @@ import {
 import { AppDuck } from '../../../duck';
 import { actions, selectors } from '../duck';
 import { withProductLayout } from '../../../layouts/Main';
-import { FailedSnackbar, SuccessSnackbar } from '../../../components';
+import { FailedSnackbar, SuccessSnackbar, Help } from '../../../components';
 import { CountrySelect } from '../../../common/countries';
 
 const textRestriction = {
@@ -136,6 +136,7 @@ class SpacesRestrictionsBase extends Component {
                 name="minAge"
                 value={this.state.minAge}
                 onChange={this.handleAgeChange}
+                startAdornment={<Help title="Edad minima del usuario" />}
               >
                 { ages.map(age => <MenuItem key={age} value={age}>{age}</MenuItem>) }
               </Select>
@@ -149,6 +150,7 @@ class SpacesRestrictionsBase extends Component {
                   labelId="badds-spacerestrictions-max-age"
                   name="maxAge"
                   value={this.state.maxAge}
+                  startAdornment={<Help title="Edad maxima del usuario" />}
                   onChange={this.handleAgeChange}
                 >
                   { ages.map(age => <MenuItem key={age} value={age}>{age}</MenuItem>) }
@@ -176,6 +178,7 @@ class SpacesRestrictionsBase extends Component {
           <CountrySelect
             value={ this.state.countryWhiteList }
             onCountrySelected={(countryCode) => this.setWhiteListCountry(countryCode) }
+            startAdornment={<Help title="Completar para aquellos paises en los cuales se enfoca la pauta." />}
             labelId="badds-space-restriction-wcselect"
             multiple
           />
@@ -201,6 +204,7 @@ class SpacesRestrictionsBase extends Component {
             value={ this.state.countryBlackList }
             onCountrySelected={(countryCode) => this.setBlackListCountry(countryCode) }
             labelId="badds-space-restriction-bcselect"
+            startAdornment={<Help title="Completar solo si quiero excluir algun pais." />}
             multiple
           />
         </FormControl>

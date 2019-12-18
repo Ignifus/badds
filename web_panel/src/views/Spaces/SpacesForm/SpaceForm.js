@@ -174,7 +174,6 @@ class SpaceFormBase extends React.Component {
                 error={this.state.errors.y_size != null}
                 helperText={this.state.errors.y_size != null ? this.state.errors.y_size[0] : ''}
                 onChange={this.handleChange}
-                InputLabelProps={{ shrink: this.state.y_size !== '' }}
                 required
               />
             </FormControl>
@@ -182,20 +181,25 @@ class SpaceFormBase extends React.Component {
         </Grid>
         <Grid container>
           <Grid item xs={4}>
-            <FormControl fullWidth>
-              <InputLabel id="badds-app-application-select">Applicacion</InputLabel>
-              <Select
-                labelId="badds-app-application-select"
-                value={this.state.application}
-                onChange={this.handleChange}
-                error={this.state.errors.application != null}
-                name="application"
-                required
-              >
-                { apps.map(app => <MenuItem key={app.id} value={app.id}>{app.domain}</MenuItem>) }
-              </Select>
-              <FormHelperText error>{this.state.errors.application != null ? this.state.errors.application[0] : ''}</FormHelperText>
-            </FormControl>
+            {
+              apps.length > 0 && <FormControl fullWidth>
+                <InputLabel id="badds-app-application-select">Applicacion</InputLabel>
+                <Select
+                  labelId="badds-app-application-select"
+                  value={this.state.application}
+                  onChange={this.handleChange}
+                  error={this.state.errors.application != null}
+                  name="application"
+                  required
+                >
+                  { apps.map(app => <MenuItem key={app.id} value={app.id}>{app.domain}</MenuItem>) }
+                </Select>
+                <FormHelperText error>{this.state.errors.application != null ? this.state.errors.application[0] : ''}</FormHelperText>
+              </FormControl>
+            }
+            {
+              apps.length === 0 && <FormHelperText error>No puede crear espacios hasta no crear una aplicacion para el mismo</FormHelperText>
+            }
           </Grid>
         </Grid>
         <Grid container>

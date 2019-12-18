@@ -64,7 +64,6 @@ class BiddingsListBase extends PureComponent {
               <TableCell>Creacion</TableCell>
               <TableCell>Subasta</TableCell>
               <TableCell>Aviso</TableCell>
-              <TableCell>Acciones</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -75,9 +74,6 @@ class BiddingsListBase extends PureComponent {
                 <TableCell>{moment(bidding.created_at).format('DD/MM/YYYY')}</TableCell>
                 <TableCell><Link to={getAuctionURL(this.props.location.pathname, bidding.auction)}>Expandir</Link></TableCell>
                 <TableCell><Link to={getAdvertisementURL(this.props.location.pathname, bidding.advertisement)}>Expandir</Link></TableCell>
-                <TableCell>
-                  <ActionMenu onActionSelected={ (action) => this.onActionSelected(action, bidding.id) } />
-                </TableCell>
               </TableRow>
             ))}
           </TableBody>

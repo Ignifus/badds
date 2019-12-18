@@ -20,7 +20,7 @@ import {
 import moment from 'moment';
 
 import { withProductLayout } from '../../../layouts/Main';
-import { FailedSnackbar, SuccessSnackbar } from '../../../components';
+import { FailedSnackbar, SuccessSnackbar, Help } from '../../../components';
 import { actions, selectors } from '../duck';
 
 const styles = theme => ({
@@ -46,6 +46,12 @@ class AuctionsFormBase extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     const validationErrors = this.validate();
+    if (this.state.time == null) {
+      validationErrors.time = ["La hora es requerida"];
+    }
+    if (this.state.end_date == null) {
+      validationErrors.end_date = ["La fecha es requerida"];
+    }
     if (validationErrors) {
       return this.setState({ errors: validationErrors });
     } else {
@@ -163,6 +169,9 @@ class AuctionsFormBase extends React.Component {
                 error={this.state.errors.prints != null}
                 helperText={this.state.errors.prints != null ? this.state.errors.prints[0] : ''}
                 onChange={this.handleChange}
+                InputProps={{
+                  endAdornment: <Help title="Es la cantidad de veces que mi slot publicitario mostrara un aviso. Equivale a las visitas de un usuario." />
+                }}
                 required
               />
             </FormControl>
@@ -178,6 +187,9 @@ class AuctionsFormBase extends React.Component {
                 error={this.state.errors.contract_duration_days != null}
                 helperText={this.state.errors.contract_duration_days != null ? this.state.errors.contract_duration_days[0] : ''}
                 onChange={this.handleChange}
+                InputProps={{
+                  endAdornment: <Help title="La duracion en dias del contrato." />
+                }}
                 required
               />
             </FormControl>
@@ -188,11 +200,12 @@ class AuctionsFormBase extends React.Component {
                 <KeyboardDatePicker
                   margin="normal"
                   id="date-picker-dialog"
-                  label="Fecha de finalizacion"
+                  label="Fecha de finalizacion de la subasta"
                   format="DD/MM/YYYY"
                   value={this.state.end_date}
                   onChange={this.handleDateChange}
                   error={this.state.errors.end_date != null}
+                  helperText={this.state.errors.end_date != null && this.state.errors.end_date[0]}
                   KeyboardButtonProps={{
                     'aria-label': 'change date',
                   }}
@@ -208,10 +221,11 @@ class AuctionsFormBase extends React.Component {
               <KeyboardTimePicker
                 margin="normal"
                 id="time-picker"
-                label="Time picker"
+                label="Hora de finalizacion de la subasta"
                 value={this.state.time}
                 onChange={this.handleTimeChange}
                 error={this.state.errors.time != null}
+                helperText={this.state.errors.time != null && this.state.errors.time[0]}
                 KeyboardButtonProps={{
                   'aria-label': 'change time',
                 }}

@@ -17,7 +17,7 @@ import { withRouter } from 'react-router-dom';
 import validate from 'validate.js';
 
 import { withProductLayout } from '../../../layouts/Main';
-import { FailedSnackbar, SuccessSnackbar } from '../../../components';
+import { FailedSnackbar, SuccessSnackbar, Help } from '../../../components';
 import { AppDuck } from '../../../duck';
 import { actions, selectors } from '../duck';
 
@@ -38,11 +38,16 @@ class ProductFormBase extends React.Component {
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.imageChange = this.imageChange.bind(this);
   }
 
   handleSubmit(e) {
     e.preventDefault();
+    const file = document.getElementById('resourceLogo').files[0];
     const validationErrors = this.validate();
+    if (file == null) {
+      validationErrors.logo = ["Debe cargar una imagen"];
+    }
     if (validationErrors) {
       return this.setState({ errors: validationErrors });
     } else {
@@ -55,7 +60,6 @@ class ProductFormBase extends React.Component {
     formData.set('category', this.state.category);
     formData.set('description', this.state.description);
     //TODO: validate
-    const file = document.getElementById('resourceLogo').files[0];
     formData.append('image', file);
 
     if (this.props.match.params.id == null) {
@@ -67,6 +71,13 @@ class ProductFormBase extends React.Component {
 
   handleChange(e) {
     this.setState({[e.target.name]: e.target.value});
+  }
+
+  imageChange(e) {
+    const file = e.target.files[0];
+    if (file != null) {
+      this.setState({ logo: file.name, errors: { ...this.state.errors, logo: undefined } })
+    }
   }
 
   validate() {
@@ -100,6 +111,7 @@ class ProductFormBase extends React.Component {
           logo: '',
           errors: {}
         });
+        document.getElementById('resourceLogo').value = '';
         reset();
       }, 750)
     }
@@ -150,6 +162,9 @@ class ProductFormBase extends React.Component {
                 error={this.state.errors.name != null}
                 helperText={this.state.errors.name != null ? this.state.errors.name[0] : ''}
                 onChange={this.handleChange}
+                InputProps={{
+                  endAdornment: <Help title="Nombre de la applicacion" />
+                }}
                 required
               />
             </FormControl>
@@ -164,6 +179,9 @@ class ProductFormBase extends React.Component {
                 error={this.state.errors.domain != null}
                 helperText={this.state.errors.domain != null ? this.state.errors.domain[0] : ''}
                 onChange={this.handleChange}
+                InputProps={{
+                  endAdornment: <Help title="Dominio de la app. Ejemplo: app.com.ar" />
+                }}
                 required
               />
             </FormControl>
@@ -199,12 +217,15 @@ class ProductFormBase extends React.Component {
                 helperText={this.state.errors.description != null ? this.state.errors.description[0] : ''}
                 onChange={this.handleChange}
                 InputLabelProps={{ shrink: this.state.description !== '' }}
+                InputProps={{
+                  endAdornment: <Help title="Escriba una breve descripcion de su aplicacion. 150 caracteres." />
+                }}
                 required
               />
             </FormControl>
           </Grid>
           <Grid item xs={4}>
-            <FormControl fullWidth>
+            <FormControl>
               <Button
                 color="secondary"
                 component="label"
@@ -216,8 +237,11 @@ class ProductFormBase extends React.Component {
                   name="logo"
                   id="resourceLogo"
                   style={{ display: "none" }}
+                  onChange={this.imageChange}
                 />
               </Button>
+              { this.state.logo != null && <FormHelperText>{this.state.logo}</FormHelperText> }
+              { this.state.errors.logo != null && <FormHelperText error>{ this.state.errors.logo[0] }</FormHelperText> }
             </FormControl>
           </Grid>
         </Grid>
