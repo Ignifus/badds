@@ -100,6 +100,22 @@ def account(request):
 
 @require_http_methods('POST')
 @login_required(login_url="/login/")
+def extract(request):
+    creds = request.POST["extract-credits"]
+
+    desired_credits = int(creds)
+
+    if request.user.profile.credits < desired_credits:
+        return render(request, 'landing/account.html', {'error': "No posee fondos suficientes."})
+
+    request.user.profile.credits -= desired_credits
+    request.user.save()
+    return render(request, 'landing/account.html', {'success': "Extraccion realizada."})
+
+
+
+@require_http_methods('POST')
+@login_required(login_url="/login/")
 def pay(request):
     c = request.POST["credits"]
 

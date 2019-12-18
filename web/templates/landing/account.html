@@ -1,12 +1,24 @@
 {% extends 'landing/base.html' %}
 
 {% block content %}
-    <section id="main" class="container 50%">
+    <section id="main" class="container">
         <header class="page-header">
             <h2>Cuenta</h2>
         </header>
 
-        <div class="box">
+        <div class="box" style="max-width:500px; text-align: center; margin: auto">
+
+            {% if success %}
+                <div class="alert alert-success" role="alert">
+                    <strong>Exito!</strong> {{ success }}
+                </div>
+            {% endif %}
+
+            {% if error %}
+                <div class="alert alert-danger" role="alert">
+                    <strong>Error!</strong> {{ error }}
+                </div>
+            {% endif %}
 
             <h3>Informacion</h3>
 
@@ -29,13 +41,13 @@
             <p style="font-size:40px;">${{ user.profile.credits }}</p>
 
                 <form method="post" action="/pay/">
+                    <h4>Cargar creditos</h4>
                     {% csrf_token %}
-                    <div class="row uniform 50%">
                         <div class="12u">
-                            <input name="credits" id="credits" type="number" min="0" placeholder="Cantidad"/>
+                            <input name="credits" id="credits" type="number" min="10" max="100000" placeholder="Cantidad"/>
+                                <br/>
+                                 <br/>
                         </div>
-                    </div>
-                    <div class="row uniform">
                         <div class="12u">
                             <ul class="actions">
                                 <li>
@@ -47,7 +59,6 @@
                                 </li>
                             </ul>
                         </div>
-                    </div>
                 </form>
             {% if init_point != none %}
                 <div class="alert alert-warning" role="alert">
@@ -60,17 +71,14 @@
                 </form>
             {% endif %}
 
-            {% if success %}
-                <div class="alert alert-success" role="alert">
-                    <strong>Exito!</strong> {{ success }}
-                </div>
-            {% endif %}
-
-            {% if error %}
-                <div class="alert alert-error" role="alert">
-                    <strong>Error!</strong> {{ error }}
-                </div>
-            {% endif %}
+            <form method="post" action="/extract/">
+                <h4>Extraer creditos</h4>
+                {% csrf_token %}
+                <input name="extract-credits" id="extract-credits" type="number" min="0" placeholder="Cantidad"/>
+                <br/>
+                <br/>
+                <input type="submit" value="Enviar creditos"/>
+            </form>
         </div>
     </section>
 {% endblock %}

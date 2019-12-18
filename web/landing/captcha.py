@@ -14,6 +14,10 @@ def check_captcha(request):
     res = requests.post("https://www.google.com/recaptcha/api/siteverify", {"secret": CAPTCHA_SECRET, "response": c})
     print(res.json())
     success = res.json()["success"]
+
+    if not success:
+        return False
+
     score = res.json()["score"]
 
-    return success and score >= 0.1
+    return score >= 0.1
