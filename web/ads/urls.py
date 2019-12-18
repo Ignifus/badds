@@ -7,7 +7,7 @@ from . import views
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet, base_name='User')
 router.register(r'applications', ApplicationViewSet, base_name='Application')
-router.register(r'advertisements', AdvertisementViewSet, base_name='Advertisement')
+router.register(r'campaigns', AdvertisementViewSet, base_name='Advertisement')
 router.register(r'spaces', SpaceViewSet, base_name='Space')
 router.register(r'auctions', AuctionViewSet, base_name='Auction')
 router.register(r'biddings', BiddingViewSet, base_name='Bidding')

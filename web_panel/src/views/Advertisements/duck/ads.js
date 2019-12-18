@@ -6,7 +6,7 @@ import { api } from '../../../helpers';
 import { MainDuck } from 'layouts';
 
 // config
-export const BASE_URL = '/ads/api/advertisements/';
+export const BASE_URL = '/ads/api/campaigns/';
 
 // Types
 export const NAMESPACE = 'ads';
