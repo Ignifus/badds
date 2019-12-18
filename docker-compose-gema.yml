@@ -110,7 +110,6 @@ services:
           - gema
         volumes:
           - ./web_panel/build:/usr/src/panel/build
-          - ./web_panel/node_modules:/usr/src/panel/node_modules
           - ./web_panel/src:/usr/src/panel/src:rw
           - ./web_panel/public:/usr/src/panel/src/public:rw
 
