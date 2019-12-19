@@ -8,7 +8,7 @@ from django.shortcuts import render
 def index(request):
     api_key = os.environ.get("DEMO_API_KEY", "")
     space_id = os.environ.get("DEMO_SPACE_ID", "")
-    full_url = f"http://badds:8080/ads/ad/?apiKey={api_key}&space={space_id}"
+    full_url = f"http://badds:8080/ads/ad/?apiKey={api_key}&space={space_id}&age=23&gender=M"
 
     response = requests.get(full_url)
     res = response.json()

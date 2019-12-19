@@ -13,7 +13,7 @@ import com.google.gson.Gson;
 import java.net.URL;
 
 public class Badds {
-    private static final String URL = "https://badds.hq.localhost/ads/ad/";
+    private static final String URL = "https://badds.geminis.dev/ads/ad/";
 
     private static final Gson gson = new Gson();
 

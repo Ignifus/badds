@@ -27,8 +27,8 @@ public class MainActivity extends Activity implements IBaddsListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        apiKey = "de9facb5e717fd7da1fc22c30b2b7eb91c97c964da8dbbcda3af8c6365aae062";
-        spaceId = "6";
+        apiKey = "8130f9ae0daf24586228cf87398d8aa85ed5b6c954e43671dec17ca9bce6d392";
+        spaceId = "1";
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
