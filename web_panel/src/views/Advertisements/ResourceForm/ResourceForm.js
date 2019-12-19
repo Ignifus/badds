@@ -56,7 +56,7 @@ class ResourceFormBase extends React.Component {
     formData.set('text', this.state.text);
     formData.set('advertisement', this.props.match.params.id);
     //TODO: validate
-    formData.append('image', );
+    formData.append('image', file);
 
     if (this.props.match.params.resourceId == null) {
       this.props.createResource(formData);
@@ -162,15 +162,15 @@ class ResourceFormBase extends React.Component {
           <Grid item xs={4}>
             <FormControl fullWidth>
               <TextField
-                label="URL Interna"
+                label="URL"
                 name="url_link"
-                placeholder="ie /mi_aviso.jpg"
+                placeholder="enlace del aviso"
                 value={this.state.url_link}
                 error={this.state.errors.url_link != null}
                 helperText={this.state.errors.url_link != null ? this.state.errors.url_link[0] : ''}
                 onChange={this.handleChange}
                 InputProps={{
-                  endAdornment: <Help title="La url del aviso, escriba el path." />
+                  endAdornment: <Help title="La url al cual el usuario es redirigido al hacer click/touch sobre el aviso" />
                 }}
                 required
               />

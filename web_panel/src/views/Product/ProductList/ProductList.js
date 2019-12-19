@@ -26,6 +26,9 @@ class ProductListBase extends PureComponent {
     if (action === 'Delete') {
       remove(id);
     }
+    if (action === 'Detail') {
+      history.push(`/ads/publishers/products/view/${id}`)
+    }
   }
 
   render() {

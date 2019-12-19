@@ -217,20 +217,22 @@ class AuctionsFormBase extends React.Component {
         </Grid>
         <Grid container>
           <Grid item xs={4}>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <KeyboardTimePicker
-                margin="normal"
-                id="time-picker"
-                label="Hora de finalizacion de la subasta"
-                value={this.state.time}
-                onChange={this.handleTimeChange}
-                error={this.state.errors.time != null}
-                helperText={this.state.errors.time != null && this.state.errors.time[0]}
-                KeyboardButtonProps={{
-                  'aria-label': 'change time',
-                }}
-              />
-            </MuiPickersUtilsProvider>
+            <FormControl fullWidth>
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <KeyboardTimePicker
+                  margin="normal"
+                  id="time-picker"
+                  label="Hora de finalizacion de la subasta (UTC datetime)"
+                  value={this.state.time}
+                  onChange={this.handleTimeChange}
+                  error={this.state.errors.time != null}
+                  helperText={this.state.errors.time != null && this.state.errors.time[0]}
+                  KeyboardButtonProps={{
+                    'aria-label': 'change time',
+                  }}
+                />
+              </MuiPickersUtilsProvider>
+            </FormControl>
           </Grid>
         </Grid>
         <Grid container>

@@ -34,6 +34,9 @@ class SpaceListBase extends PureComponent {
       case 'Add Auction':
         history.push(`/ads/publishers/spaces/${id}/auctions/add`);
         break;
+      case 'Detail':
+        history.push(`/ads/publishers/spaces/view/${id}`);
+        break;
       default:
         break;
     }
@@ -59,6 +62,7 @@ class SpaceListBase extends PureComponent {
         <Table>
           <TableHead>
             <TableRow>
+              <TableCell>Id</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Ancho</TableCell>
               <TableCell>Alto</TableCell>
@@ -69,6 +73,7 @@ class SpaceListBase extends PureComponent {
           <TableBody>
             {spaces.map(space => (
               <TableRow key={space.id}>
+                <TableCell>{space.id}</TableCell>
                 <TableCell>{space.name}</TableCell>
                 <TableCell>{space.x_size}</TableCell>
                 <TableCell>{space.y_size}</TableCell>

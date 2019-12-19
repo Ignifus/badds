@@ -9,7 +9,8 @@ const options = [
   { id: 'Update', value: 'Actualizar' },
   { id: 'Delete', value: 'Borrar' },
   { id: 'Add Restricion', value: 'Agregar Restriccion' },
-  { id: 'Add Auction', value: 'Subastar espacio' }
+  { id: 'Add Auction', value: 'Subastar espacio' },
+  { id: 'Detail', value: 'Detalle' }
 ];
 
 const ITEM_HEIGHT = 48;
