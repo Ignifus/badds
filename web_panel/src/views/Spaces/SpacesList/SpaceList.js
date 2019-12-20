@@ -1,7 +1,7 @@
 import React,  { PureComponent } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { Grid, LinearProgress, Table, TableHead, TableBody, TableRow, TableCell } from '@material-ui/core';
+import { Grid, LinearProgress, Table, TableHead, TableBody, TableRow, TableCell, Paper } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
 
@@ -59,32 +59,34 @@ class SpaceListBase extends PureComponent {
         {
           success && <SuccessSnackbar message="Operacion concluida con exito" />
         }
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Id</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Ancho</TableCell>
-              <TableCell>Alto</TableCell>
-              <TableCell>Aplicacion</TableCell>
-              <TableCell>Acciones</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {spaces.map(space => (
-              <TableRow key={space.id}>
-                <TableCell>{space.id}</TableCell>
-                <TableCell>{space.name}</TableCell>
-                <TableCell>{space.x_size}</TableCell>
-                <TableCell>{space.y_size}</TableCell>
-                <TableCell><Link to={getApplicationURL(this.props.location.pathname, space.application)}>Expandir</Link></TableCell>
-                <TableCell>
-                  <ActionMenu onActionSelected={ (action) => this.onActionSelected(action, space.id) } />
-                </TableCell>
+        <Paper style={{width: '100%', overflowX: 'auto' }}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Id</TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Ancho</TableCell>
+                <TableCell>Alto</TableCell>
+                <TableCell>Aplicacion</TableCell>
+                <TableCell>Acciones</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHead>
+            <TableBody>
+              {spaces.map(space => (
+                <TableRow key={space.id}>
+                  <TableCell>{space.id}</TableCell>
+                  <TableCell>{space.name}</TableCell>
+                  <TableCell>{space.x_size}</TableCell>
+                  <TableCell>{space.y_size}</TableCell>
+                  <TableCell><Link to={getApplicationURL(this.props.location.pathname, space.application)}>Expandir</Link></TableCell>
+                  <TableCell>
+                    <ActionMenu onActionSelected={ (action) => this.onActionSelected(action, space.id) } />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
       </Grid>
     );
   }

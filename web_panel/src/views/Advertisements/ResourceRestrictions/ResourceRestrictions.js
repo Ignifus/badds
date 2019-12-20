@@ -283,7 +283,7 @@ class ResourceRestrictionsBase extends Component {
         { this.renderCountryBlackList() }
         { this.renderGender() }
         <Grid item xs={12}>
-          <Button type="submit" color="primary">Guardar Restricciones</Button>
+          <Button type="submit" color="primary" variant="contained">Guardar Restricciones</Button>
         </Grid>
       </Grid>
     </form>);
@@ -307,7 +307,7 @@ const ResourceRestrictions = compose(
   withProductLayout({
     title: 'Restricciones de los recursos',
     withPagination: false,
-    Buttons: () => <span />
+    Buttons: null
   }),
   withRouter,
   connect(mapStateToProps, mapDispatchToProps)
