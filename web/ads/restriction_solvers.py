@@ -14,6 +14,8 @@ def solve_age(restriction, params):
 
 
 def solve_indiv_age(restriction, age):
+    restriction = restriction.strip()
+
     if "<" == restriction[0]:
         return age < int(restriction[1:])
 
