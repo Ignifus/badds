@@ -20,3 +20,22 @@ export function getRequestConfig(headers) {
     headers: { 'X-CSRFToken': csrftoken, ...headers }
   }
 }
+
+export function parseRestrictions(apiRestrictions) {
+  const restrictions = apiRestrictions.reduce((acc, restriction) => {
+    const key = restriction.restriction__restriction;
+    if (acc[key] == null) {
+        acc[key] = key === 'AGE' ? restriction.value.split(':') :
+            restriction.value.split(',');
+    }
+    return acc;
+  }, {});
+
+  return {
+    countryWhiteList: restrictions.COUNTRY_WHITELIST || [],
+    countryBlackList: restrictions.COUNTRY_BLACKLIST || [],
+    genders: restrictions.GENDER || [],
+    minAge: restrictions.AGE[0] || 0,
+    maxAge: restrictions.AGE[1] || 0
+  }
+}

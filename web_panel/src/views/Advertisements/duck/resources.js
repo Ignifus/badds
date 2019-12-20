@@ -41,6 +41,8 @@ export function reducer(state = initialState, action) {
         .set('resource', iMap(action.payload));
     case FETCH:
       return state.set('loading', false).set('list', fromJS(action.payload));
+    case DETAIL:
+        return state.set('loading', false).set('resource', fromJS(action.payload));
     case UPDATE:
       return state.set('loading', false)
         .set('success', true)

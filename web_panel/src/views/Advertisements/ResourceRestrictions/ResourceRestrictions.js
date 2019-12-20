@@ -20,6 +20,7 @@ import { actions, selectors } from '../duck/resources';
 import { withProductLayout } from '../../../layouts/Main';
 import { FailedSnackbar, SuccessSnackbar } from '../../../components';
 import { CountrySelect } from '../../../common/countries';
+import { api } from '../../../helpers';
 
 const textRestriction = {
   AGE: 'Banda de edades separada por comas, por ejemplo, 20-45,60-65',
@@ -238,7 +239,26 @@ class ResourceRestrictionsBase extends Component {
     )
   }
 
-  // TODO mass update
+  componentDidMount() {
+    if(this.props.match.params.id) {
+      this.props.fetchResource(this.props.match.params.id);
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.resource.restrictions == null ||
+      this.props.resource.restrictions.length === 0
+    ) {
+      return null;
+    }
+
+    if (prevProps.resource.name !== this.props.resource.name) {
+      const restrictions = api.parseRestrictions(this.props.resource.restrictions);
+      this.setState({...restrictions});
+    }
+  }
+
   render() {
     const { isLoading, hasError, success } = this.props;
     let progressBar = null;
@@ -274,11 +294,13 @@ export const mapStateToProps = (state) => ({
   isLoading: selectors.isLoading(state),
   hasError: selectors.hasError(state),
   success: selectors.success(state),
-  restrictions: AppDuck.selectors.getRestrictions(state)
+  resource: selectors.getResource(state),
+  restrictions: AppDuck.selectors.getRestrictions(state),
 });
 
 export const mapDispatchToProps = {
-  create: actions.addRestriction
+  create: actions.addRestriction,
+  fetchResource: actions.fetch
 }
 
 const ResourceRestrictions = compose(

@@ -20,6 +20,7 @@ import { actions, selectors } from '../duck';
 import { withProductLayout } from '../../../layouts/Main';
 import { FailedSnackbar, SuccessSnackbar, Help } from '../../../components';
 import { CountrySelect } from '../../../common/countries';
+import { api } from '../../../helpers';
 
 const textRestriction = {
   AGE: 'Banda de edades separada por comas, por ejemplo, 20-45,60-65',
@@ -242,7 +243,26 @@ class SpacesRestrictionsBase extends Component {
     )
   }
 
-  // TODO mass update
+  componentDidMount() {
+    if(this.props.match.params.id) {
+      this.props.fetchSpace(this.props.match.params.id);
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.space.restrictions == null ||
+      this.props.space.restrictions.length === 0
+    ) {
+      return null;
+    }
+
+    if (prevProps.space.name !== this.props.space.name) {
+      const restrictions = api.parseRestrictions(this.props.space.restrictions);
+      this.setState({...restrictions});
+    }
+  }
+
   render() {
     const { isLoading, hasError, success } = this.props;
     let progressBar = null;
@@ -276,13 +296,15 @@ class SpacesRestrictionsBase extends Component {
 
 export const mapStateToProps = (state) => ({
   isLoading: selectors.isLoading(state),
+  space: selectors.getSpace(state),
   hasError: selectors.hasError(state),
   success: selectors.success(state),
   restrictions: AppDuck.selectors.getRestrictions(state)
 });
 
 export const mapDispatchToProps = {
-  create: actions.addRestriction
+  create: actions.addRestriction,
+  fetchSpace: actions.fetch
 }
 
 const SpacesRestrictions = compose(
