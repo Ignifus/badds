@@ -65,11 +65,11 @@ def solve_country_whitelist(restriction, params):
     if restriction is None:
         return True
 
-    return len(restriction) > 0 and params["country"] in restriction
+    return len(restriction) == 0 or params["country"] in restriction
 
 
 def solve_country_blacklist(restriction, params):
     if restriction is None:
         return True
 
-    return len(restriction) > 0 and params["country"] not in restriction
+    return len(restriction) == 0 or params["country"] not in restriction
