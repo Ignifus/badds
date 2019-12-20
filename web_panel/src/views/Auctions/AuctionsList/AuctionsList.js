@@ -1,7 +1,7 @@
 import React,  { PureComponent } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { Grid, LinearProgress, Table, TableHead, TableBody, TableRow, TableCell } from '@material-ui/core';
+import { Grid, LinearProgress, Table, TableHead, TableBody, TableRow, TableCell, Paper } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
 
@@ -52,30 +52,32 @@ class AuctionsListBase extends PureComponent {
         {
           success && <SuccessSnackbar message="Operacion concluida con exito" />
         }
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Space</TableCell>
-              <TableCell>Duracion</TableCell>
-              <TableCell>Finalizacion</TableCell>
-              <TableCell>Impresiones</TableCell>
-              <TableCell>Acciones</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {auctions.map(auction => (
-              <TableRow key={auction.id}>
-                <TableCell><Link to={getSpaceURL(this.props.location.pathname, auction.space)}>Expandir</Link></TableCell>
-                <TableCell>{auction.contract_duration_days}</TableCell>
-                <TableCell>{auction.end_date}</TableCell>
-                <TableCell>{auction.prints}</TableCell>
-                <TableCell>
-                  <ActionMenu onActionSelected={ (action) => this.onActionSelected(action, auction.id) } />
-                </TableCell>
+        <Paper style={{ width: '100%', overflowX: 'auto' }}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Space</TableCell>
+                <TableCell>Duracion</TableCell>
+                <TableCell>Finalizacion</TableCell>
+                <TableCell>Impresiones</TableCell>
+                <TableCell>Acciones</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHead>
+            <TableBody>
+              {auctions.map(auction => (
+                <TableRow key={auction.id}>
+                  <TableCell><Link to={getSpaceURL(this.props.location.pathname, auction.space)}>Expandir</Link></TableCell>
+                  <TableCell>{auction.contract_duration_days}</TableCell>
+                  <TableCell>{auction.end_date}</TableCell>
+                  <TableCell>{auction.prints}</TableCell>
+                  <TableCell>
+                    <ActionMenu onActionSelected={ (action) => this.onActionSelected(action, auction.id) } />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
       </Grid>
     );
   }

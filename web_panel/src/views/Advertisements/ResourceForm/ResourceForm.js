@@ -146,7 +146,7 @@ class ResourceFormBase extends React.Component {
         }
         <Grid container spacing={2}>
           {progressBar}
-          <Grid item xs={4}>
+          <Grid item lg={4} xs={12}>
             <FormControl fullWidth>
               <TextField label="Name"
                 name="name"
@@ -159,7 +159,7 @@ class ResourceFormBase extends React.Component {
               />
             </FormControl>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item lg={4} xs={12}>
             <FormControl fullWidth>
               <TextField
                 label="URL"
@@ -176,7 +176,7 @@ class ResourceFormBase extends React.Component {
               />
             </FormControl>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item lg={4} xs={12}>
             <FormControl fullWidth>
               <TextField
                 label="Texto Alternativo"
@@ -195,7 +195,7 @@ class ResourceFormBase extends React.Component {
           </Grid>
         </Grid>
         <Grid container style={{marginTop: '15px'}}>
-          <Grid item xs={4}>
+          <Grid item lg={4} xs={12}>
             <FormControl>
               <Button
                 color="secondary"

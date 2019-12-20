@@ -1,7 +1,7 @@
 import React,  { PureComponent } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { Grid, LinearProgress, Table, TableHead, TableBody, TableRow, TableCell } from '@material-ui/core';
+import { Grid, LinearProgress, Table, TableHead, TableBody, TableRow, TableCell, Paper } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
 
@@ -56,28 +56,30 @@ class BiddingsListBase extends PureComponent {
         {
           success && <SuccessSnackbar message="Operacion concluida con exito" />
         }
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>PPP USD</TableCell>
-              <TableCell>Creacion</TableCell>
-              <TableCell>Subasta</TableCell>
-              <TableCell>Aviso</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {biddings.map(bidding => (
-              <TableRow key={bidding.id}>
-                <TableCell>{bidding.id}</TableCell>
-                <TableCell>{bidding.ppp_usd}</TableCell>
-                <TableCell>{moment(bidding.created_at).format('DD/MM/YYYY')}</TableCell>
-                <TableCell><Link to={getAuctionURL(this.props.location.pathname, bidding.auction)}>Expandir</Link></TableCell>
-                <TableCell><Link to={getAdvertisementURL(this.props.location.pathname, bidding.advertisement)}>Expandir</Link></TableCell>
+        <Paper style={{ width: '100%', overflowX: 'auto' }}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>ID</TableCell>
+                <TableCell>PPP USD</TableCell>
+                <TableCell>Creacion</TableCell>
+                <TableCell>Subasta</TableCell>
+                <TableCell>Aviso</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHead>
+            <TableBody>
+              {biddings.map(bidding => (
+                <TableRow key={bidding.id}>
+                  <TableCell>{bidding.id}</TableCell>
+                  <TableCell>{bidding.ppp_usd}</TableCell>
+                  <TableCell>{moment(bidding.created_at).format('DD/MM/YYYY')}</TableCell>
+                  <TableCell><Link to={getAuctionURL(this.props.location.pathname, bidding.auction)}>Expandir</Link></TableCell>
+                  <TableCell><Link to={getAdvertisementURL(this.props.location.pathname, bidding.advertisement)}>Expandir</Link></TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
       </Grid>
     );
   }

@@ -41,7 +41,7 @@ class MarketBase extends Component {
     return (<Grid container spacing={2}>
     {
     auctions.map(auction => (
-      <Grid item xs={3} key={auction.id}>
+      <Grid item lg={3} md={6} xs={12} key={auction.id}>
         <Card>
           <CardActionArea>
             <CardHeader

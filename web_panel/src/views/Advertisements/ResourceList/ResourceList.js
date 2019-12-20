@@ -1,7 +1,7 @@
 import React,  { PureComponent } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { Grid, LinearProgress, Table, TableHead, TableBody, TableRow, TableCell } from '@material-ui/core';
+import { Grid, LinearProgress, Table, TableHead, TableBody, TableRow, TableCell, Paper } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { withRouter, Link } from 'react-router-dom';
 
@@ -52,28 +52,30 @@ class ResourceListBase extends PureComponent {
         {
           success && <SuccessSnackbar message="Operacion concluida con exito" />
         }
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Nombre</TableCell>
-              <TableCell>Path</TableCell>
-              <TableCell>URL</TableCell>
-              <TableCell>Acciones</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {resources.map(resource => (
-              <TableRow key={resource.id}>
-                <TableCell>{resource.name}</TableCell>
-                <TableCell><a href={resource.path} target="__blank">Ver Recurso</a></TableCell>
-                <TableCell>{resource.url_link}</TableCell>
-                <TableCell>
-                  <ActionMenu onActionSelected={ (action) => this.onActionSelected(action, resource.id) } />
-                </TableCell>
+        <Paper style={{ width: '100%', overflowX: 'auto' }}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Nombre</TableCell>
+                <TableCell>Path</TableCell>
+                <TableCell>URL</TableCell>
+                <TableCell>Acciones</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHead>
+            <TableBody>
+              {resources.map(resource => (
+                <TableRow key={resource.id}>
+                  <TableCell>{resource.name}</TableCell>
+                  <TableCell><a href={resource.path} target="__blank">Ver Recurso</a></TableCell>
+                  <TableCell>{resource.url_link}</TableCell>
+                  <TableCell>
+                    <ActionMenu onActionSelected={ (action) => this.onActionSelected(action, resource.id) } />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
       </Grid>
     );
   }

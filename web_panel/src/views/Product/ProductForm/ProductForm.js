@@ -155,7 +155,7 @@ class ProductFormBase extends React.Component {
         }
         <Grid container spacing={2}>
           {progressBar}
-          <Grid item xs={4}>
+          <Grid item lg={4} xs={12}>
             <FormControl fullWidth>
               <TextField label="Name"
                 name="name"
@@ -171,7 +171,7 @@ class ProductFormBase extends React.Component {
               />
             </FormControl>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item lg={4} xs={12}>
             <FormControl fullWidth>
               <TextField
                 label="Domain"
@@ -188,7 +188,7 @@ class ProductFormBase extends React.Component {
               />
             </FormControl>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item lg={4} xs={12}>
             <FormControl fullWidth>
               <InputLabel id="badds-app-category-select">Categoria</InputLabel>
               <Select

@@ -139,7 +139,7 @@ class SpaceFormBase extends React.Component {
         }
         <Grid container spacing={2}>
           {progressBar}
-          <Grid item xs={4}>
+          <Grid item lg={4} xs={12}>
             <FormControl fullWidth>
               <TextField label="Name"
                 name="name"
@@ -152,7 +152,7 @@ class SpaceFormBase extends React.Component {
               />
             </FormControl>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item lg={4} xs={12}>
             <FormControl fullWidth>
               <TextField
                 label="Ancho"
@@ -167,7 +167,7 @@ class SpaceFormBase extends React.Component {
               />
             </FormControl>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item lg={4} xs={12}>
             <FormControl fullWidth>
               <TextField
                 label="Alto"
@@ -184,7 +184,7 @@ class SpaceFormBase extends React.Component {
           </Grid>
         </Grid>
         <Grid container>
-          <Grid item xs={4}>
+          <Grid item lg={4} xs={12}>
             {
               apps.length > 0 && <FormControl fullWidth>
                 <InputLabel id="badds-app-application-select">Applicacion</InputLabel>

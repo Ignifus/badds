@@ -153,7 +153,7 @@ class BiddingFormBase extends React.Component {
             <Grid container spacing={2}>
               {progressBar}
               <Divider />
-              <Grid item xs={4}>
+              <Grid item lg={6} xs={12}>
                 <FormControl fullWidth>
                   <TextField label="PPP USD"
                     name="ppp_usd"
@@ -167,7 +167,7 @@ class BiddingFormBase extends React.Component {
                   />
                 </FormControl>
               </Grid>
-              <Grid item xs={4}>
+              <Grid item lg={6} xs={12}>
                 <FormControl fullWidth>
                   <InputLabel id="badds-app-category-select">Aviso</InputLabel>
                   <Select
