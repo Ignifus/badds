@@ -67,6 +67,12 @@ export const Faq = props => (
           secondary="Luego de finalizada la subasta, Badds seleccionara el precio mas alto y creara un contrato. La app debera cumplir con la cantidad de impresiones en el tiempo pautado."
         />
       </ListItem>
+      <ListItem>
+        <ListItemText
+          primary="Como integrar en android?"
+          secondary={<span>Debe descargarse nuestro SDK. Siga el enlace a continuacion. <a href="/sdk?">SDK</a></span>}
+        />
+      </ListItem>
     </List>
   </div>
 )
