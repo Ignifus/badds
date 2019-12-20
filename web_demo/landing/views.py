@@ -29,9 +29,7 @@ def index(request):
     text = "Ad placeholder."
     file_name = "placeholder-images-image_large.png"
 
-    print(res)
-
-    if response.status_code == 200 and "error" not in res:
+    if response.status_code == 200 and "placeholder" not in res:
         img_url = res["resource"]
         link = res["link"]
         text = res["text"]

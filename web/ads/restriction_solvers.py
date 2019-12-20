@@ -14,6 +14,8 @@ def solve_age(restriction, params):
 
 
 def solve_indiv_age(restriction, age):
+    restriction = restriction.strip()
+
     if "<" == restriction[0]:
         return age < int(restriction[1:])
 
@@ -37,31 +39,31 @@ def solve_gender(restriction, params):
 
     gender = params["gender"]
 
+    restrictions = restriction.split(",")
+
+    for r in restrictions:
+        if solve_indiv_gender(r, gender):
+            return True
+
+    return False
+
+
+def solve_indiv_gender(restriction, gender):
     if gender == "U":
         return True
 
-    if len(restriction) > 0 and gender[0] != restriction:
-        return False
-    return True
+    return len(restriction) > 0 and gender[0] == restriction
 
 
 def solve_country_whitelist(restriction, params):
     if restriction is None:
         return True
 
-    country = params["country"]
-
-    if len(restriction) > 0 and country not in restriction:
-        return False
-    return True
+    return len(restriction) > 0 and params["country"] in restriction
 
 
 def solve_country_blacklist(restriction, params):
     if restriction is None:
         return True
 
-    country = params["country"]
-
-    if len(restriction) > 0 and country in restriction:
-        return False
-    return True
+    return len(restriction) > 0 and params["country"] not in restriction

@@ -1,12 +1,15 @@
 package com.badds.baddsdemo;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.badds.Badds;
 import com.badds.IBaddsListener;
@@ -16,6 +19,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 public class MainActivity extends Activity implements IBaddsListener {
 
     private ImageView image;
+    private TextView adText;
     private String apiKey;
     private String spaceId;
     private Badds badds;
@@ -33,6 +37,19 @@ public class MainActivity extends Activity implements IBaddsListener {
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         image = findViewById(R.id.imageView);
+        adText = findViewById(R.id.adText);
+
+        image.setOnClickListener(v -> {
+            String url = (String)v.getTag();
+
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.addCategory(Intent.CATEGORY_BROWSABLE);
+
+            intent.setData(Uri.parse(url));
+
+            startActivity(intent);
+        });
 
         findViewById(R.id.getAd).setOnClickListener(v -> {
             try {
@@ -63,6 +80,8 @@ public class MainActivity extends Activity implements IBaddsListener {
     @Override
     public void onBaddsResponse(BaddsResponse baddsResponse) {
         image.setImageBitmap(baddsResponse.image);
+        image.setTag(baddsResponse.link != null ? baddsResponse.link : "https://badds.geminis.dev");
+        adText.setText(baddsResponse.text);
     }
 
     @Override

@@ -88,4 +88,4 @@ def get_resource(request):
         if not filtered:
             return JsonResponse({'resource': res.path, "link": res.url_link, "text": res.text})
 
-    return JsonResponse({'error': "No resource found matching restrictions, serving placeholder.", 'resource': "https://res.cloudinary.com/geminis/image/upload/v1575435915/placeholder-images-image_large.png"})
+    return JsonResponse({'placeholder': True, 'resource': "https://res.cloudinary.com/geminis/image/upload/v1575435915/placeholder-images-image_large.png"})

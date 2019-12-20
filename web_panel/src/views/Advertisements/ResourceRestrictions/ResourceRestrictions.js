@@ -29,9 +29,9 @@ const textRestriction = {
 };
 
 const genders = [
-  { label: "Masculine", value: "M" },
-  { label: "Femenine", value: "F" },
-  { label: "Other", value: "O" },
+  { label: "Masculino", value: "M" },
+  { label: "Femenino", value: "F" },
+  { label: "Otro", value: "U" },
 ];
 
 class ResourceRestrictionsBase extends Component {

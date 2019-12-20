@@ -126,5 +126,18 @@
             android:text="&gt;50" />
     </RadioGroup>
 
+    <TextView
+        android:id="@+id/adText"
+        android:layout_width="333dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="72dp"
+        android:layout_marginEnd="349dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.096"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.875" />
+
 
 </android.support.constraint.ConstraintLayout>
