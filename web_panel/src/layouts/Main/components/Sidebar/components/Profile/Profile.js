@@ -46,17 +46,17 @@ const ProfileBase = props => {
   let avatar = (<Avatar
       alt="Person"
       className={classes.orangeAvatar}
-      component={RouterLink}
-      to="/settings"
+      component={"a"}
+      href="/account"
     >{user.first_name[0]} {user.last_name[0]}</Avatar>);
 
   if (user.avatar != null) {
     avatar = (<Avatar
         alt="Person"
         className={classes.avatar}
-        component={RouterLink}
+        component={"a"}
         src={user.avatar}
-        to="/settings"
+        href="/account"
       />)
   }
 

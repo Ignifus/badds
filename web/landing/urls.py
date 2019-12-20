@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'^pay/$', views.pay, name='pay'),
     url(r'^extract/$', views.extract, name='extract'),
     url(r'^cancel/$', views.cancel, name='cancel'),
+    url(r'^sdk/$', views.sdk, name='sdk'),
     url(r'^account_activation_sent/$', views.account_activation_sent, name='account_activation_sent'),
     url(r'^logout_auth/$', auth.logout_auth, name='logout_auth'),
     url(r'^resend_mail/$', auth.resend_mail, name='send_mail'),

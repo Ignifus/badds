@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 
-from ads.models import Contract, Ip, ContractIpLog, ResourceRestriction
+from ads.models import Contract, Ip, ContractIpLog, ResourceRestriction, SpaceRestriction
 from ads.restriction_solvers import *
 from badds.utils import get_client_country, get_client_ip
 
@@ -77,12 +77,21 @@ def get_resource(request):
     }
 
     for res in resources:
-        all_restrictions = ResourceRestriction.objects.select_related('restriction').filter(resource=res).values('restriction__restriction', 'value')
+        resource_restrictions = ResourceRestriction.objects.select_related('restriction').filter(resource=res).values('restriction__restriction', 'value')
+        space_restrictions = SpaceRestriction.objects.select_related('restriction').filter(space_id=space_id).values('restriction__restriction', 'value')
 
         filtered = False
 
-        for restriction in all_restrictions:
+        for restriction in resource_restrictions:
             if not validate[restriction["restriction__restriction"]](restriction["value"], params):
+                print(restriction["restriction__restriction"])
+                print(restriction["value"])
+                filtered = True
+
+        for restriction in space_restrictions:
+            if not validate[restriction["restriction__restriction"]](restriction["value"], params):
+                print(restriction["restriction__restriction"])
+                print(restriction["value"])
                 filtered = True
 
         if not filtered:
