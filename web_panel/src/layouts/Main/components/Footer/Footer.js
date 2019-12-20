@@ -31,7 +31,7 @@ const Footer = props => {
           . {new Date().getFullYear()}
       </Typography>
       <Typography variant="caption">
-        Badds, serving adds to the world wide web.
+        Badds, serving ads to the world wide web.
       </Typography>
     </div>
   );

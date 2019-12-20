@@ -92,7 +92,7 @@ const DashboardBase = (props) => {
           xl={3}
           xs={12}
         >
-          <TotalUsers title="Applicaiones" value={analytics.total_applications} />
+          <TotalUsers title="Aplicaciones" value={analytics.total_applications} />
         </Grid>
         <Grid
           item

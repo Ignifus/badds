@@ -51,13 +51,6 @@ const LatestSales = props => {
       </CardContent>
       <Divider />
       <CardActions className={classes.actions}>
-        <Button
-          color="primary"
-          size="small"
-          variant="text"
-        >
-          Overview <ArrowRightIcon />
-        </Button>
       </CardActions>
     </Card>
   );

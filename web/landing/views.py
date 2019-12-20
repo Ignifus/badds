@@ -5,6 +5,7 @@ import os
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
+from django.http import HttpResponse, FileResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
 
@@ -64,6 +65,12 @@ def recover(request):
 
 def activate(request, uidb64, token):
     return activate_auth(request, uidb64, token)
+
+
+def sdk(request):
+    response = FileResponse(open("static/assets/sdk/badds-1.0.aar", "rb"))
+    response['Content-Disposition'] = 'inline; filename="badds-1.0.aar"'
+    return response
 
 
 @login_required(login_url="/login/")
