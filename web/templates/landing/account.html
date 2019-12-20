@@ -73,11 +73,12 @@
 
             <form method="post" action="/extract/">
                 <h4>Extraer creditos</h4>
+                <i class="fa fa-money" style="color:green"></i><small> Se aplicara una comision del 5%</small>
                 {% csrf_token %}
                 <input name="extract-credits" id="extract-credits" type="number" min="0" placeholder="Cantidad"/>
                 <br/>
                 <br/>
-                <input type="submit" value="Enviar creditos"/>
+                <input type="submit" value="Extraer"/>
             </form>
         </div>
     </section>

@@ -2,6 +2,7 @@ import random
 import string
 import os
 
+import mercadopago
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
@@ -114,6 +115,19 @@ def extract(request):
 
     if request.user.profile.credits < desired_credits:
         return render(request, 'landing/account.html', {'error': "No posee fondos suficientes."})
+
+    # mercado = mercadopago.MP(os.environ.get("MP_CLIENT", None), os.environ.get("MP_SECRET", None))
+    # resp = mercado.post("/v1/payments", {
+    #     "transaction_amount": desired_credits,
+    #     "operation_type": "money_transfer",
+    #     "description": "BADDS Transfer",
+    #     "installments": 1,
+    #     "marketplace": "NONE",
+    #     "payment_method_id": "account_money",
+    #     "collector": {
+    #         "email": request.user.email
+    #     },
+    # })
 
     request.user.profile.credits -= desired_credits
     request.user.save()
