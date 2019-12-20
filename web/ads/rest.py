@@ -79,6 +79,13 @@ class BiddingViewSet(viewsets.ModelViewSet):
         if self.request.user.profile.credits < (serializer.validated_data['ppp_usd'] * serializer.validated_data['auction'].prints):
             raise ValidationError(detail="User does not have enough credits.")
 
+        biddings = Bidding.objects.filter(user=self.request.user, auction_id=serializer.validated_data['auction'])
+
+        for b in biddings:
+            self.request.user.profile.credits += b.ppp_usd * b.auction.prints
+        
+        biddings.delete()
+
         serializer.save(user=self.request.user)
 
         self.request.user.profile.credits -= serializer.validated_data['ppp_usd'] * serializer.validated_data['auction'].prints
