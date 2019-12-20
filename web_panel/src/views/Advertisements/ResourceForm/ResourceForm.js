@@ -52,7 +52,7 @@ class ResourceFormBase extends React.Component {
 
     const formData = new FormData();
     formData.set('name', this.state.name);
-    formData.set('url_link', this.state.name);
+    formData.set('url_link', this.state.url_link);
     formData.set('text', this.state.text);
     formData.set('advertisement', this.props.match.params.id);
     //TODO: validate
