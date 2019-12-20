@@ -222,6 +222,7 @@ class AuctionsFormBase extends React.Component {
             <FormControl fullWidth>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <KeyboardTimePicker
+                  ampm={false}
                   margin="normal"
                   id="time-picker"
                   label="Hora de finalizacion de la subasta (UTC datetime)"
