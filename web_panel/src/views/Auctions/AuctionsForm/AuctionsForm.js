@@ -60,7 +60,7 @@ class AuctionsFormBase extends React.Component {
 
     const space = this.props.match.params.spaceId || this.state.space;
     const date = moment(this.state.end_date).format('YYYY-MM-DD');
-    const time = moment(this.state.time).format('hh:mm:ss')
+    const time = moment(this.state.time).format('HH:mm:ss')
     const payload = {
       end_date: `${date}T${time}Z`,
       prints: this.state.prints,
