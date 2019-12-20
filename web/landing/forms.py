@@ -28,9 +28,11 @@ class SignUpForm(UserCreationForm):
     )
 
     def clean(self):
+        super(SignUpForm, self).clean()
+
         email = self.cleaned_data.get('email')
         if User.objects.filter(email=email).exists():
-            raise ValidationError("El email ya existe!")
+            raise ValidationError({'email': 'Ya existe un usuario con ese email.'})
         return self.cleaned_data
 
     class Meta:
