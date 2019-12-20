@@ -84,10 +84,14 @@ def get_resource(request):
 
         for restriction in resource_restrictions:
             if not validate[restriction["restriction__restriction"]](restriction["value"], params):
+                print(restriction["restriction__restriction"])
+                print(restriction["value"])
                 filtered = True
 
         for restriction in space_restrictions:
             if not validate[restriction["restriction__restriction"]](restriction["value"], params):
+                print(restriction["restriction__restriction"])
+                print(restriction["value"])
                 filtered = True
 
         if not filtered:

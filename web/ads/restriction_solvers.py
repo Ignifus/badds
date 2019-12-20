@@ -16,6 +16,9 @@ def solve_age(restriction, params):
 def solve_indiv_age(restriction, age):
     restriction = restriction.strip()
 
+    if len(restriction) == 0:
+        return True
+
     if "<" == restriction[0]:
         return age < int(restriction[1:])
 
@@ -49,6 +52,9 @@ def solve_gender(restriction, params):
 
 
 def solve_indiv_gender(restriction, gender):
+    if len(gender) == 0:
+        return True
+
     if gender == "U":
         return True
 
