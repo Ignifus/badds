@@ -76,7 +76,7 @@ class BiddingViewSet(viewsets.ModelViewSet):
         return {'request': self.request}
 
     def perform_create(self, serializer):
-        if self.request.user.profile.credits < serializer.validated_data['ppp_usd']:
+        if self.request.user.profile.credits < (serializer.validated_data['ppp_usd'] * serializer.validated_data['auction'].prints):
             raise ValidationError(detail="User does not have enough credits.")
 
         serializer.save(user=self.request.user)
