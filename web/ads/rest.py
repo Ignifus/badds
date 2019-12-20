@@ -29,7 +29,10 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         return Application.objects.filter(user=self.request.user, active=True)
 
     def perform_update(self, serializer):
-        serializer.save(logo=upload(self.request.data['image']))
+        if "image" in self.request.data:
+            serializer.save(logo=upload(self.request.data['image']))
+        else:
+            serializer.save()
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user, logo=upload(self.request.data['image']), key=hexlify(os.urandom(32)).decode())
@@ -163,7 +166,10 @@ class ResourceViewSet(viewsets.ModelViewSet):
         return {'request': self.request}
 
     def perform_update(self, serializer):
-        serializer.save(path=upload(self.request.data['image']))
+        if "image" in self.request.data:
+            serializer.save(path=upload(self.request.data['image']))
+        else:
+            serializer.save()
 
     def perform_create(self, serializer):
         serializer.save(path=upload(self.request.data['image']))
