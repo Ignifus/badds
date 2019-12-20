@@ -118,8 +118,10 @@ class ProductFormBase extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.match.params.id != null) {
+    if (this.props.match.params.id != null && this.props.app.name === '') {
       this.props.fetchApp(this.props.match.params.id);
+    } else if (this.props.app.name !== '') {
+      this.setState({ ...this.props.app });
     }
   }
 

@@ -49,7 +49,10 @@ export function reducer(state = initialState, action) {
         .set('resource', iMap(action.payload));
     case REMOVE:
         return state.set('loading', false)
-          .set('list', state.get('list').filter((resource) => resource.id !== action.payload.id));
+          .set('success', true)
+          .set('list', state.get('list').filter((resource) => {
+            return resource.get('id') !== action.payload
+          }));
     case ERROR:
       return state.set('loading', false)
         .set('error', true);
@@ -162,7 +165,6 @@ const remove = (id) => dispatch => {
 
   return axios.delete(`${BASE_URL}${id}/`, api.getRequestConfig())
     .then(() => dispatch(resourceRemoved(id)))
-    .then(() => dispatch(getList()))
     .catch((e) => dispatch(handleError(e)));
 }
 

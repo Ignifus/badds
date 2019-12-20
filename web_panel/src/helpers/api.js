@@ -25,7 +25,7 @@ export function parseRestrictions(apiRestrictions) {
   const restrictions = apiRestrictions.reduce((acc, restriction) => {
     const key = restriction.restriction__restriction;
     if (acc[key] == null) {
-        acc[key] = key === 'AGE' ? restriction.value.split(':') :
+        acc[key] = key === 'AGE' ? restriction.value :
             restriction.value.split(',');
     }
     return acc;
@@ -35,7 +35,6 @@ export function parseRestrictions(apiRestrictions) {
     countryWhiteList: restrictions.COUNTRY_WHITELIST || [],
     countryBlackList: restrictions.COUNTRY_BLACKLIST || [],
     genders: restrictions.GENDER || [],
-    minAge: restrictions.AGE[0] || 0,
-    maxAge: restrictions.AGE[1] || 0
+    age: restrictions.AGE || ''
   }
 }

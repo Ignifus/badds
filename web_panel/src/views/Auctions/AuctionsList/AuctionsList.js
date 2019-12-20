@@ -25,7 +25,7 @@ class AuctionsListBase extends PureComponent {
 
     switch (action) {
       case 'Update':
-        history.push(`/ads/publishers/spaces/${spaceId}/auctions/${id}`);
+        history.push(`/ads/publishers/auctions/update/${id}`);
         break;
       case 'Delete':
         remove(id);
@@ -59,7 +59,6 @@ class AuctionsListBase extends PureComponent {
               <TableCell>Duracion</TableCell>
               <TableCell>Finalizacion</TableCell>
               <TableCell>Impresiones</TableCell>
-              <TableCell>Estado</TableCell>
               <TableCell>Acciones</TableCell>
             </TableRow>
           </TableHead>
@@ -70,7 +69,6 @@ class AuctionsListBase extends PureComponent {
                 <TableCell>{auction.contract_duration_days}</TableCell>
                 <TableCell>{auction.end_date}</TableCell>
                 <TableCell>{auction.prints}</TableCell>
-                <TableCell>{auction.status}</TableCell>
                 <TableCell>
                   <ActionMenu onActionSelected={ (action) => this.onActionSelected(action, auction.id) } />
                 </TableCell>

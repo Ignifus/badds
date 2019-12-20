@@ -50,7 +50,7 @@ class SpaceListBase extends PureComponent {
         <LinearProgress />
       </Grid>)
     }
-    console.log(spaces)
+
     return (
       <Grid container spacing={5}>
         {

@@ -80,8 +80,10 @@ class AdvertisementFormBase extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.match.params.id != null) {
+    if (this.props.match.params.id != null && this.props.app.id == null) {
       this.props.fetchAd(this.props.match.params.id);
+    } else if (this.props.app.id != null) {
+      this.setState({ ...this.props.app });
     }
   }
 

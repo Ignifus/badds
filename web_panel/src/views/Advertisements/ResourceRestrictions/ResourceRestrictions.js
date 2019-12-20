@@ -11,14 +11,13 @@ import {
   Typography,
   FormControl,
   Button,
-  Select,
-  MenuItem,
+  TextField,
   LinearProgress
 } from '@material-ui/core';
 import { AppDuck } from '../../../duck';
 import { actions, selectors } from '../duck/resources';
 import { withProductLayout } from '../../../layouts/Main';
-import { FailedSnackbar, SuccessSnackbar } from '../../../components';
+import { FailedSnackbar, SuccessSnackbar, Help } from '../../../components';
 import { CountrySelect } from '../../../common/countries';
 import { api } from '../../../helpers';
 
@@ -42,8 +41,7 @@ class ResourceRestrictionsBase extends Component {
       countryWhiteList: [],
       countryBlackList: [],
       genders: [],
-      minAge: 0,
-      maxAge: 25
+      age: ''
     }
 
     this.handleAgeChange = this.handleAgeChange.bind(this);
@@ -59,8 +57,7 @@ class ResourceRestrictionsBase extends Component {
 
     const AGE = this.findRestrictions('AGE');
     if (AGE !== null) {
-      const value = `${this.state.minAge}:${this.state.maxAge}`;
-      payload.push({ resource, restriction: AGE.id, value });
+      payload.push({ resource, restriction: AGE.id, value: this.state.age });
     }
 
     const GENDER = this.findRestrictions('GENDER');
@@ -84,7 +81,7 @@ class ResourceRestrictionsBase extends Component {
   }
 
   handleAgeChange(e) {
-    this.setState({[e.target.name]: e.target.value});
+    this.setState({age: e.target.value});
   }
 
   handleGenderChange(e) {
@@ -128,35 +125,18 @@ class ResourceRestrictionsBase extends Component {
       <Grid item md={4} xs={12}>
         <Typography variant="h4">Banda Edades</Typography>
         <Typography variant="body1">{textRestriction['GENDER']}</Typography>
-        <Grid container>
-            <Grid item xs={6}>
-            <FormControl fullWidth>
-              <InputLabel id="badds-spacerestrictions-min-age">Edad minima</InputLabel>
-              <Select
-                labelId="badds-spacerestrictions-min-age"
-                name="minAge"
-                value={this.state.minAge}
-                onChange={this.handleAgeChange}
-              >
-                { ages.map(age => <MenuItem key={age} value={age}>{age}</MenuItem>) }
-              </Select>
-            </FormControl>
-            </Grid>
-
-            <Grid item xs={6}>
-              <FormControl fullWidth>
-                <InputLabel id="badds-spacerestrictions-max-age">Edad maxima</InputLabel>
-                <Select
-                  labelId="badds-spacerestrictions-max-age"
-                  name="maxAge"
-                  value={this.state.maxAge}
-                  onChange={this.handleAgeChange}
-                >
-                  { ages.map(age => <MenuItem key={age} value={age}>{age}</MenuItem>) }
-                </Select>
-              </FormControl>
-            </Grid>
-        </Grid>
+        <FormControl fullWidth>
+          <TextField
+            name="age"
+            label="Rango de edad"
+            value={this.state.age}
+            onChange={this.handleAgeChange}
+            placeholder="25-30,>40"
+            InputProps={{
+              startAdornment: <Help title="Restriciones de edad separadas por coma, ejemplo: 25-30,>60 buscara dentro del rango de 25 a 30 y personas mayores a 60." />
+            }}
+          />
+        </FormControl>
       </Grid>
     )
   }
@@ -178,6 +158,7 @@ class ResourceRestrictionsBase extends Component {
             value={ this.state.countryWhiteList }
             onCountrySelected={(countryCode) => this.setWhiteListCountry(countryCode) }
             labelId="badds-space-restriction-wcselect"
+            startAdornment={<Help title="Completar para aquellos paises en los cuales se enfoca la pauta." />}
             multiple
           />
         </FormControl>
@@ -202,6 +183,7 @@ class ResourceRestrictionsBase extends Component {
             value={ this.state.countryBlackList }
             onCountrySelected={(countryCode) => this.setBlackListCountry(countryCode) }
             labelId="badds-space-restriction-bcselect"
+            startAdornment={<Help title="Completar solo si quiero excluir algun pais." />}
             multiple
           />
         </FormControl>

@@ -6,7 +6,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 const options = [
-  { id: 'Update', value: 'Actualizar' },
   { id: 'Delete', value: 'Borrar' },
 ];
 

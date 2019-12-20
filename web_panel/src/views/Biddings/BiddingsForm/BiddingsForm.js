@@ -99,8 +99,10 @@ class BiddingFormBase extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.match.params.id != null) {
+    if (this.props.match.params.id != null && this.props.bidding.id == null) {
       this.props.fetchBidding(this.props.match.params.id);
+    } else if (this.props.bidding.id != null) {
+      this.setState({ ...this.props.bidding });
     }
 
     if (this.props.auction == null) {

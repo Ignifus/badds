@@ -58,7 +58,7 @@ class AuctionsFormBase extends React.Component {
       this.setState({ errors: [] });
     }
 
-    const space = this.props.match.params.spaceId;
+    const space = this.props.match.params.spaceId || this.state.space;
     const date = moment(this.state.end_date).format('YYYY-MM-DD');
     const time = moment(this.state.time).format('hh:mm:ss')
     const payload = {
@@ -120,8 +120,10 @@ class AuctionsFormBase extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.match.params.id != null) {
+    if (this.props.match.params.id != null && this.props.auction.id == null) {
       this.props.fetchAuction(this.props.match.params.id);
+    } else if (this.props.auction.id != null) {
+      this.setState({ time: this.props.auction.end_date, ...this.props.auction });
     }
     // if (this.props.apps.length === 0) {
     //   this.props.fetch();
@@ -130,7 +132,7 @@ class AuctionsFormBase extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.auction.prints !== this.props.auction.prints) {
-      this.setState({ ...this.props.auction });
+      this.setState({ time: this.props.auction.end_date, ...this.props.auction });
     }
   }
 

@@ -43,7 +43,7 @@ class ResourceFormBase extends React.Component {
     if (file == null) {
       validationErrors.image = ["Debe cargar una imagen"];
     }
-    console.log(validationErrors)
+
     if (validationErrors) {
       return this.setState({ errors: validationErrors });
     } else {

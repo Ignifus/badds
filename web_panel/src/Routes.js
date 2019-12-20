@@ -300,7 +300,7 @@ const PublishersRoutes = () => (
       component={AuctionsFormView}
       exact
       layout={PublisherLayout}
-      path="/ads/publishers/spaces/:spaceId/auctions/update/:id"
+      path="/ads/publishers/auctions/update/:id"
     />
     <RouteWithLayout
       component={ContractsListView}

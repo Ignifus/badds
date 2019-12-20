@@ -97,9 +97,13 @@ class SpaceFormBase extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.match.params.id != null) {
+    console.log(this.props.space)
+    if (this.props.match.params.id != null && this.props.space.name === '') {
       this.props.fetchSpace(this.props.match.params.id);
+    } else if (this.props.space.name !== '') {
+      this.setState({ ...this.props.space });
     }
+
     if (this.props.apps.length === 0) {
       this.props.fetchApps();
     }
