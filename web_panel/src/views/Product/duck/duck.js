@@ -140,7 +140,7 @@ const create = (app) => dispatch => {
 const update = (id, app) => dispatch => {
   dispatch(loading());
 
-  return axios.put(`${BASE_URL}${id}/`, app, api.getRequestConfig({
+  return axios.patch(`${BASE_URL}${id}/`, app, api.getRequestConfig({
         'Content-Type': 'multipart/form-data'
       })
     )

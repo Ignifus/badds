@@ -44,23 +44,24 @@ class ProductFormBase extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     const file = document.getElementById('resourceLogo').files[0];
-    const validationErrors = this.validate();
+    const validationErrors = this.validate() || {};
+    const formData = new FormData();
     if (file == null) {
       validationErrors.logo = ["Debe cargar una imagen"];
+    } else {
+      formData.append('image', file);
     }
-    if (validationErrors) {
+
+    if (validationErrors.length > 0) {
       return this.setState({ errors: validationErrors });
     } else {
       this.setState({ errors: [] });
     }
 
-    const formData = new FormData();
     formData.set('name', this.state.name);
     formData.set('domain', this.state.domain);
     formData.set('category', this.state.category);
     formData.set('description', this.state.description);
-    //TODO: validate
-    formData.append('image', file);
 
     if (this.props.match.params.id == null) {
       this.props.createApp(formData);
@@ -244,6 +245,7 @@ class ProductFormBase extends React.Component {
               </Button>
               { this.state.logo != null && <FormHelperText>{this.state.logo}</FormHelperText> }
               { this.state.errors.logo != null && <FormHelperText error>{ this.state.errors.logo[0] }</FormHelperText> }
+              { this.state.logo != null && <img src={this.state.logo} alt="App Logo" width="250" /> }
             </FormControl>
           </Grid>
         </Grid>
