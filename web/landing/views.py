@@ -134,7 +134,6 @@ def extract(request):
     return render(request, 'landing/account.html', {'success': "Extraccion realizada."})
 
 
-
 @require_http_methods('POST')
 @login_required(login_url="/login/")
 def pay(request):
