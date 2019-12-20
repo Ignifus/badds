@@ -185,8 +185,14 @@ class IpSerializer(serializers.ModelSerializer):
 
 
 class ContractIpLogSerializer(serializers.ModelSerializer):
-    contract = ContractSerializer()
+    contract = serializers.SerializerMethodField()
     ip = IpSerializer()
+
+    def get_contract(self, obj):
+        space_name = obj.contract.space.name
+        adv_name = obj.contract.advertisement.name
+
+        return f"{space_name} - {adv_name}"
 
     class Meta:
         model = ContractIpLog
