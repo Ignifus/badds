@@ -124,7 +124,7 @@ class SpacesRestrictionsBase extends Component {
     return (
       <Grid item md={4} xs={12}>
         <Typography variant="h4">Banda Edades</Typography>
-        <Typography variant="body1">{textRestriction['GENDER']}</Typography>
+        <Typography variant="body1">{textRestriction['AGE']}</Typography>
         <FormControl fullWidth>
           <TextField
             name="age"
