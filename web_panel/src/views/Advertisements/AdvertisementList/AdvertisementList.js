@@ -70,6 +70,7 @@ class AdvertisementListBase extends PureComponent {
           <TableHead>
             <TableRow>
               <TableCell>Nombre</TableCell>
+              <TableCell>Nombre</TableCell>
               <TableCell>Descripcion</TableCell>
               <TableCell>Acciones</TableCell>
             </TableRow>
@@ -77,6 +78,7 @@ class AdvertisementListBase extends PureComponent {
           <TableBody>
             {ads.map(ad => (
               <TableRow key={ad.id}>
+                <TableCell>{ad.id}</TableCell>
                 <TableCell>{ad.name}</TableCell>
                 <TableCell>{ad.description}</TableCell>
                 <TableCell>

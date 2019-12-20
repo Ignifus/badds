@@ -29,6 +29,7 @@ class ResourceFormBase extends React.Component {
       url_link: '',
       image: '',
       text: '',
+      advertisement: '',
       errors: {}
     };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -54,7 +55,7 @@ class ResourceFormBase extends React.Component {
     formData.set('name', this.state.name);
     formData.set('url_link', this.state.url_link);
     formData.set('text', this.state.text);
-    formData.set('advertisement', this.props.match.params.id);
+    formData.set('advertisement', this.props.match.params.id || this.state.advertisement);
     //TODO: validate
     formData.append('image', file);
 
@@ -111,14 +112,15 @@ class ResourceFormBase extends React.Component {
   }
 
   componentDidMount() {
+    console.log(this.props.match)
     if (this.props.match.params.resourceId != null) {
-      this.props.fetchResource(this.props.match.params.id);
+      this.props.fetchResource(this.props.match.params.resourceId);
     }
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.resource.name !== this.props.resource.name) {
-      this.setState({ ...this.props.space });
+      this.setState({ ...this.props.resource });
     }
   }
 
@@ -212,6 +214,7 @@ class ResourceFormBase extends React.Component {
               </Button>
               { this.state.image != null && <FormHelperText>{this.state.image}</FormHelperText> }
               { this.state.errors.image != null && <FormHelperText error>{ this.state.errors.image[0] }</FormHelperText> }
+              { this.state.path && <img src={this.state.path} alt="aviso" width="200"/> }
             </FormControl>
           </Grid>
         </Grid>

@@ -22,9 +22,10 @@ export const RESET = `${NAMESPACE}/RESET`;
 export const RESTRICTION_ADDED = `${NAMESPACE}/RESTRICTION_ADDED`;
 
 // Reducer
+const emptyResource = { text: '', path: '', image: '' };
 const initialState = fromJS({
   loading: false,
-  resource: { text: '', path: '', image: '' },
+  resource: emptyResource,
   list: [],
   error: false
 });
@@ -40,7 +41,8 @@ export function reducer(state = initialState, action) {
         .set('success', true)
         .set('resource', iMap(action.payload));
     case FETCH:
-      return state.set('loading', false).set('list', fromJS(action.payload));
+      return state.set('loading', false).set('list', fromJS(action.payload))
+        .set('resource', iMap(emptyResource));
     case DETAIL:
         return state.set('loading', false).set('resource', fromJS(action.payload));
     case UPDATE:
@@ -59,9 +61,7 @@ export function reducer(state = initialState, action) {
     case CLEAR_ERROR:
       return state.set('error', false);
     case RESET:
-      return state.set('success', false)
-        .set('error', false)
-        .set('loading', false);
+      return initialState;
     case RESTRICTION_ADDED:
       return state.set('success', true)
         .set('loading', false)
@@ -133,7 +133,10 @@ const fetch = (id) => dispatch => {
   dispatch(loading());
 
   return axios.get(`${BASE_URL}${id}/`)
-    .then(response => dispatch(resourceReceived(response.data)));
+    .then(response => {
+      dispatch(reset());
+      dispatch(resourceReceived(response.data))
+    });
 }
 
 const create = (resource) => dispatch => {

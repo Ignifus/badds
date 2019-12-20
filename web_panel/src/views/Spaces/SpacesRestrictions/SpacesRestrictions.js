@@ -233,8 +233,8 @@ class SpacesRestrictionsBase extends Component {
     ) {
       return null;
     }
-
-    if (prevProps.space.name !== this.props.space.name) {
+    console.log(prevProps.space, this.props.space);
+    if (prevProps.space.id !== this.props.space.id) {
       const restrictions = api.parseRestrictions(this.props.space.restrictions);
       this.setState({...restrictions});
     }

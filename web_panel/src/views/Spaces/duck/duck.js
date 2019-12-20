@@ -22,9 +22,10 @@ export const RESET = `${NAMESPACE}/RESET`;
 export const RESTRICTION_ADDED = `${NAMESPACE}/RESTRICTION_ADDED`;
 
 // Reducer
+const emptySpace = { name: '', x_size: '', y_size: '', application: '', restrictions: [] };
 const initialState = fromJS({
   loading: false,
-  space: { name: '', x_size: '', y_size: '', application: '', restrictions: [] },
+  space: emptySpace,
   list: [],
   error: false
 });
@@ -42,7 +43,8 @@ export function reducer(state = initialState, action) {
     case DETAIL:
       return state.set('loading', false).set('space', iMap(action.payload));
     case FETCH:
-      return state.set('loading', false).set('list', fromJS(action.payload));
+      return state.set('loading', false).set('list', fromJS(action.payload))
+        .set('space', iMap(emptySpace));
     case UPDATE:
       return state.set('loading', false)
         .set('success', true)
@@ -50,16 +52,14 @@ export function reducer(state = initialState, action) {
     case REMOVE:
         return state.set('loading', false)
           .set('success', true)
-          .set('list', state.get('list').filter((space) => space.id !== action.payload.id));
+          .set('list', state.get('list').filter((space) => space.get('id') !== action.payload));
     case ERROR:
       return state.set('loading', false)
         .set('error', true);
     case CLEAR_ERROR:
       return state.set('error', false);
     case RESET:
-      return state.set('success', false)
-        .set('error', false)
-        .set('loading', false);
+      return initialState;
     case RESTRICTION_ADDED:
         return state.set('success', true)
           .set('loading', false)
@@ -131,7 +131,10 @@ const fetch = (id) => dispatch => {
   dispatch(loading());
 
   return axios.get(`${BASE_URL}${id}/`)
-    .then(response => dispatch(spaceReceived(response.data)));
+    .then(response => {
+      dispatch(reset());
+      dispatch(spaceReceived(response.data))
+    });
 }
 
 const create = (space) => dispatch => {
@@ -151,8 +154,9 @@ const update = (id, space) => dispatch => {
 }
 
 const remove = (id) => dispatch => {
+  dispatch(loading());
 
-  return axios.delete(`/`, api.getRequestConfig())
+  return axios.delete(`${BASE_URL}${id}/`, api.getRequestConfig())
     .then(() => dispatch(spaceRemoved(id)))
     .catch((e) => dispatch(handleError(e)));
 }

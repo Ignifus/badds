@@ -174,7 +174,7 @@ const AdvertiserRoutes = () => (
           component={ResourceFormView}
           exact
           layout={AdvertiserLayout}
-          path="/ads/advertisers/resource/:id/update"
+          path="/ads/advertisers/resource/:resourceId/update"
     />
     <RouteWithLayout
           component={MarketView}

@@ -43,6 +43,7 @@ class ResourceListBase extends PureComponent {
         <LinearProgress />
       </Grid>)
     }
+    const adId = parseInt(this.props.match.params.id);
 
     return (
       <Grid container spacing={5}>
@@ -63,7 +64,7 @@ class ResourceListBase extends PureComponent {
               </TableRow>
             </TableHead>
             <TableBody>
-              {resources.map(resource => (
+              {resources.filter(resource => resource.advertisement === adId).map(resource => (
                 <TableRow key={resource.id}>
                   <TableCell>{resource.name}</TableCell>
                   <TableCell><a href={resource.path} target="__blank">Ver Recurso</a></TableCell>

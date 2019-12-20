@@ -68,7 +68,6 @@ class ContractsListBase extends PureComponent {
                 <TableCell>Espacio</TableCell>
                 <TableCell>Aviso</TableCell>
                 <TableCell>Status</TableCell>
-                <TableCell>Acciones</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -82,9 +81,6 @@ class ContractsListBase extends PureComponent {
                   <TableCell><Link to={getSpaceURL(this.props.location.pathname, contract.space)}>Expandir</Link></TableCell>
                   <TableCell><Link to={getAdvertisementURL(this.props.location.pathname, contract.advertisement)}>Expandir</Link></TableCell>
                   <TableCell>{contract.active ? "Activo": "Finalizado"}</TableCell>
-                  <TableCell>
-                    <ActionMenu onActionSelected={ (action) => this.onActionSelected(action, contract.id) } />
-                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

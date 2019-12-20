@@ -21,9 +21,10 @@ export const CLEAR_ERROR = `${NAMESPACE}/CLEARERROR`;
 export const RESET = `${NAMESPACE}/RESET`;
 
 // Reducer
+const emptyAdd = { name: '', description: '' };
 const initialState = fromJS({
   loading: false,
-  ad: { name: '', description: '' },
+  ad: emptyAdd,
   list: [],
   error: false
 });
@@ -41,7 +42,8 @@ export function reducer(state = initialState, action) {
     case DETAIL:
       return state.set('loading', false).set('ad', iMap(action.payload));
     case FETCH:
-      return state.set('loading', false).set('list', fromJS(action.payload));
+      return state.set('loading', false).set('list', fromJS(action.payload))
+        .set('ad', iMap(emptyAdd));
     case UPDATE:
       return state.set('loading', false)
         .set('success', true)
