@@ -5,10 +5,21 @@ import requests
 from django.shortcuts import render
 
 
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    print(request.META)
+    print(x_forwarded_for)
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0].strip()
+    else:
+        ip = request.META.get('X-Real-IP')
+    return ip
+
+
 def index(request):
     api_key = os.environ.get("DEMO_API_KEY", "")
     space_id = os.environ.get("DEMO_SPACE_ID", "")
-    full_url = f"http://badds:8080/ads/ad/?apiKey={api_key}&space={space_id}&age=23&gender=M"
+    full_url = f"http://badds:8080/ads/ad/?apiKey={api_key}&space={space_id}&age=23&gender=M&clientIp={get_client_ip(request)}"
 
     response = requests.get(full_url)
     res = response.json()
@@ -18,7 +29,9 @@ def index(request):
     text = "Ad placeholder."
     file_name = "placeholder-images-image_large.png"
 
-    if response.status_code == 200:
+    print(res)
+
+    if response.status_code == 200 and "error" not in res:
         img_url = res["resource"]
         link = res["link"]
         text = res["text"]

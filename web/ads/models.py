@@ -52,7 +52,7 @@ class Space(models.Model):
 class SpaceRestriction(models.Model):
     space = models.ForeignKey(Space, related_name='spaces', on_delete=models.CASCADE)
     restriction = models.ForeignKey(Restriction, on_delete=models.CASCADE)
-    value = models.TextField(max_length=16)
+    value = models.TextField(max_length=16, null=True, blank=True)
 
     def __str__(self):
         return self.space.name + " " + self.restriction.restriction
@@ -107,7 +107,7 @@ class Resource(models.Model):
 class ResourceRestriction(models.Model):
     resource = models.ForeignKey(Resource, related_name='resources', on_delete=models.CASCADE)
     restriction = models.ForeignKey(Restriction, related_name='resource_restrictions', on_delete=models.CASCADE)
-    value = models.TextField(max_length=16)
+    value = models.TextField(max_length=16, null=True, blank=True)
 
     def __str__(self):
         return self.resource.name + " " + self.restriction.restriction

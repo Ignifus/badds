@@ -130,8 +130,14 @@ class SpaceRestrictionViewSet(BulkModelViewSet):
     def get_serializer_context(self):
         return {'request': self.request, "view": self}
 
+    def perform_create(self, serializer):
+        space = serializer.validated_data[0]["space"]
+        SpaceRestriction.objects.filter(space=space).delete()
+
+        serializer.save()
+
     def get_queryset(self):
-        return SpaceRestriction.objects.filter(space__application__user=self.request.user)
+        return SpaceRestriction.objects.filter()
 
 
 class ResourceRestrictionViewSet(BulkModelViewSet):
@@ -139,6 +145,12 @@ class ResourceRestrictionViewSet(BulkModelViewSet):
 
     def get_serializer_context(self):
         return {'request': self.request, "view": self}
+
+    def perform_create(self, serializer):
+        resource = serializer.validated_data[0]["resource"]
+        ResourceRestriction.objects.filter(resource=resource).delete()
+
+        serializer.save()
 
     def get_queryset(self):
         return ResourceRestriction.objects.filter(resource__advertisement__user=self.request.user)
